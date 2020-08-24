@@ -473,6 +473,9 @@ class UsersList extends React.Component {
                 else {
                     this.setState({cssSkipButton: 'OnlySkipButton'})
                 }}}
+        if(this.state.activeTab === 'admin'){
+            this.setState({cssSkipButton: 'turnOff'});
+        }
         if (menuCounter % 2 !== 0){
             this.setState({
                 openMenuButton: 'Закрыть меню действий',
