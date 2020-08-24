@@ -23,6 +23,10 @@ const proConfig = process.env.DATABASE_URL;  //heroku database
 const pool = new Pool({
     connectionString:
         process.env.NODE_ENV === "production" ? proConfig : devConfig,
+    ssl: {
+        rejectUnauthorized: false
+    }
+    // sslmode: require
 });
 
 app.use( express.json() );       // to support JSON-encoded bodies
