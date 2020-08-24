@@ -216,8 +216,15 @@ function generateCode() {
 /*---------------------------------------------------------------------*/
 /*--------------------ЗАПРОСЫ------------------------------------------*/
 /*---------------------------------------------------------------------*/
-app.get('/BACK', (req, res) => {
-    res.send('Бек работает!!!')
+app.get('/BACK', async (req, res) => {
+    try{
+    const client = await pool.connect();
+    const rows = client.query('SELECT * FROM queues');
+    res.send(rows.rows)
+    await client.release();
+        }catch(e){
+        console.log(e);
+    }
 })
 
 app.post('/addNotFromVK', (req, res) => {
