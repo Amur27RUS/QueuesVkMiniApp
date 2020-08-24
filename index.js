@@ -6,12 +6,13 @@ const path = require("path");
 const cors = require('cors')
 
 app.use(cors())
+app.use(express.static(path.join(__dirname, "client/build")));
 
 if (process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "client/build")));
 }
 
-const {Pool} = require('pg')
+const {Pool} = require('pg');
 require("dotenv").config();
 const devConfig = {
     "host": process.env.PG_HOST,
@@ -26,7 +27,10 @@ const proConfig = {
     connectionString: process.env.DATABASE_URL
 }
 
-const pool = new Pool({connectionString: 'postgres://sypfjpqxhupflq:145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c@ec2-34-192-122-0.compute-1.amazonaws.com:5432/deqirk1855e1hq'});
+const pool = new Pool({
+    connectionString:
+        'postgres://sypfjpqxhupflq:145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c@ec2-34-192-122-0.compute-1.amazonaws.com:5432/deqirk1855e1hq',
+});
 
 app.use( express.json() );       // to support JSON-encoded bodies
 app.use(express.urlencoded({     // to support URL-encoded bodies
@@ -38,31 +42,40 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 // let connection = await client.connect()
 
 async function addNotFromVK(newUser, queueCode, res){
-    const client = await pool.connect();
-    const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
-    const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
+    try {
+        const client = await pool.connect();
+        const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
+        const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
 
-    await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname) VALUES ($1, $2, $3, $4, $5, $6)',
-        [id.rows[id.rows.length-1].value+1, queueCode, id.rows[id.rows.length-1].value+1, place.rows[place.rows.length-1].value + 1, false, newUser]);
+        await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname) VALUES ($1, $2, $3, $4, $5, $6)',
+            [id.rows[id.rows.length - 1].value + 1, queueCode, id.rows[id.rows.length - 1].value + 1, place.rows[place.rows.length - 1].value + 1, false, newUser]);
 
-    const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-    res.send(result.rows);
+        const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+        res.send(result.rows);
 
-    await client.release();
+        await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function addNewAdmins(usersArray, queueCode, res){
-    const client = await pool.connect();
-    for(let i = 0; i<usersArray.length; i++){
-        await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
+    try {
+        const client = await pool.connect();
+        for (let i = 0; i < usersArray.length; i++) {
+            await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
+        }
+        const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+        res.send(result.rows);
+        await client.release();
+    }catch (e){
+    console.log(e);
     }
-    const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-    res.send(result.rows);
-    await client.release();
 
 }
 
 async function changeUsersOrder(usersArr, queueCode, res){
+    try{
     const client = await pool.connect();
     for(let i = 0; i< usersArr.length; i++){
         await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [i+1, usersArr[i].userid, queueCode]);
@@ -71,9 +84,13 @@ async function changeUsersOrder(usersArr, queueCode, res){
     const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
     res.send(result.rows);
     await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function joinQueue(userID, queueCode,res){
+    try{
     const client = await pool.connect();
     const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
     if (results.rows[0] === undefined){
@@ -99,9 +116,13 @@ async function joinQueue(userID, queueCode,res){
             await client.release();
         }
     }
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function getQueues(userID, res){
+    try{
         const client = await pool.connect();
         const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID =' + userID);
         let str = 'SELECT * FROM queues WHERE'
@@ -119,9 +140,13 @@ async function getQueues(userID, res){
         console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
         await res.send(result.rows);
         await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res) {
+    try{
     const client = await pool.connect();
     let codesBD = await client.query('SELECT * FROM queues WHERE code = $1', [code]);
     while (codesBD.rows.length !== 0) {
@@ -134,20 +159,31 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
     await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5)', [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
     res.send(JSON.stringify(code));
     await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function deleteUser(userID, queueCode) {
+    try{
     const client = await pool.connect();
     await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
     await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 async function getPeople(queueCode, res){
+    try{
     const client = await pool.connect();
     console.log(`[/getPeople] Отправляю список людей для очереди ${queueCode}`);
     const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
     res.send(result.rows);
     await client.release();
+    }catch (e){
+        console.log(e);
+    }
 }
 
 // Генерация кода
