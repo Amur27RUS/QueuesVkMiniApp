@@ -14,37 +14,15 @@ if (process.env.NODE_ENV === "production"){
 
 const {Pool} = require('pg');
 require("dotenv").config();
-const proConfig2 = {
-    "host": 'ec2-34-192-122-0.compute-1.amazonaws.com',
-    "port": 5432,
-    "user": 'sypfjpqxhupflq',
-    "password": '145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c',
-    "database": 'deqirk1855e1hq',
-    "idleTimeoutMillis": 0,
-    ssl: true
-}
 
-const devConfig = {
-    "host": process.env.PG_HOST,
-    "port": process.env.PG_PORT,
-    "user": process.env.PG_USER,
-    "password": process.env.PG_PASSWORD,
-    "database": process.env.PG_DATABASE,
-    "idleTimeoutMillis": 0
-}
+const devConfig = `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`;
 
-const proConfig = {
-    connectionString: process.env.DATABASE_URL
-}
+const proConfig = process.env.DATABASE_URL;  //heroku database
+
 
 const pool = new Pool({
-    "host": 'ec2-34-192-122-0.compute-1.amazonaws.com',
-    "port": 5432,
-    "user": 'sypfjpqxhupflq',
-    "password": '145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c',
-    "database": 'deqirk1855e1hq',
-    "idleTimeoutMillis": 0,
-    ssl: true
+    connectionString:
+        process.env.NODE_ENV === "production" ? proConfig : devConfig,
 });
 
 app.use( express.json() );       // to support JSON-encoded bodies
