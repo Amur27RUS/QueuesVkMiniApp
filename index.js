@@ -14,6 +14,16 @@ if (process.env.NODE_ENV === "production"){
 
 const {Pool} = require('pg');
 require("dotenv").config();
+const proConfig2 = {
+    "host": 'ec2-34-192-122-0.compute-1.amazonaws.com',
+    "port": 5432,
+    "user": 'sypfjpqxhupflq',
+    "password": '145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c',
+    "database": 'deqirk1855e1hq',
+    "idleTimeoutMillis": 0,
+    ssl: true
+}
+
 const devConfig = {
     "host": process.env.PG_HOST,
     "port": process.env.PG_PORT,
@@ -28,8 +38,13 @@ const proConfig = {
 }
 
 const pool = new Pool({
-    connectionString:
-        'postgres://sypfjpqxhupflq:145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c@ec2-34-192-122-0.compute-1.amazonaws.com:5432/deqirk1855e1hq',
+    "host": 'ec2-34-192-122-0.compute-1.amazonaws.com',
+    "port": 5432,
+    "user": 'sypfjpqxhupflq',
+    "password": '145894f615218008daccdc77094eefc50223ba2e5cb46916171c23673ce9c18c',
+    "database": 'deqirk1855e1hq',
+    "idleTimeoutMillis": 0,
+    ssl: true
 });
 
 app.use( express.json() );       // to support JSON-encoded bodies
