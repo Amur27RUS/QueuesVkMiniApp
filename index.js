@@ -132,7 +132,6 @@ async function getQueues(userID, res){
                 str += ' code=\'' + results.rows[i].value +'\'';
             }
         }
-        str+=";";
 
         const result = await client.query(str);
         console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
