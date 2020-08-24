@@ -71,7 +71,6 @@ const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, set
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue} </Text>
 				</MiniInfoCell>
 
-					//todo доделать кнопку ниже!!!
 				{/*<Button className={'editQueueButton'} mode={'tertiary'}>Редактировать информацию</Button>*/}
 
 				</div>
