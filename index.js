@@ -130,7 +130,7 @@ async function getQueues(userID, res){
                 if(i !== results.rows.length - 1){
                 str += ' code=\'' + results.rows[i].value +'\' OR';
                 }else{
-                    str += ' code=\'' + results.rows[i].value +'\'\'';
+                    str += ' code=\'' + results.rows[i].value +'\'';
                 }
             }
 
