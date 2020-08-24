@@ -70,11 +70,6 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 					</Placeholder>
 				</Div>
 				}
-				<Div className={'EnterDiv'}>
-					<Button size="xl" level="2" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
-						<ListAddOutline28/> Войти с помощью кода
-					</Button>
-				</Div>
 
 				<Div>
 					<Group>
@@ -85,6 +80,11 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 						</List>
 
 					</Group>
+				</Div>
+				<Div className={'EnterDiv'}>
+					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
+						Войти с помощью кода
+					</Button>
 				</Div>
 
 			</Panel>
