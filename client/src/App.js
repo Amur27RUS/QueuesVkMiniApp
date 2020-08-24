@@ -165,6 +165,7 @@ const App = () =>{
 							sendDataToServer(codeInput);
 							setActiveModal(null);
 							setCodeInput(undefined);
+							setActivePanel('home');
 						}
 					}
 				]}
