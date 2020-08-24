@@ -1,0 +1,6 @@
+# Project exclude paths
+/node_modules/
+dbConnection.js
+.env
+# Project exclude paths
+/client/node_modules/
