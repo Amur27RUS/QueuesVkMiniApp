@@ -122,20 +122,22 @@ async function getQueues(userID, res){
     try{
         const client = await pool.connect();
         const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID = $1;', [userID]);
-        // let str = 'SELECT * FROM queues WHERE code = $1'
+        if(results.rows[0].value !== undefined) {
+            let str = 'SELECT * FROM queues WHERE'
 
-        // for (let i = 0; i < results.rows.length; i++) {
-        //
-        //     if(i !== results.rows.length - 1){
-        //     str += ' code=\'' + results.rows[i].value +'\' OR';
-        //     }else{
-        //         str += ' code=\'' + results.rows[i].value +'\'\'';
-        //     }
-        // }
+            for (let i = 0; i < results.rows.length; i++) {
 
-        const result = await client.query('SELECT * FROM queues WHERE code = $1;', [results.rows[0].value]);
-        console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
-        await res.send(result.rows);
+                if(i !== results.rows.length - 1){
+                str += ' code=\'' + results.rows[i].value +'\' OR';
+                }else{
+                    str += ' code=\'' + results.rows[i].value +'\'\'';
+                }
+            }
+
+            const result = await client.query(str);
+            console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
+            await res.send(result.rows);
+        }
         await client.release();
     }catch (e){
         console.log(e);
@@ -153,7 +155,8 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
     await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7);',
         [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate] );
     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id;');
-    await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5);', [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
+    await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5);',
+        [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
     res.send(JSON.stringify(code));
     await client.release();
     }catch (e){
