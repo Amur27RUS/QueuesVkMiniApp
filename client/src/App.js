@@ -149,6 +149,27 @@ const App = () =>{
 			}
 	}
 
+	const updateQueues = data => {
+		console.log('Отправлен запрос на получение очередей...')
+		fetch('/getQueues', {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				"userID": data, //user.id
+			})
+		}).then(function (response) {
+			return response.json();
+
+		})
+			.then(function (data) {
+				console.log('Получен массив очередей: ' + data);
+				setQueues(data);
+			})
+	}
+
 	const modal = (
 		<ModalRoot activeModal={activeModal}>
 			<ModalCard
@@ -165,7 +186,7 @@ const App = () =>{
 							sendDataToServer(codeInput);
 							setActiveModal(null);
 							setCodeInput(undefined);
-							setActivePanel('home');
+							updateQueues(fetchedUser.id);
 						}
 					}
 				]}
