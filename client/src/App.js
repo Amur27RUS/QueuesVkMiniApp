@@ -21,7 +21,6 @@ import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import cowboy from "./img/cowboy.jpg";
 
-
 global.queue = {
 	name: undefined,
 	idQueue: undefined,
@@ -32,6 +31,7 @@ global.queue = {
 	placeQueue: '',
 	codeQueue: undefined,
 
+	isFirstPlace: undefined,
 	userPlace: undefined,
 	iSAdmin: undefined,
 	newUser: undefined,

@@ -57,6 +57,7 @@ class UsersList extends React.Component {
             openMenuButton: 'Открыть меню действий',
             activeTab: 'user',
             isAdmin: undefined,
+            isFirst: 'turnOff'
         };
 
     }
@@ -137,6 +138,13 @@ class UsersList extends React.Component {
             for(let i = 0; i < tmpUsersArr.length; i++){
                 if(tmpUsersArr[i].notvkname === null) {
                     const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                    if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                        global.queue.isFirstPlace = true;
+                    }
+                    else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        global.queue.isFirstPlace = false;
+                    }
+
                     if(global.queue.userID === user.id && tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = true;
                     }else if (global.queue.userID === user.id && !tmpUsersArr[i].isadmin){
@@ -370,6 +378,47 @@ class UsersList extends React.Component {
         )
     }
 
+    firstToLast = () => {
+        fetch('http://localhost:5000/firstToLast', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "queueCODE": this.props.queueCode,
+            })
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(async function (data) {
+                let tmpUsersArr = data;
+                for(let i = 0; i < tmpUsersArr.length; i++){
+                    if(tmpUsersArr[i].notvkname === null) {
+                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                            global.queue.isFirstPlace = true;
+                        }
+                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                            global.queue.isFirstPlace = false;
+                        }
+                        console.log(user);
+                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
+                        tmpUsersArr[i].avatar = user.photo_100;
+                    }else{
+                        tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
+                    }
+                }
+                console.log('Получен массив людей: ' + tmpUsersArr);
+                return tmpUsersArr;
+
+            }).then((usersArr) =>{
+            this.setState({
+                users: usersArr
+            })
+        })
+    }
+
     changeUsersPositionOnServer = (usersArray) => {
         console.log('Отправлен запрос на изменение порядка людей в очереди...');
         console.log('Новый массив: ' + usersArray);
@@ -391,6 +440,12 @@ class UsersList extends React.Component {
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
                         const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                            global.queue.isFirstPlace = true;
+                        }
+                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                            global.queue.isFirstPlace = false;
+                        }
                         console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
@@ -472,6 +527,12 @@ class UsersList extends React.Component {
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
                         const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                            global.queue.isFirstPlace = true;
+                        }
+                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                            global.queue.isFirstPlace = false;
+                        }
                         console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
@@ -527,6 +588,12 @@ class UsersList extends React.Component {
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
                         const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                            global.queue.isFirstPlace = true;
+                        }
+                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                            global.queue.isFirstPlace = false;
+                        }
                         console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
@@ -542,6 +609,47 @@ class UsersList extends React.Component {
                 users: usersArr
             })
         })
+    }
+
+    deleteUser = (deletedUserPlace) => {
+        fetch('http://localhost:5000/deleteUser', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "deletedPlace": deletedUserPlace,
+                "queueCODE": this.props.queueCode,
+            })
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(async function (data) {
+                let tmpUsersArr = data;
+                for(let i = 0; i < tmpUsersArr.length; i++){
+                    if(tmpUsersArr[i].notvkname === null) {
+                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
+                            global.queue.isFirstPlace = true;
+                        }
+                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                            global.queue.isFirstPlace = false;
+                        }
+                        console.log(user);
+                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
+                        tmpUsersArr[i].avatar = user.photo_100;
+                    }else{
+                        tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
+                    }
+                }
+                console.log('Получен массив людей: ' + tmpUsersArr);
+                return tmpUsersArr;
+
+            }).then((usersArr) => {
+            this.setState({
+                users: usersArr
+            })})
     }
 
     render() {
@@ -615,6 +723,11 @@ class UsersList extends React.Component {
 
                 <Group header={
                 <Header>Участники</Header>}>
+                    {global.queue.isFirstPlace === true &&
+                    <Div>
+                        <Button className={'buttonForFirst'} onClick={() => this.firstToLast()} mode={'secondary'}>Спуститься на последнее место</Button>
+                    </Div>
+                    }
                 <Div>
                     <div className={'AddNewUserDiv'}>
                     <Input id={'inputNotVKPerson'} type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>
@@ -659,11 +772,12 @@ class UsersList extends React.Component {
                             this.changeUsersPositionOnServer(this.state.users);
 
                         }} onRemove={() => {
+                            this.deleteUser(this.state.users.indexOf(info))
                             this.setState({
                                 users: [...this.state.users.slice(0, this.state.users.indexOf(info)), ...this.state.users.slice(this.state.users.indexOf(info) +1)]
                             });
                             console.log('Отправлен запрос на обновление списка из-за удаления...')
-                            this.changeUsersPositionOnServer(this.state.users);
+                            // this.changeUsersPositionOnServer(this.state.users);
                         }}><text className={'nameUser'}>{info.name}</text></Cell>
                     })}
                 </List>
