@@ -4,6 +4,7 @@ const app = express()
 const PORT = process.env.PORT;
 const path = require("path");
 const cors = require('cors')
+
 app.use(cors())
 
 if (process.env.NODE_ENV === "production"){
@@ -22,7 +23,7 @@ const devConfig = {
 }
 
 const proConfig = {
-    connectString: process.env.PG_DATABASE_URL
+    connectString: process.env.DATABASE_URL
 }
 
 const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig);
