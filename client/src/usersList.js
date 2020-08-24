@@ -379,7 +379,7 @@ class UsersList extends React.Component {
     }
 
     firstToLast = () => {
-        fetch('http://localhost:5000/firstToLast', {
+        fetch('/firstToLast', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -612,7 +612,7 @@ class UsersList extends React.Component {
     }
 
     deleteUser = (deletedUserPlace) => {
-        fetch('http://localhost:5000/deleteUser', {
+        fetch('/deleteUser', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
