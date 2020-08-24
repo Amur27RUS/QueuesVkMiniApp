@@ -121,19 +121,19 @@ async function joinQueue(userID, queueCode,res){
 async function getQueues(userID, res){
     try{
         const client = await pool.connect();
-        const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID =$1;', [userID]);
-        let str = 'SELECT * FROM queues WHERE'
+        const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID = $1;', [userID]);
+        // let str = 'SELECT * FROM queues WHERE code = $1'
 
-        for (let i = 0; i < results.rows.length; i++) {
+        // for (let i = 0; i < results.rows.length; i++) {
+        //
+        //     if(i !== results.rows.length - 1){
+        //     str += ' code=\'' + results.rows[i].value +'\' OR';
+        //     }else{
+        //         str += ' code=\'' + results.rows[i].value +'\'\'';
+        //     }
+        // }
 
-            if(i !== results.rows.length - 1){
-            str += ' code=\'' + results.rows[i].value +'\' OR';
-            }else{
-                str += ' code=\'' + results.rows[i].value +'\'';
-            }
-        }
-
-        const result = await client.query(str);
+        const result = await client.query('SELECT * FROM queues WHERE code = $1;', [results.rows[0].value]);
         console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
         await res.send(result.rows);
         await client.release();
