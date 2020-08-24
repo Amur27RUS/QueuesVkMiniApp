@@ -298,6 +298,6 @@ app.post('/firstToLast', (req, res) => {
     firstToLast(queueCode, res);
 })
 
-app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`)
+app.listen(PORT, () => {
+    console.log(`App listening at http://localhost:${PORT}`)
 })
