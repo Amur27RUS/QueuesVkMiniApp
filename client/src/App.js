@@ -224,18 +224,18 @@ const App = () =>{
 					data-story="createQueue"
 					text="Создать очередь"
 				><AddSquareOutline28/></TabbarItem>
-				<TabbarItem
-					onClick={onStoryChange}
-					selected={activeStory === 'joinQueue'}
-					data-story="joinQueue"
-					// label="12" - Сколько уведомлений. Может быть потом пригодится
-					text="Войти в очередь"
-				><ListAddOutline28/></TabbarItem>
+				{/*<TabbarItem*/}
+				{/*	onClick={onStoryChange}*/}
+				{/*	selected={activeStory === 'joinQueue'}*/}
+				{/*	data-story="joinQueue"*/}
+				{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
+				{/*	text="Войти в очередь"*/}
+				{/*><ListAddOutline28/></TabbarItem>*/}
 			</Tabbar>
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+			<Home id='home' queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues} setActiveModal={setActiveModal}/>
 			<AboutQueue id='aboutQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 		</View>
 
@@ -243,9 +243,9 @@ const App = () =>{
 			<CreateQueue id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
 
-		<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>
-			<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>
-		</View>
+		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}
+		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}
+		{/*</View>*/}
 		</Epic>
 	);
 }

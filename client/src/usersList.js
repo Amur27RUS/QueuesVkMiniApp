@@ -140,8 +140,7 @@ class UsersList extends React.Component {
                     const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
                     if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1) {
                         global.queue.isFirstPlace = true;
-                    }
-                    else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                    } else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                         global.queue.isFirstPlace = false;
                     }
 

@@ -4,10 +4,14 @@ import QueueCell from "../QueueCell";
 import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
 import {Placeholder, List, Div, Group, PanelHeader, Panel, Button} from "@vkontakte/vkui";
 import cowboy from "../img/cowboy.jpg";
+import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 
+
+
+const MODAL_CARD_ABOUT = 'say-about';
 let homePanelCounter = 0;
 
-const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues}) => {
+const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	useEffect(() => {
 		if (homePanelCounter !== 0) {
@@ -66,6 +70,11 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues}) => {
 					</Placeholder>
 				</Div>
 				}
+				<Div className={'EnterDiv'}>
+					<Button size="xl" level="2" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
+						<ListAddOutline28/> Войти с помощью кода
+					</Button>
+				</Div>
 
 				<Div>
 					<Group>
