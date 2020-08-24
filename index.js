@@ -122,7 +122,7 @@ async function getQueues(userID, res){
     try{
         const client = await pool.connect();
         const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID = $1;', [userID]);
-        if(results.rows[0].value !== undefined) {
+        if(results.rows[0] !== undefined) {
             let str = 'SELECT * FROM queues WHERE'
 
             for (let i = 0; i < results.rows.length; i++) {
