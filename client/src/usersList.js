@@ -783,7 +783,7 @@ class UsersList extends React.Component {
                 </List>
                 </Div>
             </Group>
-                {this.state.users.length === 1 &&
+                {this.state.users.length <= 4 &&
                 <Placeholder
                     icon={<Icon56InboxOutline/>}
                     action={<Button size="l" mode="tertiary">Пригласите людей
