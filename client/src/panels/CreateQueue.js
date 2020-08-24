@@ -73,14 +73,15 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                        bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => setNameQueue(e.target.value)}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} name={'date'} type={'date'} value={date} onChange={e =>setDate(e.target.value)}/>
+                <Input top={'Дата проведения'} name={'date'} type={'date'} value={date}
+                       status={date.trim() ? 'valid' : 'error'} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setDate(e.target.value)}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(nameQueue.trim() !== '') {
+                    if(nameQueue.trim() !== '' && date.trim() !== '') {
                         createQueueOnServer();
 
                         fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
