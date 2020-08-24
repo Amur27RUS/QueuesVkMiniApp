@@ -1,7 +1,7 @@
 const express = require('express')
 
 const app = express()
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors')
 
@@ -165,14 +165,13 @@ function generateCode() {
 /*---------------------------------------------------------------------*/
 /*--------------------ЗАПРОСЫ------------------------------------------*/
 /*---------------------------------------------------------------------*/
-app.get('/', (req, res) => {
+app.get('/BACK', (req, res) => {
     res.send('Бек работает!!!')
 })
 
 app.post('/addNotFromVK', (req, res) => {
     const newUser = req.body.newUser;
     const queueCode = req.body.queueCODE;
-
 
     addNotFromVK(newUser, queueCode, res);
 })
