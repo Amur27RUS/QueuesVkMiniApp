@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {Button, PanelHeader, Panel,  FormLayout, Input, File, Text} from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
+import { Keyboard } from 'react-native'
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
+
 
 
 const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
@@ -46,6 +48,7 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
         })
             .then(function (data) {
                 setQueueCODE(data);
+                setActiveModal(MODAL_CARD_CHAT_INVITE);
             })
     };
 
@@ -73,9 +76,9 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                        bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => setNameQueue(e.target.value)}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} name={'date'} type={'date'} value={date}
+                <Input top={'Дата проведения'} onClick={Keyboard.dismiss()} name={'date'} type={'date'} value={date}
                        status={date.trim() ? 'valid' : 'error'} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setDate(e.target.value)}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
+                <Input top={'Время начала'} onClick={Keyboard.dismiss()} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
@@ -84,20 +87,21 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                     if(nameQueue.trim() !== '' && date.trim() !== '') {
                         createQueueOnServer();
 
-                        fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'image/png',
-                            },
-                            body: global.queue.pic
-                        }).then(function (response) {
-                            return response.json();
-                        })
-                            .then(function (data) {
-                                console.log('Картинка успешно загружена!!!');
-                                setActiveModal(MODAL_CARD_CHAT_INVITE);
+                        if(global.queue.pic !== undefined) {
+                            fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'image/png',
+                                },
+                                body: global.queue.pic
+                            }).then(function (response) {
+                                return response.json();
                             })
+                                .then(function (data) {
+                                    console.log('Картинка успешно загружена!!!');
+                                })
+                        }
                     }
                 }}>Создать</Button>
             </FormLayout>

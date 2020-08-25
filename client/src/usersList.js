@@ -144,12 +144,11 @@ class UsersList extends React.Component {
                         global.queue.isFirstPlace = false;
                     }
 
-                    if(global.queue.userID === user.id && tmpUsersArr[i].isadmin){
+                    if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = true;
-                    }else if (global.queue.userID === user.id && !tmpUsersArr[i].isadmin){
+                    }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
                     }
-                    console.log(user);
                     tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                     tmpUsersArr[i].avatar = user.photo_100;
                 }else{

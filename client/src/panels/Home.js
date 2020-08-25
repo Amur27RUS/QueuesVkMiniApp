@@ -14,6 +14,7 @@ let homePanelCounter = 0;
 const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	useEffect(() => {
+		global.queue.userID = fetchedUser.id;
 		if (homePanelCounter !== 0) {
 			console.log('Отправлен запрос на получение очередей...')
 

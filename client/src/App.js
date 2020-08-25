@@ -72,6 +72,7 @@ const App = () =>{
 		async function fetchData() {
 			const user = await bridge.send('VKWebAppGetUserInfo');
 			setUser(user);
+			global.queue.userID = user.id;
 			setPopout(null);
 
 			console.log('Отправлен запрос на получение очередей...')
@@ -92,7 +93,6 @@ const App = () =>{
 					console.log('Получен массив очередей: ' + data);
 					// console.log("Для пользователя с id: " + user.id);
 					queuesSet(data);
-					global.queue.userID = user.id;
 				})
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
