@@ -92,7 +92,7 @@ async function joinQueue(userID, queueCode,res){
         const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1;', [queueCode]);
         if (results.rows[0] === undefined){
             console.log('Очереди не существует!')
-            res.send('noQueue'); //todo выводить сообщение на фронте о том, что очереди не существует
+            res.send(JSON.stringify('noQueue')); //todo выводить сообщение на фронте о том, что очереди не существует
             await client.release();
         }else{
             console.log('Подключаю вас к очереди...');
@@ -104,12 +104,12 @@ async function joinQueue(userID, queueCode,res){
                 console.log(queueCode)
                 await client.query('INSERT INTO QueuesAndUsers VALUES ($1, $2, $3, $4, $5);', [id.rows[id.rows.length-1].value+1 ,queueCode, userID, place.rows[place.rows.length-1].value + 1, false])
                 console.log('Успешно подключены к очереди!')
-                await res.send('success');
+                await res.send(JSON.stringify('success'));
                 await client.release();
 
             }else{
                 console.log('Вы уже состоите в этой очереди!')
-                await res.send('alreadyThere');
+                await res.send(JSON.stringify('alreadyThere'));
                 await client.release();
             }
         }
