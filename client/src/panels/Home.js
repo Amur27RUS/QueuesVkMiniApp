@@ -62,8 +62,7 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 				<Div>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
-						action={<Button size="l" mode="tertiary" onClick={() => setActiveStory('joinQueue')}>Присоединитесь во вкладке <br/> 'Войти в
-							очередь'</Button>}
+						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь</Button>}
 						stretched
 					>
 						Вы не состоите<br/>в очередях
