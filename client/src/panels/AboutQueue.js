@@ -68,7 +68,7 @@ const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, set
 				<MiniInfoCell
 					before={<Icon20Info/>}
 				>
-					<Text weight="semibold">Код очереди:  {global.queue.codeQueue} </Text>
+					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
 				{/*<Button className={'editQueueButton'} mode={'tertiary'}>Редактировать информацию</Button>*/}

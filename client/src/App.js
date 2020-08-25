@@ -20,6 +20,7 @@ import JoinQueue from './panels/JoinQueue';
 import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import cowboy from "./img/cowboy.jpg";
+import Title from "@vkontakte/vkui/dist/components/Typography/Title/Title";
 
 global.queue = {
 	name: undefined,
@@ -216,20 +217,30 @@ const App = () =>{
 					title: 'Скопировать приглашение',
 					mode: 'secondary',
 					action: () => {
-						const code = document.getElementById('copyInput');
-						code.select();
-						document.execCommand('copy');
+						// const code = document.getElementById('copyInput');
+						// code.select();
+						// document.execCommand('copy')
+						copyToClipboard(queueCODE);
 					}
 				}]}
 				actionsLayout="vertical"
 			>
-				<FormLayout className={'inputJoin'}>
-					<Input id='copyInput' top={'Код вашей очереди:'} className={'copyText'} readOnly={true} autoFocus={false} type={'text'} value={queueCODE}/>
-				</FormLayout>
+				{/*<FormLayout className={'inputJoin'}>*/}
+				{/*	<Title id='copyInput' top={'Код вашей очереди:'} className={'copyText'} value={queueCODE}/>*/}
+				{/*</FormLayout>*/}
 			</ModalCard>
 
 		</ModalRoot>
 	);
+
+	function copyToClipboard(text) {
+		let dummy = document.createElement("textarea");
+		document.body.appendChild(dummy);
+		dummy.value = text;
+		dummy.select();
+		document.execCommand("copy");
+		document.body.removeChild(dummy);
+	}
 
 	return (
 		<Epic activeStory={activeStory} tabbar={
