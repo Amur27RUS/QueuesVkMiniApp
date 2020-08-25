@@ -65,7 +65,7 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь</Button>}
 						stretched
 					>
-						Вы не состоите<br/>в очередях
+						Вы не состоите в очередях
 					</Placeholder>
 				</Div>
 				}
