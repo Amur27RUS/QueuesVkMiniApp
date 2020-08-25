@@ -183,7 +183,7 @@ const App = () =>{
 						title: 'Присоединиться',
 						mode: 'primary',
 						action: () => {
-							sendDataToServer(codeInput);
+							sendDataToServer(codeInput.toUpperCase());
 							setActiveModal(null);
 							setCodeInput(undefined);
 							updateQueues(fetchedUser.id);
