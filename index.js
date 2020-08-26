@@ -4,8 +4,8 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors');
-const { Botact } = require('botact');
-const bot = new Botact({
+const VkBot = require('node-vk-bot-api');
+const bot = new VkBot({
     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
     confirmation: 'e90cd682'
 })
@@ -39,24 +39,20 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-//БОТ
+//todo БОТ====================================================================
 try {
 
-    bot.on(({ reply }) => {
-        reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3')
-    })
+    bot.on((ctx) => {
+        ctx.reply('Hello!');
+    });
 
 
-app.post('/bot', bot.listen);
+app.post('/bot', bot.webhookCallback);
 
 }catch (e){
     console.log(e);
 }
-process.on('unhandledRejection', (reason, p) => {
-    console.log('Unhandled Rejection at:', p, 'reason:', reason);
-});
 
-//БОТ
 
 //Запуск - nodemon app.js
 // let connection = await client.connect()
