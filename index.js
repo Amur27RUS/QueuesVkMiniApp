@@ -33,7 +33,7 @@ const pool = new Pool({
     // }
     // sslmode: require
 });
-
+app.use(bodyParser.json())
 app.use( express.json() );       // to support JSON-encoded bodies
 app.use(express.urlencoded({     // to support URL-encoded bodies
     extended: true
