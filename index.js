@@ -52,6 +52,9 @@ app.post('/bot', bot.listen);
 }catch (e){
     console.log(e);
 }
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at:', p, 'reason:', reason);
+});
 
 //БОТ
 
