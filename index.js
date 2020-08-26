@@ -47,7 +47,7 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 //todo БОТ====================================================================
 try {
-    const VkBot = require('/lib');
+    const VkBot = require('node-vk-bot-api');
 
     const bot = new VkBot('2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b');
 
