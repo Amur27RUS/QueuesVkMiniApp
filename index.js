@@ -42,9 +42,10 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 //БОТ
 try {
 
-    bot.on(async function (ctx) {
+    bot.on( function (ctx) {
         console.log(ctx.body)
-        await ctx.reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3');
+        ctx.reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3')
+            .then(r => r);
     })
 
 }catch (e){
