@@ -49,7 +49,11 @@ bot.on(({ reply }) => {
     reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3');
 })
 
-app.post('/bot', bot.listen);
+bot.command('start', ({ reply }) => {
+    reply('This is start!')
+})
+
+app.post('/', bot.listen);
 
 
 //БОТ
