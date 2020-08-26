@@ -723,7 +723,7 @@ class UsersList extends React.Component {
                 </Div>
 
                 <Group header={
-                <Header>Участники</Header>}>
+                <Header className={'headerUsers'}>Участники</Header>}>
                     {global.queue.isFirstPlace === true &&
                     <Div>
                         <Button className={'buttonForFirst'} onClick={() => this.firstToLast()} mode={'secondary'}>Спуститься на последнее место</Button>

@@ -10,6 +10,7 @@ import {
 	Input,
 	FormLayout,
 	View,
+	Snackbar
 } from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
@@ -19,7 +20,9 @@ import Home from './panels/Home';
 import JoinQueue from './panels/JoinQueue';
 import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
+import ChangeQueue from "./panels/ChangeQueue"
 import cowboy from "./img/cowboy.jpg";
+
 
 global.queue = {
 	name: undefined,
@@ -41,6 +44,8 @@ global.queue = {
 	pic: undefined,
 	picName: undefined,
 	picURL: undefined,
+
+	snackbarName: '',
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -124,7 +129,7 @@ const App = () =>{
 	const onStoryChange = e => {
 		setActiveStory(e.currentTarget.dataset.story);
 	};
-
+	
 	const sendDataToServer = data => {
 		if (data !== undefined && data.trim().length === 6) {
 			console.log('Отправлен запрос на вход в очередь...');
@@ -144,6 +149,7 @@ const App = () =>{
 					return response.json();
 				})
 					.then(function (data) {
+						global.queue.snackbarName = data
 						console.log('Ответ на запрос на вход в очередь');
 					})
 			}
@@ -216,6 +222,7 @@ const App = () =>{
 					title: 'Скопировать приглашение',
 					mode: 'secondary',
 					action: () => {
+
 						const code = document.getElementById('copyInput');
 						code.select();
 						document.execCommand('copy');
@@ -257,13 +264,16 @@ const App = () =>{
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues} setActiveModal={setActiveModal}/>
+			<Home id='home' queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 			<AboutQueue id='aboutQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+			<ChangeQueue id='changeQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setPopout={setPopout} setQueues={setQueues}/>
 		</View>
 
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
 			<CreateQueue id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
+
+
 
 		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}
 		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}

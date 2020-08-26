@@ -23,9 +23,9 @@ const proConfig = process.env.DATABASE_URL;  //heroku database
 const pool = new Pool({
     connectionString:
         process.env.NODE_ENV === "production" ? proConfig : devConfig,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    // ssl: {
+    //     rejectUnauthorized: false
+    // }
     // sslmode: require
 });
 
@@ -157,7 +157,15 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
         [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate] );
     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
     await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5)', [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
-    res.send(JSON.stringify(code));
+    await res.send(JSON.stringify(code));
+    await client.release();
+}
+
+async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res) {
+    const client = await pool.connect();
+    await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
+        [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+    await res.send(JSON.stringify(code));
     await client.release();
 }
 
@@ -286,6 +294,20 @@ app.post('/createQueue', (req, res) => {
     createQueue(userID, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res)
 
 })
+
+app.post('/changeQueue', (req, res) => {
+    const queueName = req.body.queueName;
+    const queuePlace = req.body.queuePlace;
+    const queueTime = req.body.queueTime;
+    const queueDate = req.body.queueDate;
+    const queueAvatarURL = req.body.queueAvatarURL;
+    const queueDescription = req.body.queueDescription;
+    const code = req.body.queueCode
+
+    changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res)
+
+})
+
 
 app.post('/exitQueue', (req, res) => {
     const userID = req.body.userID;
