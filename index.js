@@ -49,7 +49,10 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 //todo БОТ====================================================================
 try {
-    bot.sendMessage(199833891, 'Hello!');
+    bot.command('/start', (ctx) => {
+        ctx.reply('Hello!');
+    });
+
     bot.startPolling();
 
 }catch (e){
