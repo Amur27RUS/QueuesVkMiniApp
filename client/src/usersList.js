@@ -209,6 +209,19 @@ class UsersList extends React.Component {
         counter2++;
     }
 
+    copyToClipboard = (text) => {
+        let dummy = document.createElement("textarea");
+        // to avoid breaking orgain page when copying more words
+        // cant copy when adding below this code
+        // dummy.style.display = 'none'
+        document.body.appendChild(dummy);
+        //Be careful if you use texarea. setAttribute('value', value), which works with "input" does not work with "textarea". – Eduard
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+    }
+
     addAdminButton = () => {
         if (counter % 2 === 0){
             if (osName === IOS){
@@ -787,10 +800,9 @@ class UsersList extends React.Component {
                 {this.state.users.length <= 4 &&
                 <Placeholder
                     icon={<Icon56InboxOutline/>}
-                    action={<Button size="l" mode="tertiary">Пригласите людей
-                        с помощью кода: <br/> {this.props.queueCode}</Button>}
+                    action={<Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: <br/> {this.props.queueCode}</Button>}
                 >
-                    Здесь одиноко...
+                    Здесь одиноко... Пригласите людей!
                 </Placeholder>
                 }
             </div>

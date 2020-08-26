@@ -1,11 +1,22 @@
 const express = require('express')
-
+const bodyParser = require('body-parser')
 const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
-const cors = require('cors')
+const cors = require('cors');
+// const bot = new VkBot({
+//     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
+//     confirmation: '7268987f'
+// })
 
-app.use(cors())
+
+// const api = require('node-vk-bot-api/lib/api');
+// api('users.get', {
+//     user_ids: 1,
+//     access_token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
+// }).then(r => r);
+
+app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
 
 if (process.env.NODE_ENV === "production"){
@@ -28,11 +39,27 @@ const pool = new Pool({
     // }
     // sslmode: require
 });
-
+app.use(bodyParser.json())
 app.use( express.json() );       // to support JSON-encoded bodies
 app.use(express.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
+//todo БОТ====================================================================
+try {
+    const VkBot = require('node-vk-bot-api');
+
+    const bot = new VkBot('2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b');
+
+    bot.on((ctx) => {
+        ctx.reply('Hello!');
+    });
+
+    bot.startPolling();
+
+}catch (e){
+    console.log(e);
+}
 
 
 //Запуск - nodemon app.js

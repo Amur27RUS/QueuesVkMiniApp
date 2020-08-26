@@ -10,7 +10,6 @@ import {
 	Input,
 	FormLayout,
 	View,
-	Snackbar
 } from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
@@ -22,7 +21,7 @@ import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import ChangeQueue from "./panels/ChangeQueue"
 import cowboy from "./img/cowboy.jpg";
-
+import Title from "@vkontakte/vkui/dist/components/Typography/Title/Title";
 
 global.queue = {
 	name: undefined,
@@ -44,8 +43,6 @@ global.queue = {
 	pic: undefined,
 	picName: undefined,
 	picURL: undefined,
-
-	snackbarName: '',
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -129,7 +126,7 @@ const App = () =>{
 	const onStoryChange = e => {
 		setActiveStory(e.currentTarget.dataset.story);
 	};
-	
+
 	const sendDataToServer = data => {
 		if (data !== undefined && data.trim().length === 6) {
 			console.log('Отправлен запрос на вход в очередь...');
@@ -149,7 +146,6 @@ const App = () =>{
 					return response.json();
 				})
 					.then(function (data) {
-						global.queue.snackbarName = data
 						console.log('Ответ на запрос на вход в очередь');
 					})
 			}
@@ -222,21 +218,30 @@ const App = () =>{
 					title: 'Скопировать приглашение',
 					mode: 'secondary',
 					action: () => {
-
-						const code = document.getElementById('copyInput');
-						code.select();
-						document.execCommand('copy');
+						// const code = document.getElementById('copyInput');
+						// code.select();
+						// document.execCommand('copy')
+						copyToClipboard(queueCODE);
 					}
 				}]}
 				actionsLayout="vertical"
 			>
-				<FormLayout className={'inputJoin'}>
-					<Input id='copyInput' top={'Код вашей очереди:'} className={'copyText'} readOnly={true} autoFocus={false} type={'text'} value={queueCODE}/>
-				</FormLayout>
+				{/*<FormLayout className={'inputJoin'}>*/}
+				{/*	<Title id='copyInput' top={'Код вашей очереди:'} className={'copyText'} value={queueCODE}/>*/}
+				{/*</FormLayout>*/}
 			</ModalCard>
 
 		</ModalRoot>
 	);
+
+	function copyToClipboard(text) {
+		let dummy = document.createElement("textarea");
+		document.body.appendChild(dummy);
+		dummy.value = text;
+		dummy.select();
+		document.execCommand("copy");
+		document.body.removeChild(dummy);
+	}
 
 	return (
 		<Epic activeStory={activeStory} tabbar={
@@ -272,8 +277,6 @@ const App = () =>{
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
 			<CreateQueue id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
-
-
 
 		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}
 		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}
