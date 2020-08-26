@@ -5,17 +5,18 @@ const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors');
 const VkBot = require('node-vk-bot-api');
-const bot = new VkBot({
-    token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
-    confirmation: '7268987f'
-})
+// const bot = new VkBot({
+//     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
+//     confirmation: '7268987f'
+// })
 
-const api = require('node-vk-bot-api/lib/api');
+const bot = new VkBot('2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b')
 
-api('users.get', {
-    user_ids: 1,
-    access_token: process.env.TOKEN,
-}).then(r => r);
+// const api = require('node-vk-bot-api/lib/api');
+// api('users.get', {
+//     user_ids: 1,
+//     access_token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
+// }).then(r => r);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
@@ -48,13 +49,8 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 //todo БОТ====================================================================
 try {
-
-    bot.on((ctx) => {
-        ctx.reply('Hello!');
-    });
-
-
-app.post('/bot', bot.webhookCallback);
+    bot.sendMessage(199833891, 'Hello!');
+    bot.startPolling();
 
 }catch (e){
     console.log(e);
