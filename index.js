@@ -7,7 +7,7 @@ const cors = require('cors');
 const VkBot = require('node-vk-bot-api');
 const bot = new VkBot({
     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
-    confirmation: 'e90cd682'
+    confirmation: '7268987f'
 })
 
 const api = require('node-vk-bot-api/lib/api');
