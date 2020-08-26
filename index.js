@@ -1,5 +1,5 @@
 const express = require('express')
-
+const bodyParser = require('body-parser')
 const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
@@ -42,18 +42,16 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 //БОТ
 try {
 
-    bot.on( function (ctx) {
-        console.log(ctx.body)
-        ctx.reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3')
-            .then(r => r);
+    bot.on(({ reply }) => {
+        reply('Привет! К сожалению, меня не научили понимать человеческий язык :( Но я могу отправлять тебе сообщения, когда твоя очередь подойдёт! <3')
     })
+
+
+app.post('/bot', bot.listen);
 
 }catch (e){
     console.log(e);
 }
-
-app.post('/bot', bot.listen);
-
 
 //БОТ
 
