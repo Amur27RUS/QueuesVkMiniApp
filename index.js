@@ -10,6 +10,13 @@ const bot = new VkBot({
     confirmation: 'e90cd682'
 })
 
+const api = require('node-vk-bot-api/lib/api');
+
+api('users.get', {
+    user_ids: 1,
+    access_token: process.env.TOKEN,
+}).then(r => r);
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
 
