@@ -3,9 +3,14 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
-const cors = require('cors')
+const cors = require('cors');
+const { Botact } = require('botact');
+const bot = new Botact({
+    token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
+    confirmation: 'e90cd682'
+})
 
-app.use(cors())
+app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
 
 if (process.env.NODE_ENV === "production"){
@@ -34,6 +39,16 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+//БОТ
+
+bot.on(function (ctx) {
+    console.log(ctx.body)
+})
+
+app.post('/bot', bot.listen);
+
+
+//БОТ
 
 //Запуск - nodemon app.js
 // let connection = await client.connect()
