@@ -76,16 +76,16 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueNameStatus}
                        bottom={queueNameStatus !== 'error' ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
-                           nameQueue.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
+                           nameQueue.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                        }}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'} name={'date'} type={'date'} value={date}
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           date !== '' ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            setDate(e.target.value)
+                           date.trim() !== '' ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                         }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
