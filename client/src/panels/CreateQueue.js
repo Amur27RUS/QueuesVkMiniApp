@@ -95,11 +95,14 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            let pickedDate = new Date(e.target.value);
                            // let curr_date = (today.getMonth() + 1) + '/' + today.getDate() + '/' +  today.getFullYear()
                            // let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
-                           console.log(today.getTime());
-                           console.log(pickedDate.getTime());
+
+
                            SETTHISDATE(e.target.value.split('-').reverse().join('/'))
+                           // 2020-08-27 - ios
+                           //
+                           // 27/08/2020
                            SETTHISISDATE(nowTime);
-                           if(pickedDate.getTime().toFixed.apply < today.getTime().toFixed.apply){
+                           if(pickedDate.getTime() < today.getTime()){
                                console.log('Дата неверна!')
                                 setQueueDateStatus('error');
                            }else {
