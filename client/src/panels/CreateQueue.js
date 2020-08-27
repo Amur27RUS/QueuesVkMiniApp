@@ -82,7 +82,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            setNameQueue(e.target.value);
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Input top={'Дата проведения*'} min={nowTime} name={'date'} type={'date'}
+                <Input top={'Дата проведения*'}
+                       // min={nowTime}
+                       name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите правильную дату!'}
@@ -94,8 +96,10 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            console.log(today.getTime());
                            console.log(pickedDate.getTime());
                            if(pickedDate.getTime() < today.getTime()){
+                               console.log('Дата неверна!')
                                 setQueueDateStatus('error');
                            }else {
+                               console.log('Дата верна!')
                                e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            }
                            setDate(e.target.value)
