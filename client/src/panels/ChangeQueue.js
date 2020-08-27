@@ -15,10 +15,12 @@ import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 
+let now = new Date().toLocaleDateString();
+let nowTime = now.split('.').reverse().join('-')
 
 const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
-    const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0, 10).split('-').reverse().join('.'));
+    const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
     const [newDescription, setNewDescription] = useState(global.queue.descriptionQueue);
     const [newAvatarName, setNewAvatarName] = useState(global.queue.picName);
@@ -86,21 +88,23 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
             <PanelHeader left={<PanelHeaderButton onClick={go} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}
             </PanelHeaderButton>}
-            > Редактирование очереди </PanelHeader>
+            > Редактирование </PanelHeader>
             <FormLayout>
 
                 <Input top={'Название очереди*'}
                        value={newNameQueue}
+                       maxlength = "32"
                        status={newNameStatus}
                        bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
                            e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
                            setNewNameQueue(e.target.value)
                        }}/>
-                <Input top={'Место проведения'} value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
+                <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'} name={'date'} type={'date'}
                        value={newDate}
                        status={newDateStatus}
+                       min = {nowTime}
                        bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
                            e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
@@ -110,7 +114,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
-                <Input top={'Краткое описание очереди'} value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
+                <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '') {
                         changeQueueOnServer();

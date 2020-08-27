@@ -1,6 +1,17 @@
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {MiniInfoCell, Panel, PanelHeader, PanelHeaderButton, Group, Text, Div, Avatar, Button} from '@vkontakte/vkui';
+import {
+	MiniInfoCell,
+	Panel,
+	PanelHeader,
+	PanelHeaderButton,
+	Group,
+	Text,
+	Div,
+	Avatar,
+	Button,
+	Headline
+} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import './Persik.css';
 import Icon20ArticleOutline from '@vkontakte/icons/dist/20/article_outline';
@@ -10,6 +21,7 @@ import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import UsersList from '../usersList'
 import Icon20Info from '@vkontakte/icons/dist/20/info';
 import bridge from "@vkontakte/vk-bridge";
+
 
 
 // const osName = platform(); - Определяет ОС устройства
@@ -61,7 +73,7 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 					{<Icon28ChevronBack/>}
 				</PanelHeaderButton>}
 			>
-				{global.queue.name}
+				Очередь
 			</PanelHeader>
 
 			<div className={'AvatarInQueueDiv'}>
@@ -73,6 +85,7 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 				<div>
 					<br/>
 					<br/>
+					<Headline weight="medium" className={"HeaderOfQueue"}>{global.queue.name}</Headline>
 				{ global.queue.descriptionQueue !== '' &&
 					<MiniInfoCell
 						before={<Icon20ArticleOutline/>}
