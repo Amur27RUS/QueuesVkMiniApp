@@ -21,6 +21,7 @@ function QueueCell({ info, go}) {
                 global.queue.timeQueue = info.time;
                 global.queue.placeQueue = info.place;
                 global.queue.codeQueue = info.code;
+
             }}
             data-to={'aboutQueue'}
         >

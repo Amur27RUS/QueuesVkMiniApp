@@ -146,6 +146,7 @@ class UsersList extends React.Component {
 
                     if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = true;
+                        this.props.setCssEditButton('editQueueButton');
                     }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
                     }

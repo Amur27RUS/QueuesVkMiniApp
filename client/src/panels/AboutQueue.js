@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
 	MiniInfoCell,
@@ -28,38 +28,40 @@ import bridge from "@vkontakte/vk-bridge";
 
 const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
-	useEffect(() => {
-		fetch('/getPeople', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"queueCODE": global.queue.codeQueue,
-			})
-		}).then(function (response) {
-			return response.json();
-		})
-			.then(async function (data) {
-				await getUsersData(data);
+	const [cssEditButton, setCssEditButton] = useState('turnOff');
 
-			})
-	})
+	// useEffect(() => {
+	// 	fetch('/getPeople', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Accept': 'application/json',
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"queueCODE": global.queue.codeQueue,
+	// 		})
+	// 	}).then(function (response) {
+	// 		return response.json();
+	// 	})
+	// 		.then(async function (data) {
+	// 			await getUsersData(data);
+	//
+	// 		})
+	// });
 
-	async function getUsersData(data) {
-		console.log('Получение данных о пользователях через VK Bridge')
-		let tmpUsersArr = data;
-		for (let i = 0; i < tmpUsersArr.length; i++) {
-			if (tmpUsersArr[i].notvkname === null) {
-				if (fetchedUser.id === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
-					global.queue.isUserAdmin = true;
-				} else{
-					global.queue.isUserAdmin = false;
-				}
-			}
-		}
-	}
+	// async function getUsersData(data) {
+	// 	console.log('Получение данных о пользователях через VK Bridge')
+	// 	let tmpUsersArr = data;
+	// 	for (let i = 0; i < tmpUsersArr.length; i++) {
+	// 		if (tmpUsersArr[i].notvkname === null) {
+	// 			if (fetchedUser.id === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
+	// 				global.queue.isUserAdmin = true;
+	// 			} else{
+	// 				global.queue.isUserAdmin = false;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	return (
 		<Panel id={id}>
@@ -118,16 +120,13 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
-					{global.queue.isUserAdmin &&
-						<Button onClick={go} data-to="changeQueue" className={'editQueueButton'} mode={'tertiary'}>Редактировать
-							информацию</Button>
-					}
+					<Button className={cssEditButton} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать информацию</Button>
 
 				</div>
 			</Group>
 			</Div>
 
-			<UsersList go={go} setQueues={setQueues} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} setQueues={setQueues} setCssEditButton={setCssEditButton} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)
