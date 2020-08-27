@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {MiniInfoCell, Panel, PanelHeader, PanelHeaderButton, Group, Text, Div, Avatar, Button} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
@@ -15,6 +15,10 @@ import bridge from "@vkontakte/vk-bridge";
 // const osName = platform(); - Определяет ОС устройства
 
 const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+
+	useEffect(() => {
+		isAdmin();
+	})
 
 	const isAdmin = () => {
 		fetch('/getPeople', {
