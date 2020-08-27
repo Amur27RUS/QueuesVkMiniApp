@@ -94,7 +94,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                        status={newNameStatus}
                        bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
-                           newNameQueue.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
+                           e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
                            setNewNameQueue(e.target.value)
                        }}/>
                 <Input top={'Место проведения'} value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
@@ -103,7 +103,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                        status={newDateStatus}
                        bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           newDate.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
+                           e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
                            setNewDate(e.target.value)
                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>

@@ -76,8 +76,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueNameStatus}
                        bottom={queueNameStatus !== 'error' ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
+                           e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
-                           nameQueue.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                        }}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'} name={'date'} type={'date'}
@@ -85,7 +85,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           date.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
+                           e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            setDate(e.target.value)
                         }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
