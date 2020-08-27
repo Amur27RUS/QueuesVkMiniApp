@@ -3,24 +3,8 @@ import PropTypes from 'prop-types';
 import { RichCell, Avatar } from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
 
-function QueueCell({ info, go, fetchedUser}) {
+function QueueCell({ info, go}) {
 
-    async function getUsersData(data) {
-        console.log('Получение данных о пользователях через VK Bridge')
-        let tmpUsersArr = data;
-        for (let i = 0; i < tmpUsersArr.length; i++) {
-            if (tmpUsersArr[i].notvkname === null) {
-
-                if (fetchedUser.id === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
-                    global.queue.isUserAdmin = true;
-
-                } else if (fetchedUser.id === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin) {
-                    global.queue.isUserAdmin = false;
-                }
-
-            }
-        }
-    }
 
     return(
         <RichCell
@@ -39,23 +23,6 @@ function QueueCell({ info, go, fetchedUser}) {
                 global.queue.timeQueue = info.time;
                 global.queue.placeQueue = info.place;
                 global.queue.codeQueue = info.code;
-
-                fetch('/getPeople', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        "queueCODE": global.queue.codeQueue,
-                    })
-                }).then(function (response) {
-                    return response.json();
-                })
-                    .then(async function (data) {
-                        await getUsersData(data);
-
-                })
 
             }}
             data-to={'aboutQueue'}

@@ -133,7 +133,7 @@ class UsersList extends React.Component {
 
         menuCounter = 1;
 
-        async function getUsersData(data){
+        async function getUsersData(data, setCssEdit){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
             for(let i = 0; i < tmpUsersArr.length; i++){
@@ -147,6 +147,7 @@ class UsersList extends React.Component {
 
                     if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = true;
+                        setCssEdit('')
 
                     }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
@@ -768,6 +769,9 @@ class UsersList extends React.Component {
 
                     <List>
                     {this.state.users.map(info => {
+                        if(global.queue.isUserAdmin) {
+                            this.props.setCssEdit('editQueueButton');
+                        }
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}
                                      // onClick={() => window.open("http://vk.com/id"+info.id)}
                                      selectable={this.state.selectables}

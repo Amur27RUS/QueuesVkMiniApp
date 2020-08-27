@@ -28,6 +28,7 @@ import bridge from "@vkontakte/vk-bridge";
 
 const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
+	const [cssEdit, setCssEdit] = useState('turnOff');
 
 	return (
 		<Panel id={id}>
@@ -85,16 +86,15 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 				>
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
-					{global.queue.isUserAdmin &&
-					<Button className={'editQueueButton'} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать
+
+					<Button className={cssEdit} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать
 						информацию</Button>
-					}
 
 				</div>
 			</Group>
 			</Div>
 
-			<UsersList go={go} setQueues={setQueues} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)

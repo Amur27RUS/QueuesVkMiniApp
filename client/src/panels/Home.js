@@ -75,7 +75,7 @@ const Home = ({ id, snackbar, go, fetchedUser, queues, setActiveStory, setQueues
 					<Group>
 						<List>
 							{queues.map(info => {
-								return <QueueCell info={info} go={go} fetchedUser={fetchedUser}/>
+								return <QueueCell info={info} go={go}/>
 							})}
 						</List>
 
