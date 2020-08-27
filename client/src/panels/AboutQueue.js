@@ -30,7 +30,7 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 			return response.json();
 		})
 			.then(async function (data) {
-				getUsersData(data);
+				await getUsersData(data);
 
 		})
 	}

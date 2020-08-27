@@ -18,11 +18,13 @@ import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 
 const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
-    const [newDate, setNewDate] = useState(global.queue.dateQueue);
+    const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0, 10).split('-').reverse().join('.'));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
     const [newDescription, setNewDescription] = useState(global.queue.descriptionQueue);
     const [newAvatarName, setNewAvatarName] = useState(global.queue.picName);
     const [newPlace, setNewPlace] = useState(global.queue.placeQueue);
+    const [newDateStatus, setNewDateStatus] = useState('');
+    const [newNameStatus, setNewNameStatus] = useState('');
 
     // let pic; //Картинка очереди
     // let picName;
@@ -89,12 +91,21 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
 
                 <Input top={'Название очереди*'}
                        value={newNameQueue}
-                       status={newNameQueue.trim() ? 'valid' : 'error'}
+                       status={newNameStatus}
                        bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
-                       onChange={e => setNewNameQueue(e.target.value)}/>
+                       onChange={e => {
+                           newNameQueue.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
+                           setNewNameQueue(e.target.value)
+                       }}/>
                 <Input top={'Место проведения'} value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} name={'date'} type={'date'} value={newDate}
-                       status={newDate.trim() ? 'valid' : 'error'} bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setNewDate(e.target.value)}/>
+                <Input top={'Дата проведения*'} name={'date'} type={'date'}
+                       value={newDate}
+                       status={newDateStatus}
+                       bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
+                       onChange={e =>{
+                           newDate.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
+                           setNewDate(e.target.value)
+                       }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
