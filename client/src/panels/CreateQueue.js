@@ -16,6 +16,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [queueNameStatus, setQueueNameStatus] = useState('')
     const [queueDateStatus, setQueueDateStatus] = useState('')
 
+    const [THISISDATE, SETTHISDATE] = useState('')
+    const [THISISISDATE, SETTHISISDATE] = useState('')
     // let pic; //Картинка очереди
     // let picName;
     // let picURL = '';
@@ -95,6 +97,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            // let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
                            console.log(today.getTime());
                            console.log(pickedDate.getTime());
+                           SETTHISDATE(e.target.value)
+                           SETTHISISDATE(nowTime);
                            if(pickedDate.getTime() < today.getTime()){
                                console.log('Дата неверна!')
                                 setQueueDateStatus('error');
@@ -104,6 +108,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }
                            setDate(e.target.value)
                         }}/>
+                        <Text>{THISISDATE}</Text>
+                        <Text>{THISISISDATE}</Text>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
