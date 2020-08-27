@@ -26,9 +26,8 @@ import bridge from "@vkontakte/vk-bridge";
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, snackbar, setCssEditButton, cssEditButton, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
-	const [cssEditButton, setCssEditButton] = useState('turnOff');
 
 	return (
 		<Panel id={id}>

@@ -27,6 +27,7 @@ const osName = platform();
 let menuCounter = 1; //Счётчик открытия меню действий
 let styleForButtons = 'ButtonsDiv'; //Стили для кнопки меню действий для IOS/Android
 let styleForButtonAddAdmin = 'giveAdmin'; //Стили для кнопки меню действий для IOS/Android
+let forEditButton = false;
 
 class UsersList extends React.Component {
 
@@ -130,6 +131,9 @@ class UsersList extends React.Component {
                     users: usersArr
                 })
             })
+        if(forEditButton) {
+            this.props.setCssEditButton('editQueueButton');
+        }
         menuCounter = 1;
 
         async function getUsersData(data){
@@ -146,7 +150,7 @@ class UsersList extends React.Component {
 
                     if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = true;
-                        this.props.setCssEditButton('editQueueButton');
+                        forEditButton = true;
                     }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
                     }
