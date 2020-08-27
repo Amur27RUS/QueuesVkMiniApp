@@ -97,8 +97,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            // let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
                            console.log(today.getTime());
                            console.log(pickedDate.getTime());
-                           SETTHISDATE(pickedDate.getTime().toFixed.apply)
-                           SETTHISISDATE(today.getTime().toFixed.apply);
+                           SETTHISDATE(e.target.value.split('.').reverse().join('-'))
+                           SETTHISISDATE(nowTime);
                            if(pickedDate.getTime().toFixed.apply < today.getTime().toFixed.apply){
                                console.log('Дата неверна!')
                                 setQueueDateStatus('error');
