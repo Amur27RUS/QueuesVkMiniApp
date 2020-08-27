@@ -29,10 +29,6 @@ import bridge from "@vkontakte/vk-bridge";
 const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	useEffect(() => {
-		isAdmin();
-	})
-
-	const isAdmin = () => {
 		fetch('/getPeople', {
 			method: 'POST',
 			headers: {
@@ -48,18 +44,17 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 			.then(async function (data) {
 				await getUsersData(data);
 
-		})
-	}
+			})
+	})
 
 	async function getUsersData(data) {
 		console.log('Получение данных о пользователях через VK Bridge')
 		let tmpUsersArr = data;
 		for (let i = 0; i < tmpUsersArr.length; i++) {
 			if (tmpUsersArr[i].notvkname === null) {
-				const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-				if (global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
+				if (fetchedUser.id === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
 					global.queue.isUserAdmin = true;
-				} else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin) {
+				} else{
 					global.queue.isUserAdmin = false;
 				}
 			}
