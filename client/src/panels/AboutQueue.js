@@ -28,28 +28,28 @@ import bridge from "@vkontakte/vk-bridge";
 
 const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
-	useEffect(() => {
-		isAdmin();
-	})
-
-	const isAdmin = () => {
-		fetch('/getPeople', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"queueCODE": this.props.queueCode,
-			})
-		}).then(function (response) {
-			return response.json();
-		})
-			.then(async function (data) {
-				await getUsersData(data);
-
-		})
-	}
+	// useEffect(() => {
+	// 	isAdmin();
+	// })
+	//
+	// const isAdmin = () => {
+	// 	fetch('/getPeople', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Accept': 'application/json',
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"queueCODE": this.props.queueCode,
+	// 		})
+	// 	}).then(function (response) {
+	// 		return response.json();
+	// 	})
+	// 		.then(async function (data) {
+	// 			await getUsersData(data);
+	//
+	// 	})
+	// }
 
 	async function getUsersData(data) {
 		console.log('Получение данных о пользователях через VK Bridge')
