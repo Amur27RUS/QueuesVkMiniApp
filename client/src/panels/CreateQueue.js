@@ -12,6 +12,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [description, setDescription] = useState("");
     const [avatarName, setAvatarName] = useState("");
     const [place, setPlace] = useState("");
+    const [queueNameStatus, setQueueNameStatus] = useState('valid')
+    const [queueDateStatus, setQueueDateStatus] = useState('valid')
 
     // let pic; //Картинка очереди
     // let picName;
@@ -71,12 +73,19 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
             <FormLayout>
                 <Input top={'Название очереди*'}
                        value={nameQueue}
-                       status={nameQueue.trim() ? 'valid' : 'error'}
+                       status={queueNameStatus}
                        bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
-                       onChange={e => setNameQueue(e.target.value)}/>
+                       onChange={e => {
+                           nameQueue.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
+                           setNameQueue(e.target.value);
+                       }}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения'} name={'date'} type={'date'} value={date}
-                       status={date.trim() ? 'valid' : 'error'} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setDate(e.target.value)}/>
+                       status={queueDateStatus} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'}
+                       onChange={e =>{
+                            date.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
+                           setDate(e.target.value)
+                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
@@ -101,6 +110,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                     console.log('Картинка успешно загружена!!!');
                                 })
                         }
+                    }else{
+                        setQueueNameStatus('error');
+                        setQueueDateStatus('error');
                     }
                 }}>Создать</Button>
             </FormLayout>

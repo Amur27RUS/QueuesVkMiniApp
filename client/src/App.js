@@ -304,7 +304,7 @@ const App = () =>{
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
 			<Home id='home' snackbar={snackbar} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-			<AboutQueue id='aboutQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+			<AboutQueue id='aboutQueue' snackbar={snackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
 

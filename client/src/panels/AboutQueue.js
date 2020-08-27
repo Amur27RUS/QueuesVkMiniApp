@@ -14,7 +14,7 @@ import bridge from "@vkontakte/vk-bridge";
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const isAdmin = () => {
 		fetch('/getPeople', {
