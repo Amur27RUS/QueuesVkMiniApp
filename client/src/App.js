@@ -10,18 +10,21 @@ import {
 	Input,
 	FormLayout,
 	View,
+	Avatar,
+	Snackbar,
 } from "@vkontakte/vkui";
-import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
 import AddSquareOutline28 from '@vkontakte/icons/dist/28/add_square_outline'
 
 import Home from './panels/Home';
-import JoinQueue from './panels/JoinQueue';
 import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import ChangeQueue from "./panels/ChangeQueue"
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+import Icon16User from '@vkontakte/icons/dist/16/user';
+import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import cowboy from "./img/cowboy.jpg";
-import Title from "@vkontakte/vkui/dist/components/Typography/Title/Title";
+
 
 global.queue = {
 	name: undefined,
@@ -58,6 +61,9 @@ const App = () =>{
 	const [codeInput, setCodeInput] = useState(undefined);
 	const [queues, setQueues] = useState([]);
 	const [queueCODE, setQueueCODE] = useState('');
+	const [snackbar, setSnackbar] = useState(null);
+	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать приглашение');
+	const [joinQueueResponse, setJoinQueueResponse] = useState('')
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -142,12 +148,43 @@ const App = () =>{
 						"serverCode": data,
 						"userID": fetchedUser.id,
 					})
-				}).then(function (response) {
-					return response.json();
+				}).then(async function (response) {
+							let res = await response.json();
+
+							console.log(joinQueueResponse);
+							if (res === 'noQueue') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+								>
+									Очереди с введённым кодом не существует!
+								</Snackbar>)
+							} else if (res === 'alreadyThere') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14} height={14}/></Avatar>}
+								>
+									Вы уже находитесь в этой очереди!
+								</Snackbar>)
+							} else if (res === 'success') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+								>
+									Вы успешно присоединились к очереди!
+								</Snackbar>)
+							}
 				})
-					.then(function (data) {
-						console.log('Ответ на запрос на вход в очередь');
-					})
+
 			}
 	}
 
@@ -172,6 +209,10 @@ const App = () =>{
 			})
 	}
 
+	const blueBackground = {
+		backgroundColor: 'var(--accent)'
+	};
+
 	const modal = (
 		<ModalRoot activeModal={activeModal}>
 			<ModalCard
@@ -186,9 +227,6 @@ const App = () =>{
 						mode: 'primary',
 						action: () => {
 							sendDataToServer(codeInput.toUpperCase());
-							setActiveModal(null);
-							setCodeInput(undefined);
-							updateQueues(fetchedUser.id);
 						}
 					}
 				]}
@@ -196,14 +234,14 @@ const App = () =>{
 				<FormLayout className={'inputJoin'}>
 						<Input id='input' className={'inputJoin'} autoFocus={false} type={'text'} minlength={6} maxlength={6} onChange={(e) => setCodeInput(e.target.value)}/>
 				</FormLayout>
-				{/*<div className={'inputCodeDiv'}>*/}
-				{/*	<ReactCodeInput id={'codeINPUT'} type='text' fields={6} onChange={e => setCodeInput(e)} autoFocus={false} {...props}/>*/}
-				{/*</div>*/}
 			</ModalCard>
 
 			<ModalCard
 				id={MODAL_CARD_CHAT_INVITE}
-				onClose={() => setActiveModal(null)}
+				onClose={() => {
+					setActiveModal(null)
+					setCopyButtonTitle('Скопировать приглашение')
+				}}
 				icon={<span role="img" aria-label="Готово!" className={'emoji'}>&#128588;</span>}
 				header="Очередь создана!"
 				caption="Перейдите на страницу с очередями, чтобы увидеть её!"
@@ -214,21 +252,17 @@ const App = () =>{
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
+						setCopyButtonTitle('Скопировать приглашение')
 					}}, {
-					title: 'Скопировать приглашение',
+					title: copyButtonTitle,
 					mode: 'secondary',
 					action: () => {
-						// const code = document.getElementById('copyInput');
-						// code.select();
-						// document.execCommand('copy')
 						copyToClipboard(queueCODE);
+						setCopyButtonTitle('Скопировано!')
 					}
 				}]}
 				actionsLayout="vertical"
 			>
-				{/*<FormLayout className={'inputJoin'}>*/}
-				{/*	<Title id='copyInput' top={'Код вашей очереди:'} className={'copyText'} value={queueCODE}/>*/}
-				{/*</FormLayout>*/}
 			</ModalCard>
 
 		</ModalRoot>
@@ -269,13 +303,13 @@ const App = () =>{
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-			<AboutQueue id='aboutQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-			<ChangeQueue id='changeQueue' setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setPopout={setPopout} setQueues={setQueues}/>
+			<Home id='home' snackbar={snackbar} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+			<AboutQueue id='aboutQueue' snackbar={snackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
 
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
-			<CreateQueue id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			<CreateQueue snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
 
 		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}

@@ -781,6 +781,13 @@ class UsersList extends React.Component {
                             draggingList.splice(from, 1);
                             draggingList.splice(to, 0, this.state.users[from]);
                             this.setState({users: draggingList });
+                            if(this.state.openMenuButton === 'Закрыть меню действий'){
+                                this.setState({
+                                    CSSMenuDropout: 'turnOff',
+                                    openMenuButton: 'Открыть меню действий',
+                                })
+                                menuCounter++;
+                            }
 
                             console.log('Отправлен запрос на обновление списка из-за перемещения...')
                             this.changeUsersPositionOnServer(this.state.users);
@@ -790,6 +797,13 @@ class UsersList extends React.Component {
                             this.setState({
                                 users: [...this.state.users.slice(0, this.state.users.indexOf(info)), ...this.state.users.slice(this.state.users.indexOf(info) +1)]
                             });
+                            if(this.state.openMenuButton === 'Закрыть меню действий'){
+                                this.setState({
+                                    CSSMenuDropout: 'turnOff',
+                                    openMenuButton: 'Открыть меню действий',
+                                })
+                                menuCounter++;
+                            }
                             console.log('Отправлен запрос на обновление списка из-за удаления...')
                             // this.changeUsersPositionOnServer(this.state.users);
                         }}><text className={'nameUser'}>{info.name}</text></Cell>

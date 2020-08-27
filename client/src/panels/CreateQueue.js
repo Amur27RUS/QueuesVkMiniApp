@@ -6,13 +6,15 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-')
 
-const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
+const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
     const [description, setDescription] = useState("");
     const [avatarName, setAvatarName] = useState("");
     const [place, setPlace] = useState("");
+    const [queueNameStatus, setQueueNameStatus] = useState('')
+    const [queueDateStatus, setQueueDateStatus] = useState('')
 
     // let pic; //Картинка очереди
     // let picName;
@@ -73,12 +75,21 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                 <Input top={'Название очереди*'}
                        value={nameQueue}
                        maxlength = "32"
-                       status={nameQueue.trim() ? 'valid' : 'error'}
-                       bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
-                       onChange={e => setNameQueue(e.target.value)}/>
+                       status={queueNameStatus}
+                       bottom={queueNameStatus !== 'error' ? '' : 'Пожалуйста, введите название!'}
+                       onChange={e => {
+                           e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
+                           setNameQueue(e.target.value);
+                       }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} min={nowTime} name={'date'} type={'date'} value={date}
-                       status={date.trim() ? 'valid' : 'error'} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setDate(e.target.value)}/>
+                <Input top={'Дата проведения*'} min={nowTime} name={'date'} type={'date'}
+                       value={date}
+                       status={queueDateStatus}
+                       bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
+                       onChange={e =>{
+                           e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
+                           setDate(e.target.value)
+                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
@@ -103,9 +114,13 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                                     console.log('Картинка успешно загружена!!!');
                                 })
                         }
+                    }else{
+                        setQueueNameStatus('error');
+                        setQueueDateStatus('error');
                     }
                 }}>Создать</Button>
             </FormLayout>
+            {snackbar}
         </Panel>
     );
 }
