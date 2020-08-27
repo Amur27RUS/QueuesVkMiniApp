@@ -4,7 +4,9 @@ import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
 let now = new Date().toLocaleDateString();
-let nowTime = now.split('.').reverse().join('-')
+let nowTime = now.split('.').reverse().join('-');
+
+let nowIOSTime = now.split('/').reverse().join('-');
 
 const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
@@ -91,12 +93,12 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите правильную дату!'}
                        onChange={e =>{
-                           let today = new Date(nowTime);
+                           let today = new Date(nowIOSTime);
                            let pickedDate = new Date(e.target.value);
 
                            SETTHISDATE(e.target.value);
                            SETTHISISDATE(nowTime);
-                           if(pickedDate.getTime() < today.getTime()){
+                           if(today-pickedDate > 86400000){
                                console.log('Дата неверна!')
                                 setQueueDateStatus('error');
                            }else {
