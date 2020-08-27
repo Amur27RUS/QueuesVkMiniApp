@@ -129,7 +129,7 @@ const App = () =>{
 		}
 	}, []);
 
-	const camelCase = ( scheme, needChange = false ) => {
+	const camelCase = ( scheme, needChange = true ) => {
 		let isLight = lights.includes( scheme );
 
 		if( needChange ) {
