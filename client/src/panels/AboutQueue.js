@@ -87,7 +87,7 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
-					<Button className={cssEdit} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать
+					<Button className={'editQueueButton'} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать
 						информацию</Button>
 
 				</div>
