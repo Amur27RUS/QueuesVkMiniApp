@@ -122,17 +122,16 @@ const App = () =>{
 		fetchData();
 
 
-
-
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
 	}, []);
 
-	const camelCase = ( scheme, needChange = false ) => {
+	const camelCase = ( scheme, needChange = true ) => {
 		let isLight = lights.includes( scheme );
 
 		if( needChange ) {
+			isLight = !isLight;
 			isLight = !isLight;
 		}
 		setScheme( isLight ? 'bright_light' : 'space_gray');
