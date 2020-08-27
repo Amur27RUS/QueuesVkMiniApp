@@ -60,14 +60,15 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
-
+        console.log(this.props.schemeForMenu);
         if( this.props.schemeForMenu === 'client_light') {
             this.setState({
-                CSSActionsButton: 'showActionsButton'
+                CSSActionsButton: 'showActionsButtonDark'
             });
+
         }else{
             this.setState({
-                CSSActionsButton: 'showActionsButtonDark'
+                CSSActionsButton: 'showActionsButton'
             });
         }
 
@@ -504,13 +505,15 @@ class UsersList extends React.Component {
             if(this.props.schemeForMenu === 'client_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropout',
+                    CSSMenuDropout: 'CSSMenuDropoutDark',
                 })
+
             }else{
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropoutDark',
+                    CSSMenuDropout: 'CSSMenuDropout',
                 })
+
             }
         }else{
             this.setState({
