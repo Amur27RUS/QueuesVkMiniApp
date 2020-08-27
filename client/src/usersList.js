@@ -769,9 +769,6 @@ class UsersList extends React.Component {
 
                     <List>
                     {this.state.users.map(info => {
-                        if(global.queue.isUserAdmin) {
-                            this.props.setCssEdit('editQueueButton');
-                        }
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}
                                      // onClick={() => window.open("http://vk.com/id"+info.id)}
                                      selectable={this.state.selectables}
