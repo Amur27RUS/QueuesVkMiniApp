@@ -149,9 +149,10 @@ const App = () =>{
 						"userID": fetchedUser.id,
 					})
 				}).then(async function (response) {
+							let res = await response.json();
 
 							console.log(joinQueueResponse);
-							if (await response.json() === 'noQueue') {
+							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
 								setSnackbar(<Snackbar
@@ -161,7 +162,7 @@ const App = () =>{
 								>
 									Очереди с введённым кодом не существует!
 								</Snackbar>)
-							} else if (await response.json() === 'alreadyThere') {
+							} else if (res === 'alreadyThere') {
 								setActiveModal(null);
 								setCodeInput(undefined);
 								setSnackbar(<Snackbar
@@ -171,7 +172,7 @@ const App = () =>{
 								>
 									Вы уже находитесь в этой очереди!
 								</Snackbar>)
-							} else if (await response.json() === 'success') {
+							} else if (res === 'success') {
 								setActiveModal(null);
 								setCodeInput(undefined);
 								setSnackbar(<Snackbar

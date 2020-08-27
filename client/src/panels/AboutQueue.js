@@ -15,6 +15,10 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 
 const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
+	const isAdmin = () => {
+
+	}
+
 	return (
 		<Panel id={id}>
 			<PanelHeader
