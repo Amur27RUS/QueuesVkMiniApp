@@ -87,7 +87,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           if(nowTime > e.target.value){
+                           let today = new Date(nowTime);
+                           let pickedDate = new Date(e.target.value);
+                           if(pickedDate < today){
                                 setQueueDateStatus('error');
                            }else {
                                e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
