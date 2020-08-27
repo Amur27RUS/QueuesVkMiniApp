@@ -89,7 +89,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        onChange={e =>{
                            let today = new Date(nowTime);
                            let pickedDate = new Date(e.target.value);
-                           if(pickedDate < today){
+                           let curr_date = (today.getMonth() + 1) + '/' + today.getDate() + '/' +  today.getFullYear()
+                           let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
+                           if(pick_date < curr_date){
                                 setQueueDateStatus('error');
                            }else {
                                e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
