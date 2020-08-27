@@ -65,8 +65,6 @@ const App = () =>{
 	const [snackbar, setSnackbar] = useState(null);
 	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать приглашение');
 	const [joinQueueResponse, setJoinQueueResponse] = useState('')
-	const [scheme, setScheme] = useState('bright_light');
-	const [lights, setLights] = useState(['bright_light', 'client_light']);
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -75,11 +73,10 @@ const App = () =>{
 		console.log('Получение данных о пользователе через VK Bridge')
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
-				camelCase( data.scheme )
-				// const schemeAttribute = document.createAttribute('scheme');
-				// console.log(schemeAttribute.value)
-				// schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				// document.body.attributes.setNamedItem(schemeAttribute);
+				const schemeAttribute = document.createAttribute('scheme');
+				console.log(schemeAttribute.value)
+				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
 		async function fetchData() {
@@ -126,20 +123,6 @@ const App = () =>{
 			setQueues(queuesArray);
 		}
 	}, []);
-
-	const camelCase = ( scheme, needChange = false ) => {
-		let isLight = lights.includes( scheme );
-
-		if( needChange ) {
-			isLight = !isLight;
-		}
-		setScheme( isLight ? 'bright_light' : 'space_gray');
-
-		bridge.send('VKWebAppSetViewSettings', {
-			'status_bar_style': isLight ? 'dark' : 'light',
-			'action_bar_color': isLight ? '#ffffff' : '#191919'
-		});
-	}
 
 
 	const go = e => {

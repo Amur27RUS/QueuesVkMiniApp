@@ -36,14 +36,6 @@ const Home = ({ id, snackbar, go, fetchedUser, queues, setActiveStory, setQueues
 					queuesSet(data);
 
 				})
-			bridge.subscribe(({ detail: { type, data }}) => {
-				if (type === 'VKWebAppUpdateConfig') {
-					const schemeAttribute = document.createAttribute('scheme');
-					console.log(schemeAttribute.value)
-					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-					document.body.attributes.setNamedItem(schemeAttribute);
-				}
-			});
 		}
 		homePanelCounter++;
 		// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
