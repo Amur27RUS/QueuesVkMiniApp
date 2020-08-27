@@ -5,7 +5,7 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
 
 
-const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
+const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
@@ -104,6 +104,7 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
                     }
                 }}>Создать</Button>
             </FormLayout>
+            {/*{snackbar}*/}
         </Panel>
     );
 }

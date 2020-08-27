@@ -1,11 +1,22 @@
 import React, {useState} from 'react';
-import {Button, PanelHeader, Panel, FormLayout, Input, File, Text, PanelHeaderButton} from "@vkontakte/vkui";
+import {
+    Button,
+    PanelHeader,
+    Panel,
+    FormLayout,
+    Input,
+    File,
+    Text,
+    PanelHeaderButton,
+    Snackbar,
+    Avatar
+} from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
+import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 
 
-
-const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
+const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
     const [newDate, setNewDate] = useState(global.queue.dateQueue);
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
@@ -64,6 +75,9 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
     const getRandomInt = (max) => {
         return Math.floor(Math.random() * Math.floor(max));
     }
+    const blueBackground = {
+        backgroundColor: 'var(--accent)'
+    };
 
     return(
         <Panel id={id} >
@@ -105,9 +119,17 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
                                     console.log('Картинка успешно загружена!!!');
                                 })
                         }
+                        setSnackbar(<Snackbar
+                            layout="vertical"
+                            onClose={() => setSnackbar(null)}
+                            before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}
+                        >
+                            Изменения сохранены!
+                        </Snackbar>)
                     }
                 }}>Сохранить</Button>
             </FormLayout>
+            {snackbar}
         </Panel>
     );
 }

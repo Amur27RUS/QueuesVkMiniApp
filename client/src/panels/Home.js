@@ -11,7 +11,7 @@ import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 const MODAL_CARD_ABOUT = 'say-about';
 let homePanelCounter = 0;
 
-const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
+const Home = ({ id, snackbar, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
@@ -86,7 +86,7 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 						Войти с помощью кода
 					</Button>
 				</Div>
-
+				{snackbar}
 			</Panel>
 		)
 }
