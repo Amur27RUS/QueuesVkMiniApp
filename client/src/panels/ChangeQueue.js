@@ -93,13 +93,14 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
 
                 <Input top={'Название очереди*'}
                        value={newNameQueue}
+                       maxlength = "32"
                        status={newNameStatus}
                        bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
                            e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
                            setNewNameQueue(e.target.value)
                        }}/>
-                <Input top={'Место проведения'} value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
+                <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'} name={'date'} type={'date'}
                        value={newDate}
                        status={newDateStatus}
@@ -113,7 +114,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
-                <Input top={'Краткое описание очереди'} value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
+                <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '') {
                         changeQueueOnServer();
