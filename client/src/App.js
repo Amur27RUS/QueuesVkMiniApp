@@ -24,6 +24,7 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import cowboy from "./img/cowboy.jpg";
+import ConfigProvider from "@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider";
 
 
 global.queue = {
@@ -64,6 +65,8 @@ const App = () =>{
 	const [snackbar, setSnackbar] = useState(null);
 	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать приглашение');
 	const [joinQueueResponse, setJoinQueueResponse] = useState('')
+	const [scheme, setScheme] = useState('bright_light');
+	const [lights, setLights] = useState(['bright_light', 'client_light']);
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -72,9 +75,11 @@ const App = () =>{
 		console.log('Получение данных о пользователе через VK Bridge')
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
+				camelCase( data.scheme )
+				// const schemeAttribute = document.createAttribute('scheme');
+				// console.log(schemeAttribute.value)
+				// schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				// document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
 		async function fetchData() {
@@ -123,6 +128,20 @@ const App = () =>{
 			setQueues(queuesArray);
 		}
 	}, []);
+
+	const camelCase = ( scheme, needChange = false ) => {
+		let isLight = lights.includes( scheme );
+
+		if( needChange ) {
+			isLight = !isLight;
+		}
+		setScheme( isLight ? 'bright_light' : 'space_gray');
+
+		bridge.send('VKWebAppSetViewSettings', {
+			'status_bar_style': isLight ? 'dark' : 'light',
+			'action_bar_color': isLight ? '#ffffff' : '#191919'
+		});
+	}
 
 
 	const go = e => {
@@ -278,6 +297,7 @@ const App = () =>{
 	}
 
 	return (
+		<ConfigProvider isWebView={true} scheme={scheme}>
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
@@ -316,6 +336,7 @@ const App = () =>{
 		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}
 		{/*</View>*/}
 		</Epic>
+		</ConfigProvider>
 	);
 }
 
