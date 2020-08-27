@@ -84,7 +84,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                            date.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
+                           date.trim() !== '' ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            setDate(e.target.value)
                         }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
