@@ -96,8 +96,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            let today = new Date(nowIOSTime);
                            let pickedDate = new Date(e.target.value);
 
-                           SETTHISDATE(e.target.value);
-                           SETTHISISDATE(nowTime);
                            if(today-pickedDate > 86400000){
                                console.log('Дата неверна!')
                                 setQueueDateStatus('error');
@@ -107,8 +105,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }
                            setDate(e.target.value)
                         }}/>
-                        <Text>{THISISDATE}</Text>
-                        <Text>{THISISISDATE}</Text>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
