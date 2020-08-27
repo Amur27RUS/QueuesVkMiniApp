@@ -30,39 +30,6 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 
 	const [cssEditButton, setCssEditButton] = useState('turnOff');
 
-	// useEffect(() => {
-	// 	fetch('/getPeople', {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Accept': 'application/json',
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 		body: JSON.stringify({
-	// 			"queueCODE": global.queue.codeQueue,
-	// 		})
-	// 	}).then(function (response) {
-	// 		return response.json();
-	// 	})
-	// 		.then(async function (data) {
-	// 			await getUsersData(data);
-	//
-	// 		})
-	// });
-
-	// async function getUsersData(data) {
-	// 	console.log('Получение данных о пользователях через VK Bridge')
-	// 	let tmpUsersArr = data;
-	// 	for (let i = 0; i < tmpUsersArr.length; i++) {
-	// 		if (tmpUsersArr[i].notvkname === null) {
-	// 			if (fetchedUser.id === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
-	// 				global.queue.isUserAdmin = true;
-	// 			} else{
-	// 				global.queue.isUserAdmin = false;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 	return (
 		<Panel id={id}>
 			<PanelHeader
