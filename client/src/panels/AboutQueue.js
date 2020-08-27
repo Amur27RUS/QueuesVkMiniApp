@@ -26,7 +26,7 @@ import bridge from "@vkontakte/vk-bridge";
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id, snackbar, setCssEditButton, cssEditButton, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 
 	return (
@@ -85,14 +85,16 @@ const AboutQueue = ({id, snackbar, setCssEditButton, cssEditButton, fetchedUser,
 				>
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
-
-					<Button className={cssEditButton} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать информацию</Button>
+					{global.queue.isUserAdmin &&
+					<Button className={'editQueueButton'} onClick={go} data-to="changeQueue" mode={'tertiary'}>Редактировать
+						информацию</Button>
+					}
 
 				</div>
 			</Group>
 			</Div>
 
-			<UsersList go={go} setQueues={setQueues} setCssEditButton={setCssEditButton} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} setQueues={setQueues} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)
