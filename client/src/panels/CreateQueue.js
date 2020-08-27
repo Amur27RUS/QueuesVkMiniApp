@@ -85,13 +85,15 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Input top={'Дата проведения*'} min={nowTime} name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
+                       bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите правильную дату!'}
                        onChange={e =>{
                            let today = new Date(nowTime);
                            let pickedDate = new Date(e.target.value);
-                           let curr_date = (today.getMonth() + 1) + '/' + today.getDate() + '/' +  today.getFullYear()
-                           let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
-                           if(pick_date < curr_date){
+                           // let curr_date = (today.getMonth() + 1) + '/' + today.getDate() + '/' +  today.getFullYear()
+                           // let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
+                           console.log(today.getTime());
+                           console.log(pickedDate.getTime());
+                           if(pickedDate.getTime() < today.getTime()){
                                 setQueueDateStatus('error');
                            }else {
                                e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
