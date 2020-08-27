@@ -64,7 +64,8 @@ const App = () =>{
 	const [queueCODE, setQueueCODE] = useState('');
 	const [snackbar, setSnackbar] = useState(null);
 	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать приглашение');
-	const [joinQueueResponse, setJoinQueueResponse] = useState('')
+	const [joinQueueResponse, setJoinQueueResponse] = useState('');
+	const [schemeForMenu, setSchemeForMenu] = useState('client_light');
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -75,6 +76,7 @@ const App = () =>{
 			if (type === 'VKWebAppUpdateConfig') {
 				const schemeAttribute = document.createAttribute('scheme');
 				console.log(schemeAttribute.value)
+				setSchemeForMenu(data.scheme);
 				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
@@ -304,7 +306,7 @@ const App = () =>{
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
 			<Home id='home' snackbar={snackbar} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-			<AboutQueue id='aboutQueue' snackbar={snackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+			<AboutQueue id='aboutQueue' snackbar={snackbar} schemeForMenu={schemeForMenu} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
 

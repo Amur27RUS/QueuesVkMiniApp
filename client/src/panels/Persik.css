@@ -173,6 +173,16 @@
   transition-duration: 1000ms;
 }
 
+.CSSMenuDropoutDark {
+  width: 252px;
+  display: inline-block;
+  position: absolute;
+  background-color: #232324;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1);
+  border-radius: 0px 0px 10px 10px;
+  transition-duration: 1000ms;
+}
+
 .exitQueueButton {
 
 }

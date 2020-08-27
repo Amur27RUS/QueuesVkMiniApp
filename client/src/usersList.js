@@ -490,10 +490,17 @@ class UsersList extends React.Component {
             this.setState({cssSkipButton: 'turnOff'});
         }
         if (menuCounter % 2 !== 0){
-            this.setState({
-                openMenuButton: 'Закрыть меню действий',
-                CSSMenuDropout: 'CSSMenuDropout',
-            })
+            if(this.props.schemeForMenu === 'client_light') {
+                this.setState({
+                    openMenuButton: 'Закрыть меню действий',
+                    CSSMenuDropout: 'CSSMenuDropout',
+                })
+            }else{
+                this.setState({
+                    openMenuButton: 'Закрыть меню действий',
+                    CSSMenuDropout: 'CSSMenuDropoutDark',
+                })
+            }
         }else{
             this.setState({
                 openMenuButton: 'Открыть меню действий',
