@@ -3,11 +3,13 @@ import {Button, PanelHeader, Panel, FormLayout, Input, File, Text, PanelHeaderBu
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 
+let now = new Date().toLocaleDateString();
+let nowTime = now.split('.').reverse().join('-')
 
 
 const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
-    const [newDate, setNewDate] = useState(global.queue.dateQueue);
+    const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
     const [newDescription, setNewDescription] = useState(global.queue.descriptionQueue);
     const [newAvatarName, setNewAvatarName] = useState(global.queue.picName);
@@ -70,7 +72,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
             <PanelHeader left={<PanelHeaderButton onClick={go} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}
             </PanelHeaderButton>}
-            > Редактирование очереди </PanelHeader>
+            > Редактирование </PanelHeader>
             <FormLayout>
 
                 <Input top={'Название очереди*'}
@@ -79,7 +81,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
                        bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => setNewNameQueue(e.target.value)}/>
                 <Input top={'Место проведения'} value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} name={'date'} type={'date'} value={newDate}
+                <Input top={'Дата проведения'} min={nowTime} name={'date'} type={'date'} value={newDate}
                        status={newDate.trim() ? 'valid' : 'error'} bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setNewDate(e.target.value)}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
@@ -90,6 +92,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE}) => {
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '') {
                         changeQueueOnServer();
                         changedQueue();
+                        console.log('AAAAAAAAAAAAAA')
+                        console.log(newDate)
                         if(global.queue.pic !== undefined) {
                             fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
                                 method: 'POST',

@@ -57,7 +57,7 @@ const Home = ({ id, go, fetchedUser, queues, setActiveStory, setQueues, setActiv
 
 		return (
 			<Panel id={id}>
-				<PanelHeader>Ваши очереди</PanelHeader>
+				<PanelHeader className={'homeHeader'}>Ваши очереди</PanelHeader>
 
 				{queues.length === 0 &&
 				<Div>

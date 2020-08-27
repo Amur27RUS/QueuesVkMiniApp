@@ -265,6 +265,17 @@
   user-select: none;
 }
 
-.PanelHeader {
-  width: 80%;
+/*.PanelHeader--ios.PanelHeader--no-right .PanelHeader__content>* {*/
+/*  padding-right: 75px;*/
+/*  text-align: left;*/
+/*}*/
+
+.HeaderOfQueue {
+  text-align: center;
+  padding-left: 12px;
+  padding-right: 12px;
 }
+
+/*.homeHeader {*/
+/*  padding-right: 20%;*/
+/*}*/

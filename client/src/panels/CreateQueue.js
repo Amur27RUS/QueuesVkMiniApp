@@ -3,7 +3,8 @@ import {Button, PanelHeader, Panel,  FormLayout, Input, File, Text} from "@vkont
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
-
+let now = new Date().toLocaleDateString();
+let nowTime = now.split('.').reverse().join('-')
 
 const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
@@ -67,21 +68,22 @@ const CreateQueue = ({ id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
 
     return(
         <Panel id={id} >
-            <PanelHeader> Создание очереди </PanelHeader>
+            <PanelHeader> Создание </PanelHeader>
             <FormLayout>
                 <Input top={'Название очереди*'}
                        value={nameQueue}
+                       maxlength = "32"
                        status={nameQueue.trim() ? 'valid' : 'error'}
                        bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => setNameQueue(e.target.value)}/>
-                <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Input top={'Дата проведения'} name={'date'} type={'date'} value={date}
+                <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
+                <Input top={'Дата проведения'} min={nowTime} name={'date'} type={'date'} value={date}
                        status={date.trim() ? 'valid' : 'error'} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'} onChange={e =>setDate(e.target.value)}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
-                <Input top={'Краткое описание очереди'} value={description} onChange={e => setDescription(e.target.value)}/>
+                <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
                     if(nameQueue.trim() !== '' && date.trim() !== '') {
                         createQueueOnServer();
