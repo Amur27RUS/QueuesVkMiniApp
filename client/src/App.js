@@ -278,7 +278,6 @@ const App = () =>{
 	}
 
 	return (
-		<ConfigProvider isWebView={true} scheme={scheme}>
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
@@ -317,7 +316,6 @@ const App = () =>{
 		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}
 		{/*</View>*/}
 		</Epic>
-		</ConfigProvider>
 	);
 }
 
