@@ -9,6 +9,7 @@ import Icon20PlaceOutline from '@vkontakte/icons/dist/20/place_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import UsersList from '../usersList'
 import Icon20Info from '@vkontakte/icons/dist/20/info';
+import bridge from "@vkontakte/vk-bridge";
 
 
 // const osName = platform(); - Определяет ОС устройства
@@ -16,7 +17,37 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const isAdmin = () => {
+		fetch('/getPeople', {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				"queueCODE": this.props.queueCode,
+			})
+		}).then(function (response) {
+			return response.json();
+		})
+			.then(async function (data) {
+				getUsersData(data);
 
+		})
+	}
+
+	async function getUsersData(data) {
+		console.log('Получение данных о пользователях через VK Bridge')
+		let tmpUsersArr = data;
+		for (let i = 0; i < tmpUsersArr.length; i++) {
+			if (tmpUsersArr[i].notvkname === null) {
+				const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+				if (global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
+					global.queue.isUserAdmin = true;
+				} else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin) {
+					global.queue.isUserAdmin = false;
+				}
+			}
+		}
 	}
 
 	return (
@@ -75,7 +106,10 @@ const AboutQueue = ({id, fetchedUser, go, queues, setActiveModal, setPopout, set
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
-				<Button onClick={go} data-to="changeQueue" className={'editQueueButton'} mode={'tertiary'}>Редактировать информацию</Button>
+					{global.queue.isUserAdmin &&
+						<Button onClick={go} data-to="changeQueue" className={'editQueueButton'} mode={'tertiary'}>Редактировать
+							информацию</Button>
+					}
 
 				</div>
 			</Group>
