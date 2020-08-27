@@ -5,6 +5,7 @@ import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
 import {Placeholder, List, Div, Group, PanelHeader, Panel, Button} from "@vkontakte/vkui";
 import cowboy from "../img/cowboy.jpg";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
+import bridge from "@vkontakte/vk-bridge";
 
 
 
@@ -35,6 +36,14 @@ const Home = ({ id, snackbar, go, fetchedUser, queues, setActiveStory, setQueues
 					queuesSet(data);
 
 				})
+			bridge.subscribe(({ detail: { type, data }}) => {
+				if (type === 'VKWebAppUpdateConfig') {
+					const schemeAttribute = document.createAttribute('scheme');
+					console.log(schemeAttribute.value)
+					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+					document.body.attributes.setNamedItem(schemeAttribute);
+				}
+			});
 		}
 		homePanelCounter++;
 		// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */

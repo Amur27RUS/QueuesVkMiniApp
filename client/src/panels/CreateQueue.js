@@ -18,12 +18,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [queueNameStatus, setQueueNameStatus] = useState('')
     const [queueDateStatus, setQueueDateStatus] = useState('')
 
-    const [THISISDATE, SETTHISDATE] = useState('')
-    const [THISISISDATE, SETTHISISDATE] = useState('')
-    // let pic; //Картинка очереди
-    // let picName;
-    // let picURL = '';
-
     const createQueueOnServer = () => {
         console.log('Отправлен запрос на создание очереди...');
         console.log('С параметрами:');

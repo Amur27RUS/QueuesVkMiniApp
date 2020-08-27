@@ -18,6 +18,9 @@ import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-')
 
+let nowIOSTime = now.split('/').reverse().join('-');
+
+
 const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
     const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
@@ -107,7 +110,16 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                        min = {nowTime}
                        bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
+                           let today = new Date(nowIOSTime);
+                           let pickedDate = new Date(e.target.value);
+
+                           if(today-pickedDate > 86400000){
+                               console.log('Дата неверна!')
+                               setNewDateStatus('error');
+                           }else {
+                               console.log('Дата верна!')
+                               e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
+                           }
                            setNewDate(e.target.value)
                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
