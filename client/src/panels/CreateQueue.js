@@ -85,7 +85,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'}
-                       // min={nowTime}
+                       min={nowTime}
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
@@ -93,14 +93,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        onChange={e =>{
                            let today = new Date(nowTime);
                            let pickedDate = new Date(e.target.value);
-                           // let curr_date = (today.getMonth() + 1) + '/' + today.getDate() + '/' +  today.getFullYear()
-                           // let pick_date = (pickedDate.getMonth() + 1) + '/' + pickedDate.getDate() + '/' +  pickedDate.getFullYear()
 
-
-                           SETTHISDATE(e.target.value.split('-').reverse().join('/'))
-                           // 2020-08-27 - ios
-                           //
-                           // 27/08/2020
+                           SETTHISDATE(e.target.value);
                            SETTHISISDATE(nowTime);
                            if(pickedDate.getTime() < today.getTime()){
                                console.log('Дата неверна!')
