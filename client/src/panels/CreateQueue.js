@@ -12,8 +12,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [description, setDescription] = useState("");
     const [avatarName, setAvatarName] = useState("");
     const [place, setPlace] = useState("");
-    const [queueNameStatus, setQueueNameStatus] = useState('valid')
-    const [queueDateStatus, setQueueDateStatus] = useState('valid')
+    const [queueNameStatus, setQueueNameStatus] = useState('')
+    const [queueDateStatus, setQueueDateStatus] = useState('')
 
     // let pic; //Картинка очереди
     // let picName;
@@ -74,14 +74,15 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Input top={'Название очереди*'}
                        value={nameQueue}
                        status={queueNameStatus}
-                       bottom={nameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
+                       bottom={queueNameStatus !== 'error' ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
                            nameQueue.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
                        }}/>
                 <Input top={'Место проведения'} value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения'} name={'date'} type={'date'} value={date}
-                       status={queueDateStatus} bottom={date.trim() ? '' : 'Пожалуйста, выберите дату!'}
+                       status={queueDateStatus}
+                       bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
                             date.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            setDate(e.target.value)
@@ -116,7 +117,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     }
                 }}>Создать</Button>
             </FormLayout>
-            {/*{snackbar}*/}
+            {snackbar}
         </Panel>
     );
 }
