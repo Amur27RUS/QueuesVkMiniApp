@@ -163,6 +163,16 @@
   z-index: 4;
 }
 
+.showActionsButtonDark {
+  margin-left: auto;
+  margin-right: auto;
+  /*background-color: #6d7885;*/
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1);
+  background-color: #232324;
+  z-index: 4;
+}
+
 .CSSMenuDropout {
   width: 252px;
   display: inline-block;

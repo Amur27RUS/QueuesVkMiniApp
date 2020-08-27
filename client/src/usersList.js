@@ -51,6 +51,7 @@ class UsersList extends React.Component {
             CSSEditQueueButton: 'turnOff',
             CSSAddPersonButton: 'turnOff',
             cssButtonGiveAdmin: 'turnOff',
+            CSSActionsButton: '',
             nameAdminButton: 'Выдать права админа',
             selectables: false,
             CSSMenuDropout: 'turnOff', //turnOff or CSSMenuDropout
@@ -59,6 +60,16 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
+
+        if( this.props.schemeForMenu === 'client_light') {
+            this.setState({
+                CSSActionsButton: 'showActionsButton'
+            });
+        }else{
+            this.setState({
+                CSSActionsButton: 'showActionsButtonDark'
+            });
+        }
 
     }
 
