@@ -69,8 +69,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
             .then(function (data) {
                 setQueueCODE(data);
             })
-        global.queue.pic = undefined;
-        global.queue.picURL = undefined;
+
     };
 
     const onPhotoUpload = (e) => {
