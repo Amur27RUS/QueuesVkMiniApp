@@ -190,8 +190,13 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
 
 async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res) {
     const client = await pool.connect();
-    await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
-        [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+    if(queueAvatarURL === 'noPhoto'){
+        await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
+            [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
+    }else {
+        await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
+            [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+    }
     await res.send(JSON.stringify(code));
     await client.release();
 }

@@ -60,7 +60,6 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
-        console.log(this.props.schemeForMenu);
         if( this.props.schemeForMenu === 'client_light') {
             this.setState({
                 CSSActionsButton: 'showActionsButtonDark'
@@ -73,33 +72,6 @@ class UsersList extends React.Component {
         }
 
     }
-
-    // Приём каждые 5 сек
-    // async componentDidMount() {
-    //     try {
-    //         setInterval(async () => {
-    //             fetch('/getPeople', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Accept': 'application/json',
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({
-    //                     "queueCODE": this.props.queueCode,
-    //                 })
-    //             }).then(function (response) {
-    //                 return response.json();
-    //             })
-    //                 .then(function (data) {
-    //                     console.log('Получен массив людей: ' + data);
-    //
-    //                 })
-    //
-    //         }, 5000);
-    //     } catch(e) {
-    //         console.log(e);
-    //     }
-    // }
 
     async componentDidMount() {
         	console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
