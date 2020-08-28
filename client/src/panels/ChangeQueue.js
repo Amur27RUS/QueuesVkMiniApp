@@ -41,7 +41,9 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
         global.queue.timeQueue = newTime
         global.queue.descriptionQueue = newDescription
         global.queue.placeQueue = newPlace
-        global.queue.avatarQueue = global.queue.picURL
+        if(global.queue.picURL !== 'noPhoto'){
+            global.queue.avatarQueue = global.queue.picURL
+        }
     }
 
     const changeQueueOnServer = () => {

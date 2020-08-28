@@ -87,7 +87,7 @@ const AboutQueue = ({id, snackbar, schemeForMenu, fetchedUser, go, queues, setAc
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
-					<Button className={'editQueueButton'} onClick={(e) => {
+					<Button className={cssEdit} onClick={(e) => {
 						go(e)
 						global.queue.pic = undefined;
 						global.queue.picURL = 'noPhoto';
