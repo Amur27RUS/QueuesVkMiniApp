@@ -156,6 +156,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                         >
                             Изменения сохранены!
                         </Snackbar>)
+                        global.queue.picURL = undefined;
+                        global.queue.pic = undefined;
                     }
                 }}>Сохранить</Button>
             </FormLayout>

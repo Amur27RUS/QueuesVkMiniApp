@@ -123,6 +123,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                     console.log('Картинка успешно загружена!!!');
                                 })
                         }
+                        global.queue.picURL = undefined;
+                        global.queue.pic = undefined;
                     }else{
                         setQueueNameStatus('error');
                         setQueueDateStatus('error');
