@@ -60,7 +60,7 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
-        if( this.props.schemeForMenu === 'client_light') {
+        if( global.queue.scheme === 'client_light') {
             this.setState({
                 CSSActionsButton: 'showActionsButton'
             });
@@ -478,7 +478,7 @@ class UsersList extends React.Component {
             this.setState({cssSkipButton: 'turnOff'});
         }
         if (menuCounter % 2 !== 0){
-            if(this.props.schemeForMenu === 'client_light') {
+            if(global.queue.scheme === 'client_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
                     CSSMenuDropout: 'CSSMenuDropout',
