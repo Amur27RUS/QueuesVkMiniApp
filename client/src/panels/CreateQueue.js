@@ -7,6 +7,7 @@ let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
+let IOSdateError;
 
 const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
@@ -15,8 +16,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [description, setDescription] = useState("");
     const [avatarName, setAvatarName] = useState("");
     const [place, setPlace] = useState("");
-    const [queueNameStatus, setQueueNameStatus] = useState('')
-    const [queueDateStatus, setQueueDateStatus] = useState('')
+    const [queueNameStatus, setQueueNameStatus] = useState('');
+    const [queueDateStatus, setQueueDateStatus] = useState('');
 
     const createQueueOnServer = () => {
         console.log('Отправлен запрос на создание очереди...');
@@ -92,9 +93,11 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
 
                            if(today-pickedDate > 86400000){
                                console.log('Дата неверна!')
+                               IOSdateError = false;
                                 setQueueDateStatus('error');
                            }else {
                                console.log('Дата верна!')
+                               IOSdateError = true;
                                e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
                            }
                            setDate(e.target.value)
@@ -105,7 +108,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(nameQueue.trim() !== '' && date.trim() !== '') {
+                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError) {
                         createQueueOnServer();
 
                         if(global.queue.picURL !== undefined) {
@@ -126,8 +129,12 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                     }else{
-                        setQueueNameStatus('error');
-                        setQueueDateStatus('error');
+                        if(nameQueue.trim() === '') {
+                            setQueueNameStatus('error');
+                        }
+                        if(date.trim() === '') {
+                            setQueueDateStatus('error');
+                        }
                     }
                 }}>Создать</Button>
             </FormLayout>
