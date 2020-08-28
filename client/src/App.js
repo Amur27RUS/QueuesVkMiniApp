@@ -185,6 +185,24 @@ const App = () =>{
 									Вы успешно присоединились к очереди!
 								</Snackbar>)
 							}
+				}).then(async function (res) {
+					fetch('/getQueues', {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							"userID": fetchedUser.id, //user.id
+						})
+					}).then(function (response) {
+						return response.json();
+
+					})
+						.then(function (data) {
+							console.log('Получен массив очередей: ' + data);
+							setQueues(data);
+						})
 				})
 
 			}

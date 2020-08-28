@@ -41,7 +41,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
         global.queue.timeQueue = newTime
         global.queue.descriptionQueue = newDescription
         global.queue.placeQueue = newPlace
-        if(global.queue.picURL !== 'noPhoto'){
+        if(global.queue.picURL !== undefined){
             global.queue.avatarQueue = global.queue.picURL
         }
     }
@@ -69,6 +69,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
             .then(function (data) {
                 setQueueCODE(data);
             })
+        global.queue.pic = undefined;
+        global.queue.picURL = undefined;
     };
 
     const onPhotoUpload = (e) => {

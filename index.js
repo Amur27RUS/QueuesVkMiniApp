@@ -180,8 +180,13 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
         code = generateCode();
         codesBD = await client.query('SELECT * FROM queues WHERE code = $1', [code]);
     }
-    await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate] );
+    if(queueAvatarURL !== undefined) {
+        await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate]);
+    }else{
+        await client.query('INSERT INTO queues (code, place, description, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            [code, queuePlace, queueDescription, queueName, queueTime, queueDate]);
+    }
     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
     await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5)', [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
     await res.send(JSON.stringify(code));
@@ -190,7 +195,7 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
 
 async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, res) {
     const client = await pool.connect();
-    if(queueAvatarURL === 'noPhoto'){
+    if(queueAvatarURL === undefined){
         await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
             [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
     }else {

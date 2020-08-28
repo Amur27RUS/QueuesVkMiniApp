@@ -90,7 +90,7 @@ const AboutQueue = ({id, snackbar, schemeForMenu, fetchedUser, go, queues, setAc
 					<Button className={cssEdit} onClick={(e) => {
 						go(e)
 						global.queue.pic = undefined;
-						global.queue.picURL = 'noPhoto';
+						global.queue.picURL = undefined;
 					}} data-to="changeQueue" mode={'tertiary'}>Редактировать
 						информацию</Button>
 
