@@ -62,13 +62,14 @@ class UsersList extends React.Component {
         };
         if( this.props.schemeForMenu === 'client_light') {
             this.setState({
-                CSSActionsButton: 'showActionsButtonDark'
+                CSSActionsButton: 'showActionsButton'
             });
 
         }else{
             this.setState({
-                CSSActionsButton: 'showActionsButton'
+                CSSActionsButton: 'showActionsButtonDark'
             });
+
         }
 
     }
@@ -480,14 +481,15 @@ class UsersList extends React.Component {
             if(this.props.schemeForMenu === 'client_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropoutDark',
+                    CSSMenuDropout: 'CSSMenuDropout',
                 })
 
             }else{
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropout',
+                    CSSMenuDropout: 'CSSMenuDropoutDark',
                 })
+
 
             }
         }else{
