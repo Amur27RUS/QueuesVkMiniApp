@@ -61,7 +61,7 @@ class UsersList extends React.Component {
             isFirst: 'turnOff'
         };
         console.log(global.scheme.scheme)
-        if( global.scheme.scheme === 'client_light') {
+        if( global.scheme.scheme === 'client_light' || global.scheme.scheme === 'bright_light') {
             this.setState({
                 CSSActionsButton: 'showActionsButton'
             });
@@ -480,7 +480,7 @@ class UsersList extends React.Component {
         }
         if (menuCounter % 2 !== 0){
             console.log(global.scheme.scheme)
-            if(global.scheme.scheme === 'client_light') {
+            if(global.scheme.scheme === 'client_light' || global.scheme.scheme === 'bright_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
                     CSSMenuDropout: 'CSSMenuDropout',
