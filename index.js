@@ -184,7 +184,7 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
         await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
             [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate]);
     }else{
-        await client.query('INSERT INTO queues (code, place, description, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        await client.query('INSERT INTO queues (code, place, description, name, time, date) VALUES ($1, $2, $3, $4, $5, $6)',
             [code, queuePlace, queueDescription, queueName, queueTime, queueDate]);
     }
     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');

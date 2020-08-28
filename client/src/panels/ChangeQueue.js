@@ -135,7 +135,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '') {
                         changeQueueOnServer();
                         changedQueue();
-                        if(global.queue.pic !== undefined) {
+                        if(global.queue.picURL !== undefined) {
                             fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
                                 method: 'POST',
                                 headers: {
