@@ -48,7 +48,6 @@ global.queue = {
 	picName: undefined,
 	picURL: undefined,
 
-	scheme: undefined,
 }
 
 const MODAL_CARD_ABOUT = 'say-about';

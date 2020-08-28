@@ -5,6 +5,10 @@ import ReactDOM from "react-dom";
 import bridge from "@vkontakte/vk-bridge";
 import App from "./App";
 
+global.scheme = {
+    scheme: undefined,
+}
+
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
 bridge.subscribe(({ detail: { type, data }}) => {
@@ -13,7 +17,8 @@ bridge.subscribe(({ detail: { type, data }}) => {
         console.log(schemeAttribute.value)
         schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
         document.body.attributes.setNamedItem(schemeAttribute);
-        global.queue.scheme = schemeAttribute.value;
+        global.scheme.scheme = schemeAttribute.value;
+        console.log()
     }
 });
 
