@@ -60,6 +60,7 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
+        console.log(global.scheme.scheme)
         if( global.scheme.scheme === 'client_light') {
             this.setState({
                 CSSActionsButton: 'showActionsButton'
@@ -478,6 +479,7 @@ class UsersList extends React.Component {
             this.setState({cssSkipButton: 'turnOff'});
         }
         if (menuCounter % 2 !== 0){
+            console.log(global.scheme.scheme)
             if(global.scheme.scheme === 'client_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',

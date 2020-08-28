@@ -18,7 +18,6 @@ bridge.subscribe(({ detail: { type, data }}) => {
         schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
         document.body.attributes.setNamedItem(schemeAttribute);
         global.scheme.scheme = schemeAttribute.value;
-        console.log()
     }
 });
 
