@@ -94,6 +94,7 @@ const AboutQueue = ({id, snackbar, schemeForMenu, fetchedUser, go, queues, setAc
 					}} data-to="changeQueue" mode={'tertiary'}>Редактировать
 						информацию</Button>
 
+
 				</div>
 			</Group>
 			</Div>

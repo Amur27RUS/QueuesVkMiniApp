@@ -113,7 +113,10 @@ class UsersList extends React.Component {
                 this.setState({
                     users: usersArr
                 })
-            })
+                if(global.queue.isUserAdmin) {
+                    this.props.setCssEdit('editQueueButton');
+                }
+            }).bind(this)
 
         menuCounter = 1;
 
