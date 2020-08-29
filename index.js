@@ -271,6 +271,7 @@ async function getQueueToJoin(queueCode, userID, res){
         const results = await client.query('SELECT * FROM queues WHERE code = $1', [queueCode]);
         if(results.rows[0] !== undefined) {
             const result = await client.query('SELECT * FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID])
+            console.log(userID + "  AAAAAAAAAAAAAAA");
             if(result.rows[0] === undefined){
                 await res.send(results.rows[0]);
             }else {
