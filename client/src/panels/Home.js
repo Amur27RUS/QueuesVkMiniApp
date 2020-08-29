@@ -70,7 +70,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						"userID": user.id, //user.id
+						"userID": fetchedUser.id, //user.id
 						"queueCODE": global.queue.joinQueueCode,
 					})
 				}).then(function (response) {
