@@ -113,52 +113,52 @@ const App = () =>{
 					queuesSet(data);
 				})
 
-			if(window.location.hash !== ''){
-				global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
-				if(global.queue.joinQueueCode.length === 6) {
-					fetch('/getQueueToJoin', {
-						method: 'POST',
-						headers: {
-							'Accept': 'application/json',
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							"userID": user.id, //user.id
-							"queueCODE": global.queue.joinQueueCode,
-						})
-					}).then(function (response) {
-						return response.json();
-
-					})
-						.then(function (data) {
-							if (data === 'alreadyThere') {
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14}
-																								 height={14}/></Avatar>}
-								>
-									Вы уже находитесь в этой очереди!
-								</Snackbar>);
-							} else if (data === 'noQueue') {
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-								>
-									Очереди с введённым кодом приглашения не существует!
-								</Snackbar>)
-							} else {
-								global.queue.name = data.name;
-								global.queue.avatar = data.avatar;
-								setJoinQueueAvatar(data.avatar);
-								setJoinQueueName(data.name);
-								setActiveModal(MODAL_CARD_QUEUE_INVITE);
-							}
-						})
-				}
-
-			}
+			// if(window.location.hash !== ''){
+			// 	global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
+			// 	if(global.queue.joinQueueCode.length === 6) {
+			// 		fetch('/getQueueToJoin', {
+			// 			method: 'POST',
+			// 			headers: {
+			// 				'Accept': 'application/json',
+			// 				'Content-Type': 'application/json',
+			// 			},
+			// 			body: JSON.stringify({
+			// 				"userID": user.id, //user.id
+			// 				"queueCODE": global.queue.joinQueueCode,
+			// 			})
+			// 		}).then(function (response) {
+			// 			return response.json();
+			//
+			// 		})
+			// 			.then(function (data) {
+			// 				if (data === 'alreadyThere') {
+			// 					setSnackbar(<Snackbar
+			// 						layout="vertical"
+			// 						onClose={() => setSnackbar(null)}
+			// 						before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14}
+			// 																					 height={14}/></Avatar>}
+			// 					>
+			// 						Вы уже находитесь в этой очереди!
+			// 					</Snackbar>);
+			// 				} else if (data === 'noQueue') {
+			// 					setSnackbar(<Snackbar
+			// 						layout="vertical"
+			// 						onClose={() => setSnackbar(null)}
+			// 						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+			// 					>
+			// 						Очереди с введённым кодом приглашения не существует!
+			// 					</Snackbar>)
+			// 				} else {
+			// 					global.queue.name = data.name;
+			// 					global.queue.avatar = data.avatar;
+			// 					setJoinQueueAvatar(data.avatar);
+			// 					setJoinQueueName(data.name);
+			// 					setActiveModal(MODAL_CARD_QUEUE_INVITE);
+			// 				}
+			// 			})
+			// 	}
+			//
+			// }
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
 			// const queuesArray = [
@@ -414,7 +414,7 @@ const App = () =>{
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' snackbar={snackbar} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+			<Home id='home' snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 			<AboutQueue id='aboutQueue' snackbar={snackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
