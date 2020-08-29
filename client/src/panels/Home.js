@@ -78,6 +78,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 
 				})
 					.then(function (data) {
+						console.log(data)
 						if (data === 'alreadyThere') {
 							setSnackbar(<Snackbar
 								layout="vertical"
@@ -121,7 +122,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 				<Div>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
-						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь</Button>}
+						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь с помощью коду</Button>}
 						stretched
 					>
 						Вы не состоите в очередях
