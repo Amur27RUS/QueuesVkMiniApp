@@ -813,12 +813,11 @@ class UsersList extends React.Component {
                 </List>
                 </Div>
             </Group>
-                {this.state.users.length <= 4 &&
                 <Placeholder
                     icon={<Icon56InboxOutline/>}
                     actions={<Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: <br/> {this.props.queueCode}</Button>}
                 >
-                    Здесь одиноко... Пригласите людей!<br/>
+                    Вам одиноко? Пригласите людей!<br/>
                     <Button size="l" mode="tertiary"
                             onClick={() => bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${this.props.queueCode}`})}>
                         Пригласить друзей из VK</Button>
@@ -826,7 +825,7 @@ class UsersList extends React.Component {
                     <br/><Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: {this.props.queueCode}</Button>
 
                 </Placeholder>
-                }
+
             </div>
         )
     }
