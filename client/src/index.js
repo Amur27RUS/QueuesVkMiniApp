@@ -20,6 +20,4 @@ bridge.subscribe(({ detail: { type, data }}) => {
         global.scheme.scheme = schemeAttribute.value;
     }
 });
-console.log('ЭТО INDEX.JS');
 ReactDOM.render(<App />, document.getElementById("root"));
-import("./eruda").then(({ default: eruda }) => {}); //runtime download
