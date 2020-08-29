@@ -86,6 +86,7 @@ const App = () =>{
 				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
+
 		});
 		async function fetchData() {
 			const user = await bridge.send('VKWebAppGetUserInfo');
@@ -157,7 +158,6 @@ const App = () =>{
 							}
 						})
 				}
-
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
@@ -362,7 +362,7 @@ const App = () =>{
 					title: 'Пригласить друзей',
 					mode: 'secondary',
 					action: () => {
-						bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${queueCODE}`});
+						bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891/#${queueCODE}`});
 					}
 				}, {
 					title: copyButtonTitle,

@@ -81,7 +81,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            setNameQueue(e.target.value);
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
-                <Text>{global.scheme.scheme}</Text>
                 <Input top={'Дата проведения*'}
                        min={nowTime}
                        name={'date'} type={'date'}
