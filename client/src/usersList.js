@@ -746,7 +746,7 @@ class UsersList extends React.Component {
                     }
                 <Div>
                     <div className={'AddNewUserDiv'}>
-                    <Input id={'inputNotVKPerson'} maxlength = "18" type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>
+                    <Input id={'inputNotVKPerson'} maxlength = "25" type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>
                     <Button mode={'outline'} className={this.state.CSSAddNewUserButton} onClick={() => {
                         if(global.queue.newUser !== undefined && global.queue.newUser.trim() !== '') {
                             const newUser = {name: global.queue.newUser};
