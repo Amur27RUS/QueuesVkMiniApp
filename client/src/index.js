@@ -22,4 +22,4 @@ bridge.subscribe(({ detail: { type, data }}) => {
 });
 
 ReactDOM.render(<App />, document.getElementById("root"));
-
+import("./eruda").then(({ default: eruda }) => {}); //runtime download

@@ -158,7 +158,6 @@ const App = () =>{
 							}
 						})
 				}
-				window.location.href.split('#')[0];
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
