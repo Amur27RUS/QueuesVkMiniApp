@@ -61,15 +61,16 @@ class UsersList extends React.Component {
             isFirst: 'turnOff'
         };
         console.log(global.scheme.scheme)
-        if( global.scheme.scheme === 'client_light' || global.scheme.scheme === 'bright_light') {
+        if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
-                CSSActionsButton: 'showActionsButton'
+                CSSActionsButton: 'showActionsButtonDark'
             });
 
         }else{
             this.setState({
-                CSSActionsButton: 'showActionsButtonDark'
+                CSSActionsButton: 'showActionsButton'
             });
+
 
         }
         menuCounter = 1;
@@ -479,17 +480,18 @@ class UsersList extends React.Component {
             this.setState({cssSkipButton: 'turnOff'});
         }
         if (menuCounter % 2 !== 0){
-            if(global.scheme.scheme === 'client_light' || global.scheme.scheme === 'bright_light') {
+            if(global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropout',
+                    CSSMenuDropout: 'CSSMenuDropoutDark',
                 })
 
             }else{
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
-                    CSSMenuDropout: 'CSSMenuDropoutDark',
+                    CSSMenuDropout: 'CSSMenuDropout',
                 })
+
 
 
             }
