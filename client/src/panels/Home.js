@@ -70,7 +70,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						"userID": fetchedUser.id, //user.id
+						"userID": global.queue.userID, //user.id
 						"queueCODE": global.queue.joinQueueCode,
 					})
 				}).then(function (response) {
@@ -78,6 +78,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 
 				})
 					.then(function (data) {
+						console.log('Это информация о подключении:')
 						console.log(data)
 						if (data === 'alreadyThere') {
 							setSnackbar(<Snackbar
