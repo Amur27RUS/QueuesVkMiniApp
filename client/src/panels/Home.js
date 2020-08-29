@@ -88,7 +88,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 							}
 						})
 				}
-				window.location.hash = '';
+				window.history.pushState('page2', 'Title', 'https://vk.com/app7551421_199833891');
 
 			}
 		}
