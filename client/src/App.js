@@ -168,11 +168,11 @@ const App = () =>{
 		fetchData();
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				console.log(schemeAttribute.value)
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-				global.scheme.scheme = schemeAttribute.value;
+				// const schemeAttribute = document.createAttribute('scheme');
+				// console.log(schemeAttribute.value)
+				// schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				// document.body.attributes.setNamedItem(schemeAttribute);
+				// global.scheme.scheme = schemeAttribute.value;
 			}else if(type === 'VKWebAppViewRestore'){
 				if(window.location.hash !== ''){
 					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
