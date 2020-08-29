@@ -88,7 +88,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 							}
 						})
 				}
-
+				window.location.href.split('#')[0];
 			}
 		}
 		homePanelCounter++;

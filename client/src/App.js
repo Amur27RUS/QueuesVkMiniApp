@@ -158,6 +158,7 @@ const App = () =>{
 							}
 						})
 				}
+				window.location.href.split('#')[0];
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
@@ -362,7 +363,7 @@ const App = () =>{
 					title: 'Пригласить друзей',
 					mode: 'secondary',
 					action: () => {
-						bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891/#${queueCODE}`});
+						bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${queueCODE}`});
 					}
 				}, {
 					title: copyButtonTitle,
