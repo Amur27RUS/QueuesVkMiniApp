@@ -157,7 +157,7 @@ const App = () =>{
 							}
 						})
 				}
-				window.location.hash = '';
+				window.history.pushState('page2', 'Title', '/');
 
 			}
 
