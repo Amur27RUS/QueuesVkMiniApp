@@ -72,6 +72,7 @@ const App = () =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+		console.log(window.location.hash)
 		console.log('Получение данных о пользователе через VK Bridge')
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
