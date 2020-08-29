@@ -38,7 +38,7 @@ class UsersList extends React.Component {
         this.state = {
             users: [],
             draggable: false,
-            buttonText: 'Вкл. режим админа',
+            buttonText: 'Вкл. перемещение/удаление',
             cssAdminButton: 'turnOff',
             cssSkipButton: 'OnlySkipButton',
             CSSButtonDiv: styleForButtons,
@@ -72,7 +72,7 @@ class UsersList extends React.Component {
             });
 
         }
-
+        menuCounter = 1;
     }
 
     async componentDidMount() {
@@ -181,7 +181,7 @@ class UsersList extends React.Component {
         if (counter2 % 2 === 0){
             this.setState({
                 draggable: false,
-                buttonText: 'Вкл. режим админа',
+                buttonText: 'Вкл. перемещение/удаление',
             });
 
         }else {
@@ -190,7 +190,7 @@ class UsersList extends React.Component {
                 selectables: false,
                 nameAdminButton: 'Выдать права админа',
                 draggable: true,
-                buttonText: 'Откл. режим админа',
+                buttonText: 'Откл. перемещение/удаление',
                 CSSMenuDropout: 'turnOff',
                 openMenuButton: 'Открыть меню действий',
                 cssButtonGiveAdmin: 'turnOff',
@@ -229,7 +229,7 @@ class UsersList extends React.Component {
                 CSSButtonDiv: styleForButtons,
             });
         }else {
-            if (this.state.buttonText === 'Откл. режим админа') {counter2++}
+            if (this.state.buttonText === 'Откл. перемещение/удаление') {counter2++}
             if (osName === IOS){
                 styleForButtons = 'ButtonDivIOS2';
                 styleForButtonAddAdmin = 'giveAdminIOS'
@@ -247,7 +247,7 @@ class UsersList extends React.Component {
                 openMenuButton: 'Открыть меню действий',
                 cssButtonGiveAdmin: styleForButtonAddAdmin,
                 draggable: false,
-                buttonText: 'Вкл. режим админа',
+                buttonText: 'Вкл. перемещение/удаление',
             });
             menuCounter++;
 
@@ -479,7 +479,6 @@ class UsersList extends React.Component {
             this.setState({cssSkipButton: 'turnOff'});
         }
         if (menuCounter % 2 !== 0){
-            console.log(global.scheme.scheme)
             if(global.scheme.scheme === 'client_light' || global.scheme.scheme === 'bright_light') {
                 this.setState({
                     openMenuButton: 'Закрыть меню действий',
@@ -738,15 +737,16 @@ class UsersList extends React.Component {
                 </Div>
 
                 <Group header={
-                <Header className={'headerUsers'}>Участники</Header>}>
-                    {global.queue.isFirstPlace === true &&
+                <Header className={'headerUsers'}>Участники</Header> }>
+                    {global.queue.isFirstPlace &&
                     <Div>
-                        <Button className={'buttonForFirst'} onClick={() => this.firstToLast()} mode={'secondary'}>Спуститься на последнее место</Button>
+                        <Button className={'buttonForFirst'} onClick={() => this.firstToLast()} mode={'secondary'}>Спуститься
+                                на последнее место</Button>
                     </Div>
                     }
                 <Div>
                     <div className={'AddNewUserDiv'}>
-                    <Input id={'inputNotVKPerson'} type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>
+                    <Input id={'inputNotVKPerson'} maxlength = "18" type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>
                     <Button mode={'outline'} className={this.state.CSSAddNewUserButton} onClick={() => {
                         if(global.queue.newUser !== undefined && global.queue.newUser.trim() !== '') {
                             const newUser = {name: global.queue.newUser};
@@ -816,9 +816,15 @@ class UsersList extends React.Component {
                 {this.state.users.length <= 4 &&
                 <Placeholder
                     icon={<Icon56InboxOutline/>}
-                    action={<Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: <br/> {this.props.queueCode}</Button>}
+                    actions={<Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: <br/> {this.props.queueCode}</Button>}
                 >
-                    Здесь одиноко... Пригласите людей!
+                    Здесь одиноко... Пригласите людей!<br/>
+                    <Button size="l" mode="tertiary"
+                            onClick={() => bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${this.props.queueCode}`})}>
+                        Пригласить друзей из VK</Button>
+                    <br/>или
+                    <br/><Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: {this.props.queueCode}</Button>
+
                 </Placeholder>
                 }
             </div>

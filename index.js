@@ -264,6 +264,29 @@ async function firstToLast(queueCode, res) {
     }
 }
 
+async function getQueueToJoin(queueCode, userID, res){
+    try{
+        const client = await pool.connect();
+
+        const results = await client.query('SELECT * FROM queues WHERE code = $1', [queueCode]);
+        if(results.rows[0] !== undefined) {
+            const result = await client.query('SELECT * FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID])
+            if(result.rows[0] === undefined){
+                await res.send(results.rows[0]);
+            }else {
+                await res.send(JSON.stringify('alreadyThere'));
+            }
+
+        }else{
+            await res.send(JSON.stringify('noQueue'));
+        }
+
+        await client.release();
+    }catch (e){
+        console.log(e);
+    }
+}
+
 // Генерация кода
 function generateCode() {
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -293,6 +316,13 @@ app.post('/addNewAdmins', (req, res) => {
     const queueCode = req.body.queueCODE;
 
     addNewAdmins(usersArray, queueCode, res);
+})
+
+app.post('/getQueueToJoin', (req, res) => {
+    const queueCode = req.body.queueCODE;
+    const userID = req.body.userID;
+
+    getQueueToJoin(queueCode, userID, res);
 })
 
 app.post('/changeUsersOrder', (req, res) => {
