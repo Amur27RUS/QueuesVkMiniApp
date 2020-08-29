@@ -151,6 +151,7 @@ const App = () =>{
 							}
 						})
 				}
+				window.location.hash = '';
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
@@ -215,6 +216,7 @@ const App = () =>{
 								}
 							})
 					}
+					window.location.hash = '';
 				}
 			}
 
