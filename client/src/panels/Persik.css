@@ -258,6 +258,11 @@
   margin-top: -17px;
 }
 
+img {
+  width:100%;
+  object-fit:cover;
+}
+
 .copyText {
   text-align: center;
   margin-left:auto;
