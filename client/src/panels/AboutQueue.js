@@ -41,7 +41,7 @@ const AboutQueue = ({id, snackbar, fetchedUser, go, queues, setActiveModal, setP
 			</PanelHeader>
 
 			<div className={'AvatarInQueueDiv'}>
-			<Avatar className={'AvatarInQueue'} size={106} mode={'image'} src={global.queue.avatarQueue}/>
+			<Avatar className={'AvatarInQueue'} size={106} src={global.queue.avatarQueue}/>
 			</div>
 
 			<Div>
