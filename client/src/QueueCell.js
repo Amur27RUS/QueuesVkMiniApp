@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RichCell, Avatar } from "@vkontakte/vkui";
-import bridge from "@vkontakte/vk-bridge";
 
 function QueueCell({ info, go}) {
 
