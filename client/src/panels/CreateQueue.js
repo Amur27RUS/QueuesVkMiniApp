@@ -91,8 +91,10 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            let today = new Date(nowIOSTime);
                            let pickedDate = new Date(e.target.value);
 
-                           if(today-pickedDate > 86400000){
-                               console.log('Дата неверна!')
+                           // if(today-pickedDate > 86400000){
+                              if(today.getTime() > pickedDate.getTime()){
+                               console.log(today-pickedDate);
+                               console.log('Дата неверна!');
                                IOSdateError = false;
                                 setQueueDateStatus('error');
                            }else {
