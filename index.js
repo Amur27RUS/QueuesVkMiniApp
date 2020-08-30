@@ -46,20 +46,16 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 }));
 
 //todo БОТ====================================================================
-try {
     const VkBot = require('node-vk-bot-api');
 
-    const bot = new VkBot('2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b');
+    const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
 
     bot.on((ctx) => {
-        ctx.reply('Hello!');
+        ctx.reply('Привет! К сожалению, меня не научили понимать ваш язык! Зато я могу отправлять тебе уведомления, когда твоя очередь будет подходить :)');
     });
+    console.log('Бот работает!')
 
     bot.startPolling();
-
-}catch (e){
-    console.log(e);
-}
 
 
 //Запуск - nodemon app.js
