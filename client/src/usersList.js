@@ -382,6 +382,14 @@ class UsersList extends React.Component {
     }
 
     firstToLast = () => {
+        this.props.setPopout(
+            <Alert
+                actionsLayout="vertical"
+                actions={[{
+                    title: 'В конец очереди',
+                    autoclose: true,
+                    mode: 'destructive',
+                    action: () => {
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
@@ -420,7 +428,19 @@ class UsersList extends React.Component {
                 users: usersArr
             })
         })
+    }} , {
+                    title: 'Отмена',
+                    autoclose: true,
+                    mode: 'cancel'
+                }]}
+                onClose={this.closePopout}
+            >
+                <h2>Подтвердите действие</h2>
+                <p>Вы уверены, что хотите спуститься в конец очереди?</p>
+            </Alert>
+        )
     }
+
 
     changeUsersPositionOnServer = (usersArray) => {
         console.log('Отправлен запрос на изменение порядка людей в очереди...');
