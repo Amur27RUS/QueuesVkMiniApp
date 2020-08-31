@@ -128,7 +128,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            setNameQueue(e.target.value);
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
-                {/*<form noValidate={true}>*/}
                 <Input id = {'dateID'}
                        min={nowTime}
                        top={'Дата проведения*'}
@@ -150,6 +149,13 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusVisibility(false);
                                setQueueDateStatus('valid');
                            }
+                           if(queueDateStatus === 'error'){
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Неверная дата!');
+                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                           }else{
+                               setFormStatusVisibility(false);
+                           }
 
                            // if(today-pickedDate > 86400000){
                            if(today.getTime() > pickedDate.getTime()){
@@ -166,7 +172,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }
                            setDate(e.target.value)
                         }}/>
-                {/*</form>*/}
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
@@ -178,6 +183,13 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     console.log(dataCheck.validity.rangeUnderflow);
                     if(dataCheck.validity.rangeUnderflow){
                         setQueueDateStatus('error');
+                        setFormStatusVisibility(true);
+                        setFormStatusHeader('Неверная дата!');
+                        setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                    }else{
+                        setFormStatusVisibility(false);
+                    }
+                    if(queueDateStatus === 'error'){
                         setFormStatusVisibility(true);
                         setFormStatusHeader('Неверная дата!');
                         setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
