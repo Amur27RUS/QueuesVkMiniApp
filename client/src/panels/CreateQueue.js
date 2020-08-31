@@ -7,7 +7,7 @@ let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
-let IOSdateError;
+let IOSdateError = true;
 let today;
 let pickedDate;
 
@@ -84,6 +84,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
                 <Input top={'Дата проведения*'}
+                       id = {'dateID'}
                        min={nowTime}
                        name={'date'} type={'date'}
                        value={date}
@@ -112,7 +113,10 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && today.getTime() <= pickedDate.getTime()) {
+                    // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
+                    let dataCheck = document.getElementById('dateID');
+                    console.log(dataCheck.validity.rangeUnderflow);
+                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
                         createQueueOnServer();
 
                         if(global.queue.picURL !== undefined) {
