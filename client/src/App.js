@@ -105,7 +105,15 @@ const App = () =>{
 					console.log('Получен массив очередей: ' + data);
 					// console.log("Для пользователя с id: " + user.id);
 					queuesSet(data);
-				})
+				}).catch((e) => {
+				setSnackbar(<Snackbar
+					layout="vertical"
+					onClose={() => setSnackbar(null)}
+					before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+				>
+					Ошибка соединения! Проверьте интернет!
+				</Snackbar>);
+			})
 
 			if(window.location.hash !== ''){
 				global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
@@ -348,7 +356,15 @@ const App = () =>{
 			.then(function (data) {
 				console.log('Получен массив очередей: ' + data);
 				setQueues(data);
-			})
+			}).catch((e) => {
+			setSnackbar(<Snackbar
+				layout="vertical"
+				onClose={() => setSnackbar(null)}
+				before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+			>
+				Ошибка соединения! Проверьте интернет!
+			</Snackbar>);
+		})
 	}
 
 	const blueBackground = {
@@ -483,7 +499,7 @@ const App = () =>{
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
 			<Home id='home' snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-			<AboutQueue id='aboutQueue' snackbar={snackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+			<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
 

@@ -14,6 +14,8 @@ import {
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+
 
 let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-')
@@ -73,7 +75,15 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
         })
             .then(function (data) {
                 setQueueCODE(data);
-            })
+            }).catch((e) => {
+            setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
+        })
 
     };
 
@@ -182,7 +192,15 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                             })
                                 .then(function (data) {
                                     console.log('Картинка успешно загружена!!!');
-                                })
+                                }).catch((e) => {
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                            })
                         }
                         setSnackbar(<Snackbar
                             layout="vertical"

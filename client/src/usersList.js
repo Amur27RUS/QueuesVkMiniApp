@@ -12,13 +12,15 @@ import {
     List, PanelHeaderButton,
     Placeholder,
     platform,
-    Separator,
+    Separator, Snackbar,
     Tabs,
     TabsItem
 } from "@vkontakte/vkui";
 import unnamed from './img/unnamed.jpg'
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
 let counter2= 1; //Счётчик, считающий кол-во включений добавления админов
@@ -119,7 +121,15 @@ class UsersList extends React.Component {
                 if(global.queue.isUserAdmin) {
                     this.props.setCssEdit('editQueueButton');
                 }
-            }).bind(this)
+            }).bind(this).catch((e) => {
+                this.props.setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => this.props.setSnackbar(null)}
+                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                >
+                    Ошибка соединения! Проверьте интернет!
+                </Snackbar>);
+            })
 
         menuCounter = 1;
 
@@ -151,20 +161,6 @@ class UsersList extends React.Component {
             return tmpUsersArr;
         }
 
-        // //Асинхронный приём
-        //     const response = await fetch('/getPeople', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             "queueCODE": this.props.queueCode,
-        //         })
-        //     });
-        //     const json = await response.json();
-        //     console.log('Принят асинхронно запрос на изменение людей :' + json);
-        //     //json - это уже обработанный ответ
     }
 
     //Функция для перемешивания очереди
@@ -365,7 +361,15 @@ class UsersList extends React.Component {
                         })
                             .then(function (data) {
                                 console.log('Ответ получен! : ' + data);
-                            })
+                            }).catch((e) => {
+                            this.props.setSnackbar(<Snackbar
+                                layout="vertical"
+                                onClose={() => this.props.setSnackbar(null)}
+                                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                            >
+                                Ошибка соединения! Проверьте интернет!
+                            </Snackbar>);
+                        });
                         this.props.setActivePanel('home');
                     }
                 }, {
@@ -427,7 +431,15 @@ class UsersList extends React.Component {
             this.setState({
                 users: usersArr
             })
-        })
+        }).catch((e) => {
+            this.props.setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => this.props.setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
+        });
     }} , {
                     title: 'Отмена',
                     autoclose: true,
@@ -483,6 +495,14 @@ class UsersList extends React.Component {
             this.setState({
                 users: usersArr
             })
+        }).catch((e) => {
+            this.props.setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => this.props.setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
         })
     }
 
@@ -583,6 +603,14 @@ class UsersList extends React.Component {
             }).then((usersArr) =>{
             this.setState({
                 users: usersArr
+            }).catch((e) => {
+                this.props.setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => this.props.setSnackbar(null)}
+                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                >
+                    Ошибка соединения! Проверьте интернет!
+                </Snackbar>);
             })
         })
     }
@@ -644,6 +672,14 @@ class UsersList extends React.Component {
             }).then((usersArr) =>{
             this.setState({
                 users: usersArr
+            }).catch((e) => {
+                this.props.setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => this.props.setSnackbar(null)}
+                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                >
+                    Ошибка соединения! Проверьте интернет!
+                </Snackbar>);
             })
         })
     }
@@ -686,7 +722,15 @@ class UsersList extends React.Component {
             }).then((usersArr) => {
             this.setState({
                 users: usersArr
-            })})
+            })}).catch((e) => {
+            this.props.setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => this.props.setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
+        })
     }
 
     render() {
@@ -847,7 +891,7 @@ class UsersList extends React.Component {
                     <br/><Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: {this.props.queueCode}</Button>
 
                 </Placeholder>
-
+                {this.props.snackbar}
             </div>
         )
     }
