@@ -778,7 +778,7 @@ class UsersList extends React.Component {
                                      removable={this.state.draggable}
                                      before={ info.avatar ? <Avatar className={'avatar'} size={45} src={info.avatar}>
                                           <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>
-                                          : <Avatar className={'avatar'} size={45}> //todo Добавить сюда другую аватарку
+                                          : <Avatar className={'avatar'} size={45} src={}>
                                           <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>}
                                      onDragFinish={({ from, to }) => {
                             const draggingList = [...this.state.users];
