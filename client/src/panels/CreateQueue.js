@@ -148,7 +148,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                            }else{
                                setFormStatusVisibility(false);
-                               setQueueDateStatus('valid')
+                               setQueueDateStatus('valid');
                            }
 
                            // if(today-pickedDate > 86400000){
@@ -176,6 +176,14 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
                     let dataCheck = document.getElementById('dateID');
                     console.log(dataCheck.validity.rangeUnderflow);
+                    if(dataCheck.validity.rangeUnderflow){
+                        setQueueDateStatus('error');
+                        setFormStatusVisibility(true);
+                        setFormStatusHeader('Неверная дата!');
+                        setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                    }else{
+                        setFormStatusVisibility(false);
+                    }
                     if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
                         setFormStatusVisibility(false);
                         createQueueOnServer();
