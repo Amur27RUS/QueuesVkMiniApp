@@ -109,7 +109,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                            setNewNameQueue(e.target.value)
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
-                <Input top={'Дата проведения*'} name={'date'} type={'date'}
+                <Input top={'Дата проведения*'}
+                       name={'date'}
+                       type={'date'}
+                       id = {'dateID'}
                        value={newDate}
                        status={newDateStatus}
                        min = {nowTime}
@@ -136,7 +139,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && today.getTime() <= pickedDate.getTime()) {
+                    let dataCheck = document.getElementById('dateID');
+                    console.log(dataCheck.validity.rangeUnderflow);
+
+                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {
