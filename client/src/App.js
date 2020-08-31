@@ -216,7 +216,15 @@ const App = () =>{
 									setJoinQueueName(data.name);
 									setActiveModal(MODAL_CARD_QUEUE_INVITE);
 								}
-							})
+							}).catch((e) => {
+							setSnackbar(<Snackbar
+								layout="vertical"
+								onClose={() => setSnackbar(null)}
+								before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+							>
+								Ошибка соединения! Проверьте интернет!
+							</Snackbar>);
+						})
 					}
 
 				}
@@ -309,6 +317,14 @@ const App = () =>{
 							console.log('Получен массив очередей: ' + data);
 							setQueues(data);
 						})
+				}).catch((e) => {
+					setSnackbar(<Snackbar
+						layout="vertical"
+						onClose={() => setSnackbar(null)}
+						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+					>
+						Ошибка соединения! Проверьте интернет!
+					</Snackbar>);
 				})
 
 			}
@@ -472,7 +488,7 @@ const App = () =>{
 		</View>
 
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
-			<CreateQueue snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			<CreateQueue setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
 
 		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}

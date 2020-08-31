@@ -9,7 +9,7 @@ import {
     Text,
     PanelHeaderButton,
     Snackbar,
-    Avatar
+    Avatar, FormStatus
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
@@ -32,6 +32,9 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
     const [newPlace, setNewPlace] = useState(global.queue.placeQueue);
     const [newDateStatus, setNewDateStatus] = useState('');
     const [newNameStatus, setNewNameStatus] = useState('');
+    const [formStatusHeader, setFormStatusHeader] = useState('');
+    const [formStatusDescription, setFormStatusDescription] = useState('');
+    const [formStatusVisibility, setFormStatusVisibility] = useState(false);
 
     // let pic; //Картинка очереди
     // let picName;
@@ -98,17 +101,27 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
             </PanelHeaderButton>}
             > Редактирование </PanelHeader>
             <FormLayout>
-
+                {formStatusVisibility &&
+                <FormStatus header={formStatusHeader} mode="error">
+                    {formStatusDescription}
+                </FormStatus>
+                }
                 <Input top={'Название очереди*'}
                        value={newNameQueue}
                        maxlength = "32"
                        status={newNameStatus}
-                       bottom={newNameQueue.trim() ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
+                           if(e.target.value.trim() === ''){
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Введите имя очереди!')
+                           }else{
+                               setFormStatusVisibility(false);
+                           }
                            e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
                            setNewNameQueue(e.target.value)
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
+                <form noValidate={true}>
                 <Input top={'Дата проведения*'}
                        name={'date'}
                        type={'date'}
@@ -116,10 +129,19 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                        value={newDate}
                        status={newDateStatus}
                        min = {nowTime}
-                       bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
+                           let dataCheck = document.getElementById('dateID');
+                           if(dataCheck.validity.rangeUnderflow){
+                               setNewDateStatus('error');
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Неверная дата!');
+                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                           }else{
+                               setFormStatusVisibility(false);
+                               setNewDateStatus('valid')
+                           }
 
                            if(today.getTime() > pickedDate.getTime()){
                                console.log('Дата неверна!')
@@ -129,10 +151,12 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                            }else {
                                console.log('Дата верна!')
                                IOSdateError = true;
-                               e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
-                           }
+                               if(!formStatusVisibility) {
+                                   e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error');
+                               }                           }
                            setNewDate(e.target.value)
                        }}/>
+                </form>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
@@ -169,6 +193,23 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                         </Snackbar>)
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
+                    }else{
+                        if(newDate.trim() === '' && newNameQueue.trim() === ''){
+                            setNewNameStatus('error');
+                            setNewDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите имя и дату!')
+
+                        }else if(newNameQueue.trim() === '') {
+                            setNewNameStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите имя!')
+
+                        }else if(newDate.trim() === '') {
+                            setNewDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите дату!')
+                        }
                     }
                 }}>Сохранить</Button>
             </FormLayout>

@@ -1,7 +1,22 @@
 import React, {useState} from 'react';
-import {Button, PanelHeader, Panel,  FormLayout, Input, File, Text} from "@vkontakte/vkui";
+import {
+    Button,
+    PanelHeader,
+    Panel,
+    FormLayout,
+    Input,
+    File,
+    Text,
+    FormStatus,
+    ScreenSpinner,
+    Avatar, Snackbar
+} from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
+
+
 
 let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-');
@@ -11,7 +26,7 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 
-const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
+const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
@@ -20,8 +35,12 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const [place, setPlace] = useState("");
     const [queueNameStatus, setQueueNameStatus] = useState('');
     const [queueDateStatus, setQueueDateStatus] = useState('');
+    const [formStatusHeader, setFormStatusHeader] = useState('');
+    const [formStatusDescription, setFormStatusDescription] = useState('');
+    const [formStatusVisibility, setFormStatusVisibility] = useState(false);
 
     const createQueueOnServer = () => {
+        setPopout(<ScreenSpinner/>);
         console.log('Отправлен запрос на создание очереди...');
         console.log('С параметрами:');
         console.log('id : ' + fetchedUser.id);
@@ -31,28 +50,43 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
         console.log('Время проведения: ' + time);
         console.log('Описание очереди: ' + description);
 
-        fetch('/createQueue', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "userID": fetchedUser.id,
-                "queueName": nameQueue,
-                "queuePlace": place,
-                "queueTime": time,
-                "queueDate": date,
-                "queueAvatarURL": global.queue.picURL,
-                "queueDescription": description,
+        try {
+
+            fetch('/createQueue', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "userID": fetchedUser.id,
+                    "queueName": nameQueue,
+                    "queuePlace": place,
+                    "queueTime": time,
+                    "queueDate": date,
+                    "queueAvatarURL": global.queue.picURL,
+                    "queueDescription": description,
+                })
+            }).then(function (response) {
+                return response.json();
             })
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(function (data) {
-                setQueueCODE(data);
-                setActiveModal(MODAL_CARD_CHAT_INVITE);
+                .then(function (data) {
+                    setQueueCODE(data);
+                    setPopout(null);
+                    setActiveModal(MODAL_CARD_CHAT_INVITE);
+                }).catch((e) => {
+                setPopout(null);
+                setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => setSnackbar(null)}
+                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                >
+                    Ошибка соединения! Проверьте интернет!
+                </Snackbar>);
             })
+        }catch (e){
+            console.log(e);
+        }
     };
 
     const onPhotoUpload = (e) => {
@@ -73,26 +107,49 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
         <Panel id={id} >
             <PanelHeader> Создание </PanelHeader>
             <FormLayout>
+                {formStatusVisibility &&
+                <FormStatus header={formStatusHeader} mode="error">
+                    {formStatusDescription}
+                </FormStatus>
+                }
+
                 <Input top={'Название очереди*'}
                        value={nameQueue}
                        maxlength = "32"
                        status={queueNameStatus}
-                       bottom={queueNameStatus !== 'error' ? '' : 'Пожалуйста, введите название!'}
                        onChange={e => {
+                           if(e.target.value.trim() === ''){
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Введите имя очереди!')
+                           }else{
+                               setFormStatusVisibility(false);
+                           }
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
                        }}/>
                 <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
+                <form noValidate={true}>
                 <Input top={'Дата проведения*'}
                        id = {'dateID'}
                        min={nowTime}
+                       novalidate
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите правильную дату!'}
                        onChange={e =>{
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
+                           let dataCheck = document.getElementById('dateID');
+
+                           if(dataCheck.validity.rangeUnderflow){
+                               setQueueDateStatus('error');
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Неверная дата!');
+                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                           }else{
+                               setFormStatusVisibility(false);
+                               setQueueDateStatus('valid')
+                           }
 
                            // if(today-pickedDate > 86400000){
                            if(today.getTime() > pickedDate.getTime()){
@@ -103,10 +160,13 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }else {
                                console.log('Дата верна!')
                                IOSdateError = true;
-                               e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error')
+                               if(!formStatusVisibility) {
+                                   e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error');
+                               }
                            }
                            setDate(e.target.value)
                         }}/>
+                </form>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
@@ -117,31 +177,53 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     let dataCheck = document.getElementById('dateID');
                     console.log(dataCheck.validity.rangeUnderflow);
                     if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
+                        setFormStatusVisibility(false);
                         createQueueOnServer();
 
                         if(global.queue.picURL !== undefined) {
-                            fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'image/png',
-                                },
-                                body: global.queue.pic
-                            }).then(function (response) {
-                                return response.json();
-                            })
-                                .then(function (data) {
-                                    console.log('Картинка успешно загружена!!!');
+                            try {
+                                fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'image/png',
+                                    },
+                                    body: global.queue.pic
+                                }).then(function (response) {
+                                    return response.json();
                                 })
+                                    .then(function (data) {
+                                        console.log('Картинка успешно загружена!!!');
+                                    })
+                            }catch(e){
+                                setPopout(null);
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                            }
                         }
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                     }else{
-                        if(nameQueue.trim() === '') {
+                        if(date.trim() === '' && nameQueue.trim() === ''){
                             setQueueNameStatus('error');
-                        }
-                        if(date.trim() === '') {
                             setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите имя и дату!')
+
+                        }else if(nameQueue.trim() === '') {
+                            setQueueNameStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите имя!')
+
+                        }else if(date.trim() === '') {
+                            setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите дату!')
                         }
                     }
                 }}>Создать</Button>

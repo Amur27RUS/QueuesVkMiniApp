@@ -41,7 +41,15 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 					console.log('Получен массив очередей: ' + data);
 					queuesSet(data);
 
-				})
+				}).catch((e) => {
+				setSnackbar(<Snackbar
+					layout="vertical"
+					onClose={() => setSnackbar(null)}
+					before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+				>
+					Ошибка соединения! Проверьте интернет!
+				</Snackbar>);
+			})
 
 			// if(window.location.hash !== ''){
 			// 	global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
