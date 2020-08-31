@@ -8,6 +8,8 @@ let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError;
+let today;
+let pickedDate;
 
 const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE}) => {
     const [nameQueue, setNameQueue] = useState("");
@@ -88,15 +90,15 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        status={queueDateStatus}
                        bottom={queueDateStatus !== 'error' ? '' : 'Пожалуйста, выберите правильную дату!'}
                        onChange={e =>{
-                           let today = new Date(nowIOSTime);
-                           let pickedDate = new Date(e.target.value);
+                           today = new Date(nowIOSTime);
+                           pickedDate = new Date(e.target.value);
 
                            // if(today-pickedDate > 86400000){
-                              if(today.getTime() > pickedDate.getTime()){
+                           if(today.getTime() > pickedDate.getTime()){
                                console.log(today-pickedDate);
                                console.log('Дата неверна!');
                                IOSdateError = false;
-                                setQueueDateStatus('error');
+                               setQueueDateStatus('error');
                            }else {
                                console.log('Дата верна!')
                                IOSdateError = true;
@@ -104,13 +106,15 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }
                            setDate(e.target.value)
                         }}/>
+                <Text>{now}</Text>
+                <Text>{nowIOSTime}</Text>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
                 <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError) {
+                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && today.getTime() <= pickedDate.getTime()) {
                         createQueueOnServer();
 
                         if(global.queue.picURL !== undefined) {
