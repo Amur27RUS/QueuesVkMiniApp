@@ -160,9 +160,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }else {
                                console.log('Дата верна!')
                                IOSdateError = true;
-                               if(!formStatusVisibility) {
-                                   e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error');
-                               }
+                               // if(!formStatusVisibility) {
+                               //     e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error');
+                               // }
                            }
                            setDate(e.target.value)
                         }}/>
