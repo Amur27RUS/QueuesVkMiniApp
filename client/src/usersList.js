@@ -775,7 +775,7 @@ class UsersList extends React.Component {
                                      selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
                                      className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
                                      draggable={this.state.draggable}
-                                     removable={this.state.draggable}
+                                     removable={!(info.userid === this.props.fetchedUser.id) ? this.state.draggable : false}
                                      before={ info.avatar ? <Avatar className={'avatar'} size={45} src={info.avatar}>
                                           <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>
                                           : <Avatar className={'avatar'} size={45}>

@@ -19,7 +19,9 @@ let now = new Date().toLocaleDateString();
 let nowTime = now.split('.').reverse().join('-')
 
 let nowIOSTime = now.split('/').reverse().join('-');
-
+let IOSdateError;
+let today;
+let pickedDate;
 
 const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
@@ -113,14 +115,17 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                        min = {nowTime}
                        bottom={newDate.trim() ? '' : 'Пожалуйста, выберите дату!'}
                        onChange={e =>{
-                           let today = new Date(nowIOSTime);
-                           let pickedDate = new Date(e.target.value);
+                           today = new Date(nowIOSTime);
+                           pickedDate = new Date(e.target.value);
 
-                           if(today-pickedDate > 86400000){
+                           if(today.getTime() > pickedDate.getTime()){
                                console.log('Дата неверна!')
                                setNewDateStatus('error');
+                               IOSdateError = false;
+
                            }else {
                                console.log('Дата верна!')
+                               IOSdateError = true;
                                e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error')
                            }
                            setNewDate(e.target.value)
@@ -131,7 +136,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(newNameQueue.trim() !== '' && newDate.trim() !== '') {
+                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && today.getTime() <= pickedDate.getTime()) {
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {
