@@ -772,13 +772,13 @@ class UsersList extends React.Component {
                     {this.state.users.map(info => {
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}
                                      // onClick={() => window.open("http://vk.com/id"+info.id)}
-                                     selectable={this.state.selectables}
+                                     selectable={info.avatar ? this.state.selectables : false}
                                      className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
                                      draggable={this.state.draggable}
                                      removable={this.state.draggable}
                                      before={ info.avatar ? <Avatar className={'avatar'} size={45} src={info.avatar}>
                                           <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>
-                                          : <Avatar className={'avatar'} size={45} src={unnamed}>
+                                          : <Avatar className={'avatar'} size={45} src={}> //todo Добавить сюда другую аватарку
                                           <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>}
                                      onDragFinish={({ from, to }) => {
                             const draggingList = [...this.state.users];
