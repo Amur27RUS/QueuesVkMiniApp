@@ -93,6 +93,7 @@ async function addNewAdmins(usersArray, queueCode, res){
     }
 }
 
+//todo ЗДЕСЬ
 async function changeUsersOrder(usersArr, queueCode, res){
     try{
         const client = await pool.connect();
@@ -102,6 +103,12 @@ async function changeUsersOrder(usersArr, queueCode, res){
 
         const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
         res.send(result.rows);
+        //БОТ:
+        const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+        const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1`);
+        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2`);
+
         await client.release();
     }catch(e){
         console.log(e);
@@ -201,6 +208,7 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
     await client.release();
 }
 
+//todo ЗДЕСЬ
 async function deleteUser(userID, queueCode) {
     try {
         const client = await pool.connect();
@@ -218,6 +226,7 @@ async function deleteUser(userID, queueCode) {
     }
 }
 
+//todo ЗДЕСЬ
 async function deleteUserWithAdmin(deletedPlace, queueCode, res) {
     try {
         const client = await pool.connect();
@@ -246,6 +255,7 @@ async function getPeople(queueCode, res){
     }
 }
 
+//todo ЗДЕСЬ
 async function firstToLast(queueCode, res) {
     try{
         const client = await pool.connect();
