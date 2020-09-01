@@ -130,7 +130,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 				<Div>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
-						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь с помощью коду</Button>}
+						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>
 						Вы не состоите в очередях
