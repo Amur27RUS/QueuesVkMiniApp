@@ -91,7 +91,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
 
     const onPhotoUpload = (e) => {
         global.queue.pic = e.target.files[0];
-        global.queue.picName = nameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
+        global.queue.picName = nameQueue.replace(/\s+/g,'-').replace('?', '')
+            .replace('!', '').replace('!', '')
+            + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         setAvatarName(e.target.files[0].name);
         console.log(global.queue.picURL);

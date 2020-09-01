@@ -91,7 +91,6 @@ async function addNewAdmins(usersArray, queueCode, res){
     }catch(e){
         console.log(e);
     }
-
 }
 
 async function changeUsersOrder(usersArr, queueCode, res){
