@@ -166,7 +166,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                     let dataCheck = document.getElementById('dateID');
                     console.log(dataCheck.validity.rangeUnderflow);
 
-                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
+                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {
