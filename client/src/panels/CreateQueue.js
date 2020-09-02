@@ -122,7 +122,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                        onChange={e => {
                            if(e.target.value.trim() === ''){
                                setFormStatusVisibility(true);
-                               setFormStatusHeader('Введите имя очереди!')
+                               setFormStatusHeader('Введите название очереди!')
                            }else{
                                setFormStatusVisibility(false);
                            }
@@ -235,12 +235,12 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите имя и дату!')
+                            setFormStatusHeader('Введите название и дату!')
 
                         }else if(nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите имя!')
+                            setFormStatusHeader('Введите название!')
 
                         }else if(date.trim() === '') {
                             setQueueDateStatus('error');
