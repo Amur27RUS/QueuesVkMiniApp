@@ -244,10 +244,21 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, res) {
         const deletedUser = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode])
         console.log('DELETED PLACE2')
         console.log(deletedUser.rows[deletedPlace].value);
-        console.log('END2')
         await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [deletedUser.rows[deletedPlace].value, queueCode]);
         const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
         await res.send(data.rows);
+
+        if(deletedPlace === 0){
+            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+            const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        }else if(deletedPlace === 1){
+            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+            const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        }
+
         await client.release();
     }catch(e){
         console.log(e);
@@ -274,6 +285,12 @@ async function firstToLast(queueCode, res) {
         await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = 1', [lenghtQueue.rows.length ,queueCode])
         const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
         await res.send(data.rows);
+
+        const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+        const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+
         await client.release();
     }catch(e){
         console.log(e);
