@@ -212,7 +212,7 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
 async function deleteUser(userID, queueCode) {
     try {
         const client = await pool.connect();
-        // const placeDeletedUser = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+        const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
         await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
         const check = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
         if (check.rows[0] === undefined) {
@@ -220,7 +220,6 @@ async function deleteUser(userID, queueCode) {
             await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
         }
 
-        const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
         if(checkPlace.rows[0].value === 1){
             const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
             const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
