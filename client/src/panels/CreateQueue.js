@@ -80,6 +80,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                             Лимит в создании 5 очередей в день исчерпан!
                         </Snackbar>)
                         setPopout(null);
+
                     }else {
                         setQueueCODE(data);
                         setPopout(null);
