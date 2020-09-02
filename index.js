@@ -219,6 +219,18 @@ async function deleteUser(userID, queueCode) {
             await client.query('DELETE FROM queues WHERE code = $1', [queueCode]);
             await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
         }
+
+        const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+        if(checkPlace.rows[0].value === 1){
+            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+            const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        }else if (checkPlace.rows[0].value === 2){
+            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+            const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        }
         await client.release();
         // return (placeDeletedUser.rows[0].value)
     }catch(e){
