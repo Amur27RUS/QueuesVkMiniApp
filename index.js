@@ -106,8 +106,8 @@ async function changeUsersOrder(usersArr, queueCode, res){
         //БОТ:
         const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
         const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${queueName.rows[queueName.rows.length-1].value}`);
-        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${queueName.rows[queueName.rows.length-1].value}`);
+        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows[queueName.rows.length-1].value}`);
+        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows[queueName.rows.length-1].value}`);
 
         await client.release();
     }catch(e){
