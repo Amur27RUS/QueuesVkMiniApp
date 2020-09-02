@@ -71,9 +71,20 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 return response.json();
             })
                 .then(function (data) {
-                    setQueueCODE(data);
-                    setPopout(null);
-                    setActiveModal(MODAL_CARD_CHAT_INVITE);
+                    if(data === 'LIMIT REACHED'){
+                        setSnackbar(<Snackbar
+                            layout="vertical"
+                            onClose={() => setSnackbar(null)}
+                            before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                        >
+                            Лимит в создании 5 очередей в день исчерпан!
+                        </Snackbar>)
+                        setPopout(null);
+                    }else {
+                        setQueueCODE(data);
+                        setPopout(null);
+                        setActiveModal(MODAL_CARD_CHAT_INVITE);
+                    }
                 }).catch((e) => {
                 setPopout(null);
                 setSnackbar(<Snackbar

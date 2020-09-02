@@ -182,16 +182,25 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
         code = generateCode();
         codesBD = await client.query('SELECT * FROM queues WHERE code = $1', [code]);
     }
-    if(queueAvatarURL !== undefined) {
-        await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate]);
-    }else{
-        await client.query('INSERT INTO queues (code, place, description, name, time, date) VALUES ($1, $2, $3, $4, $5, $6)',
-            [code, queuePlace, queueDescription, queueName, queueTime, queueDate]);
+    let now = new Date().toLocaleDateString();
+
+    const floodCheck = await client.query('SELECT * FROM queuesandusers WHERE userid = $1 AND createdate = $2', [userID, now])
+
+    if(floodCheck.rows.length >= 5) {
+        await res.send(JSON.stringify('LIMIT REACHED'));
+    }else {
+        if (queueAvatarURL !== undefined) {
+            await client.query('INSERT INTO queues (code, place, description, avatar, name, time, date) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                [code, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate]);
+        } else {
+            await client.query('INSERT INTO queues (code, place, description, name, time, date) VALUES ($1, $2, $3, $4, $5, $6)',
+                [code, queuePlace, queueDescription, queueName, queueTime, queueDate]);
+        }
+        const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
+        await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, createdate) VALUES ($1, $2, $3, $4, $5, $6)',
+            [id.rows[id.rows.length - 1].value + 1, code, userID, 1, true, now]);
+        await res.send(JSON.stringify(code));
     }
-    const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
-    await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin) VALUES ($1, $2, $3, $4, $5)', [id.rows[id.rows.length-1].value+1, code, userID, 1, true]);
-    await res.send(JSON.stringify(code));
     await client.release();
 }
 
