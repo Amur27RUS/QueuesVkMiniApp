@@ -29,6 +29,7 @@ const paramsHash = crypto
     .replace(/\//g, '_')
     .replace(/=$/, '');
 
+console.log(stringParams);
 console.log('TEST');
 console.log(paramsHash === urlParams.sign);
 console.log(paramsHash);
