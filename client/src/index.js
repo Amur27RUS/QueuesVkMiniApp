@@ -11,7 +11,7 @@ global.scheme = {
 const qs = require('querystring');
 const crypto = require('crypto');
 
-const urlParams = qs.parse(URL_PARAMS);
+const urlParams = qs.parse(window.location.search);
 const ordered = {};
 Object.keys(urlParams).sort().forEach((key) => {
     if (key.slice(0, 3) === 'vk_') {
@@ -21,7 +21,7 @@ Object.keys(urlParams).sort().forEach((key) => {
 
 const stringParams = qs.stringify(ordered);
 const paramsHash = crypto
-    .createHmac('sha256', secretKey)
+    .createHmac('sha256', 'BwCbyUaL4oTdKzuNXYIy')
     .update(stringParams)
     .digest()
     .toString('base64')
@@ -29,8 +29,11 @@ const paramsHash = crypto
     .replace(/\//g, '_')
     .replace(/=$/, '');
 
-console.log('TEST')
+console.log('TEST');
 console.log(paramsHash === urlParams.sign);
+console.log(paramsHash);
+console.log(urlParams.sign);
+
 
 // Init VK  Mini App
 bridge.send("VKWebAppInit");

@@ -75,6 +75,7 @@ const App = () =>{
 	const [joinQueueName, setJoinQueueName] = useState('');
 	const [joinQueueAvatar, setJoinQueueAvatar] = useState('');
 
+
 	//ActiveStory - это View
 	//ActivePanel - это Panel
 
