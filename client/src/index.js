@@ -19,6 +19,26 @@ Object.keys(urlParams).sort().forEach((key) => {
     }
 });
 
+/*
+vk_access_token_settings=notify
+&vk_app_id=6736218
+&vk_are_notifications_enabled=0
+&vk_is_app_user=0
+&vk_language=ru
+&vk_platform=android
+&vk_user_id=494075
+
+
+vk_app_id=7551421
+&vk_are_notifications_enabled=0
+&vk_is_app_user=1
+&vk_is_favorite=1
+&vk_language=ru
+&vk_platform=mobile_web
+&vk_ref=other
+&vk_user_id=199833891
+ */
+
 const stringParams = qs.stringify(ordered);
 const paramsHash = crypto
     .createHmac('sha256', 'BwCbyUaL4oTdKzuNXYIy')
