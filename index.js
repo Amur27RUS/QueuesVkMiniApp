@@ -4,6 +4,8 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors');
+const crypto = require('crypto');
+const qs = require('querystring');
 // const bot = new VkBot({
 //     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
 //     confirmation: '7268987f'
@@ -93,7 +95,6 @@ async function addNewAdmins(usersArray, queueCode, res){
     }
 }
 
-//todo ЗДЕСЬ
 async function changeUsersOrder(usersArr, queueCode, res){
     try{
         const client = await pool.connect();
@@ -217,7 +218,6 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
     await client.release();
 }
 
-//todo ЗДЕСЬ
 async function deleteUser(userID, queueCode) {
     try {
         const client = await pool.connect();
@@ -246,7 +246,6 @@ async function deleteUser(userID, queueCode) {
     }
 }
 
-//todo ЗДЕСЬ
 async function deleteUserWithAdmin(deletedPlace, queueCode, res) {
     try {
         const client = await pool.connect();
@@ -286,7 +285,6 @@ async function getPeople(queueCode, res){
     }
 }
 
-//todo ЗДЕСЬ
 async function firstToLast(queueCode, res) {
     try{
         const client = await pool.connect();
@@ -340,6 +338,35 @@ function generateCode() {
     return(code)
 }
 
+async function checkSign(url, res){
+    const urlParams = qs.parse(url);
+    const ordered = {};
+    Object.keys(urlParams).sort().forEach((key) => {
+       if(key.slice(0, 3) === 'vk_'){
+           ordered[key] = urlParams[key];
+       }
+    });
+    const stringParams = qs.stringify(ordered);
+
+    const paramsHash = crypto
+        .createHmac('sha256', 'NVGy9yxwLDxxEd6lz9Bp')
+        .update(stringParams)
+        .digest()
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=$/, '');
+    console.log('Параметры запуска');
+    console.log(`Хеш = ${paramsHash}`);
+    console.log(`Подпись = ${urlParams.sign}`);
+
+    if(paramsHash === urlParams.sign){
+        res.send(JSON.stringify('ok'));
+    }else{
+        res.send(JSON.stringify('fail'));
+    }
+}
+
 
 
 /*---------------------------------------------------------------------*/
@@ -352,6 +379,12 @@ app.post('/addNotFromVK', (req, res) => {
 
 
     addNotFromVK(newUser, queueCode, res);
+})
+
+app.post('/checkSign', (req, res) => {
+    const url = req.body.url;
+
+    checkSign(url, res);
 })
 
 app.post('/addNewAdmins', (req, res) => {

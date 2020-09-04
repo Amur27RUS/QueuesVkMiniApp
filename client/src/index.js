@@ -8,52 +8,31 @@ import App from "./App";
 global.scheme = {
     scheme: undefined,
 }
-const qs = require('querystring');
-const crypto = require('crypto');
 
-const urlParams = qs.parse(window.location.search);
-const ordered = {};
-Object.keys(urlParams).sort().forEach((key) => {
-    if (key.slice(0, 3) === 'vk_') {
-        ordered[key] = urlParams[key];
-    }
-});
+// Проверка на подлинность
 
-/*
-vk_access_token_settings=notify
-&vk_app_id=6736218
-&vk_are_notifications_enabled=0
-&vk_is_app_user=0
-&vk_language=ru
-&vk_platform=android
-&vk_user_id=494075
+fetch('/checkSign', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "url": window.location.search.replace('?', ''),
+    })
+}).then(function (response) {
+    return response.json();
 
-
-vk_app_id=7551421
-&vk_are_notifications_enabled=0
-&vk_is_app_user=1
-&vk_is_favorite=1
-&vk_language=ru
-&vk_platform=mobile_web
-&vk_ref=other
-&vk_user_id=199833891
- */
-
-const stringParams = qs.stringify(ordered);
-const paramsHash = crypto
-    .createHmac('sha256', 'BwCbyUaL4oTdKzuNXYIy')
-    .update(stringParams)
-    .digest()
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=$/, '');
-
-console.log(stringParams);
-console.log('TEST');
-console.log(paramsHash === urlParams.sign);
-console.log(paramsHash);
-console.log(urlParams.sign);
+})
+    .then(function (data) {
+        if(data === 'ok'){
+            console.log('чел нормальный');
+        }else if(data === 'fail'){
+            console.log('Лови хацкера!');
+        }
+    }).catch((e) => {
+    console.log('Упс... Запрос на проверку сертификата не прошёл...')
+})
 
 
 // Init VK  Mini App
