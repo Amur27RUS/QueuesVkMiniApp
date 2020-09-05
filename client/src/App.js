@@ -23,8 +23,6 @@ import ChangeQueue from "./panels/ChangeQueue"
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
-import cowboy from "./img/cowboy.jpg";
-import ConfigProvider from "@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider";
 
 
 global.queue = {

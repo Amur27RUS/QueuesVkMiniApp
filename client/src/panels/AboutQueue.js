@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {
 	MiniInfoCell,
@@ -20,7 +20,6 @@ import Icon20PlaceOutline from '@vkontakte/icons/dist/20/place_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import UsersList from '../usersList'
 import Icon20Info from '@vkontakte/icons/dist/20/info';
-import bridge from "@vkontakte/vk-bridge";
 
 
 

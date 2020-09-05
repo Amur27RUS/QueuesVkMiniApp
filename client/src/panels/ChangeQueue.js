@@ -14,7 +14,6 @@ import {
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
-import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 
 
 let now = new Date().toLocaleDateString();

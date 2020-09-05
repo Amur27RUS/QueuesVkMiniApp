@@ -3,17 +3,10 @@ import PropTypes from 'prop-types';
 import QueueCell from "../QueueCell";
 import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
 import {Placeholder, List, Div, Group, PanelHeader, Panel, Button, Snackbar, Avatar} from "@vkontakte/vkui";
-import cowboy from "../img/cowboy.jpg";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
-import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
-import Icon16User from '@vkontakte/icons/dist/16/user';
-
-
-
 
 const MODAL_CARD_ABOUT = 'say-about';
-const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 
 
 let homePanelCounter = 0;

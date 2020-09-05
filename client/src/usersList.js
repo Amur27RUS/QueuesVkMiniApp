@@ -9,18 +9,15 @@ import {
     Header,
     Input,
     IOS,
-    List, PanelHeaderButton,
+    List,
     Placeholder,
     platform,
-    Separator, Snackbar,
+    Separator,
     Tabs,
     TabsItem
 } from "@vkontakte/vkui";
-import unnamed from './img/unnamed.jpg'
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
-import Icon16Clear from '@vkontakte/icons/dist/16/clear';
-
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
 let counter2= 1; //Счётчик, считающий кол-во включений добавления админов
