@@ -42,13 +42,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
     const createQueueOnServer = () => {
         setPopout(<ScreenSpinner/>);
         console.log('Отправлен запрос на создание очереди...');
-        console.log('С параметрами:');
-        console.log('id : ' + fetchedUser.id);
-        console.log('Название очереди: ' + nameQueue);
-        console.log('Mesto: ' + place);
-        console.log('Дата проведения: ' + date.toString());
-        console.log('Время проведения: ' + time);
-        console.log('Описание очереди: ' + description);
 
         try {
 
@@ -98,7 +91,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 </Snackbar>);
             })
         }catch (e){
-            console.log(e);
+            console.log('Ошибка при создании очереди...');
         }
     };
 
@@ -109,9 +102,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
             + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         setAvatarName(e.target.files[0].name);
-        console.log(global.queue.picURL);
-        console.log(global.queue.picName);
-        console.log(global.queue.pic);
     }
 
     const getRandomInt = (max) => {
@@ -174,16 +164,10 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
 
                            // if(today-pickedDate > 86400000){
                            if(today.getTime() > pickedDate.getTime()){
-                               console.log(today-pickedDate);
-                               console.log('Дата неверна!');
                                IOSdateError = false;
                                setQueueDateStatus('error');
                            }else {
-                               console.log('Дата верна!')
                                IOSdateError = true;
-                               // if(!formStatusVisibility) {
-                               //     e.target.value.trim() ? setQueueDateStatus('valid') : setQueueDateStatus('error');
-                               // }
                            }
                            setDate(e.target.value)
                         }}/>
@@ -195,7 +179,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Button size="xl" onClick={() => {
                     // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
                     let dataCheck = document.getElementById('dateID');
-                    console.log(dataCheck.validity.rangeUnderflow);
                     if(dataCheck.validity.rangeUnderflow){
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
@@ -228,7 +211,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                     return response.json();
                                 })
                                     .then(function (data) {
-                                        console.log('Картинка успешно загружена!!!');
+                                        console.log('Картинка успешно загружена!');
                                     })
                             }catch(e){
                                 setPopout(null);

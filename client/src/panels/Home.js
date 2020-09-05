@@ -39,7 +39,6 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 				return response.json();
 			})
 				.then(function (data) {
-					console.log('Получен массив очередей: ' + data);
 					queuesSet(data);
 
 				}).catch((e) => {
@@ -70,7 +69,6 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 			//
 			// 		})
 			// 			.then(function (data) {
-			// 				console.log(data)
 			// 				if (data === 'alreadyThere') {
 			// 					setSnackbar(<Snackbar
 			// 						layout="vertical"

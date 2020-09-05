@@ -62,7 +62,6 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff'
         };
-        console.log(global.scheme.scheme)
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
                 CSSActionsButton: 'showActionsButtonDark'
@@ -158,7 +157,6 @@ class UsersList extends React.Component {
                     tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                 }
             }
-            console.log('Получен массив людей: ' + tmpUsersArr);
             return tmpUsersArr;
         }
 
@@ -362,7 +360,6 @@ class UsersList extends React.Component {
                             return response.json();
                         })
                             .then(function (data) {
-                                console.log('Ответ получен! : ' + data);
                             }).catch((e) => {
                             // this.props.setSnackbar(<Snackbar
                             //     layout="vertical"
@@ -420,14 +417,12 @@ class UsersList extends React.Component {
                         else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
                 }
-                console.log('Получен массив людей: ' + tmpUsersArr);
                 return tmpUsersArr;
 
             }).then((usersArr) =>{
@@ -459,7 +454,6 @@ class UsersList extends React.Component {
 
     changeUsersPositionOnServer = (usersArray) => {
         console.log('Отправлен запрос на изменение порядка людей в очереди...');
-        console.log('Новый массив: ' + usersArray);
         fetch('/changeUsersOrder', {
             method: 'POST',
             headers: {
@@ -485,14 +479,12 @@ class UsersList extends React.Component {
                         else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
                 }
-                console.log('Получен массив людей: ' + tmpUsersArr);
                 return tmpUsersArr;
 
             }).then((usersArr) =>{
@@ -595,14 +587,12 @@ class UsersList extends React.Component {
                         else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
                 }
-                console.log('Получен массив людей: ' + tmpUsersArr);
                 return tmpUsersArr;
 
             }).then((usersArr) =>{
@@ -665,14 +655,12 @@ class UsersList extends React.Component {
                         else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
                 }
-                console.log('Получен массив людей: ' + tmpUsersArr);
                 return tmpUsersArr;
 
             }).then((usersArr) =>{
@@ -716,14 +704,12 @@ class UsersList extends React.Component {
                         else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        console.log(user);
                         tmpUsersArr[i].name = user.last_name + " " + user.first_name;
                         tmpUsersArr[i].avatar = user.photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
                 }
-                console.log('Получен массив людей: ' + tmpUsersArr);
                 return tmpUsersArr;
 
             }).then((usersArr) => {

@@ -104,8 +104,6 @@ const App = () =>{
 
 			})
 				.then(function (data) {
-					console.log('Получен массив очередей: ' + data);
-					// console.log("Для пользователя с id: " + user.id);
 					queuesSet(data);
 				}).catch((e) => {
 				setSnackbar(<Snackbar
@@ -180,7 +178,6 @@ const App = () =>{
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
 				const schemeAttribute = document.createAttribute('scheme');
-				console.log(schemeAttribute.value)
 				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 				global.scheme.scheme = schemeAttribute.value;
@@ -264,7 +261,6 @@ const App = () =>{
 	const sendDataToServer = data => {
 		if (data !== undefined && data.trim().length === 6) {
 			console.log('Отправлен запрос на вход в очередь...');
-			console.log('Код очереди: '+ data);
 
 				fetch('/joinQueue', {
 					method: 'POST',
@@ -280,7 +276,6 @@ const App = () =>{
 				}).then(async function (response) {
 							let res = await response.json();
 
-							console.log(joinQueueResponse);
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -328,7 +323,6 @@ const App = () =>{
 
 					})
 						.then(function (data) {
-							console.log('Получен массив очередей: ' + data);
 							setQueues(data);
 						})
 				}).catch((e) => {
@@ -361,7 +355,6 @@ const App = () =>{
 
 		})
 			.then(function (data) {
-				console.log('Получен массив очередей: ' + data);
 				setQueues(data);
 			}).catch((e) => {
 			setSnackbar(<Snackbar

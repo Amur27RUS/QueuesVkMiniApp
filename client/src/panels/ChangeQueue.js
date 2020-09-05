@@ -85,9 +85,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
         global.queue.picName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         setNewAvatarName(e.target.files[0].name);
-        console.log(global.queue.picURL);
-        console.log(global.queue.picName);
-        console.log(global.queue.pic);
     }
 
     const getRandomInt = (max) => {
@@ -146,12 +143,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                            }
 
                            if(today.getTime() > pickedDate.getTime()){
-                               console.log('Дата неверна!')
                                setNewDateStatus('error');
                                IOSdateError = false;
 
                            }else {
-                               console.log('Дата верна!')
                                IOSdateError = true;
                                if(!formStatusVisibility) {
                                    e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error');
@@ -165,7 +160,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
                     let dataCheck = document.getElementById('dateID');
-                    console.log(dataCheck.validity.rangeUnderflow);
 
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '' && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
