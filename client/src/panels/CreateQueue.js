@@ -66,6 +66,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     "queueDate": date,
                     "queueAvatarURL": global.queue.picURL,
                     "queueDescription": description,
+                    "url": window.location.search.replace('?', '')
                 })
             }).then(function (response) {
                 return response.json();

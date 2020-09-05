@@ -69,6 +69,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                 "queueAvatarURL": global.queue.picURL,
                 "queueDescription": newDescription,
                 "queueCode": global.queue.codeQueue,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();

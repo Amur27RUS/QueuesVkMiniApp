@@ -33,6 +33,7 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 				},
 				body: JSON.stringify({
 					"userID": fetchedUser.id,
+					"url": window.location.search.replace('?', '')
 				})
 			}).then(function (response) {
 				return response.json();
@@ -114,7 +115,6 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
-
 
 	}, []);
 

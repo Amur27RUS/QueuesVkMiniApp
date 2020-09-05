@@ -97,6 +97,7 @@ const App = () =>{
 				},
 				body: JSON.stringify({
 					"userID": user.id, //user.id
+					"url": window.location.search.replace('?', '')
 				})
 			}).then(function (response) {
 				return response.json();
@@ -128,6 +129,7 @@ const App = () =>{
 						body: JSON.stringify({
 							"userID": user.id, //user.id
 							"queueCODE": global.queue.joinQueueCode,
+							"url": window.location.search.replace('?', '')
 						})
 					}).then(function (response) {
 						return response.json();
@@ -195,6 +197,7 @@ const App = () =>{
 							body: JSON.stringify({
 								"userID": fetchedUser.id, //user.id
 								"queueCODE": global.queue.joinQueueCode,
+								"url": window.location.search.replace('?', '')
 							})
 						}).then(function (response) {
 							return response.json();
@@ -272,6 +275,7 @@ const App = () =>{
 					body: JSON.stringify({
 						"serverCode": data,
 						"userID": fetchedUser.id,
+						"url": window.location.search.replace('?', '')
 					})
 				}).then(async function (response) {
 							let res = await response.json();
@@ -317,6 +321,7 @@ const App = () =>{
 						},
 						body: JSON.stringify({
 							"userID": fetchedUser.id, //user.id
+							"url": window.location.search.replace('?', '')
 						})
 					}).then(function (response) {
 						return response.json();
@@ -349,6 +354,7 @@ const App = () =>{
 			},
 			body: JSON.stringify({
 				"userID": data, //user.id
+				"url": window.location.search.replace('?', '')
 			})
 		}).then(function (response) {
 			return response.json();

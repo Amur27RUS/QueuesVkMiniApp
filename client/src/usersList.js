@@ -106,6 +106,7 @@ class UsersList extends React.Component {
         		},
         		body: JSON.stringify({
         			"queueCODE": this.props.queueCode,
+                    "url": window.location.search.replace('?', '')
         		})
         	}).then(function (response) {
         		return response.json();
@@ -354,7 +355,8 @@ class UsersList extends React.Component {
                             },
                             body: JSON.stringify({
                                 "userID": this.props.fetchedUser.id,
-                                "queueCODE": this.props.queueCode
+                                "queueCODE": this.props.queueCode,
+                                "url": window.location.search.replace('?', '')
                             })
                         }).then(function (response) {
                             return response.json();
@@ -402,6 +404,7 @@ class UsersList extends React.Component {
             },
             body: JSON.stringify({
                 "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();
@@ -462,6 +465,7 @@ class UsersList extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                "url": window.location.search.replace('?', '')
             },
             body: JSON.stringify({
                 "usersArray": usersArray,
@@ -575,6 +579,7 @@ class UsersList extends React.Component {
             body: JSON.stringify({
                 "usersArray": this.state.users,
                 "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();
@@ -644,6 +649,7 @@ class UsersList extends React.Component {
             body: JSON.stringify({
                 "newUser": newUser,
                 "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();
@@ -694,6 +700,7 @@ class UsersList extends React.Component {
             body: JSON.stringify({
                 "deletedPlace": deletedUserPlace,
                 "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();
