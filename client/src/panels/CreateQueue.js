@@ -127,7 +127,15 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!')
                            }else{
-                               setFormStatusVisibility(false);
+                               if(!IOSdateError || !global.queue.dataCheck){
+                                   setFormStatusVisibility(true);
+                                   setFormStatusHeader('Неверная дата!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }else{
+                                   setFormStatusVisibility(false);
+                                   setFormStatusDescription('');
+                               }
+
                            }
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
@@ -273,6 +281,12 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название и дату!')
+
+                        }else if((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === ''){
+                            setQueueNameStatus('error');
+                            setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите название и корректную дату!')
 
                         }else if(nameQueue.trim() === '') {
                             setQueueNameStatus('error');
