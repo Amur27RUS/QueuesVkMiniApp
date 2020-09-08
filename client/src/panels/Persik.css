@@ -74,7 +74,7 @@
   display: flex;
   position: sticky;
   top: 44px;
-  z-index: 3;
+  z-index: 4;
   margin-top: -4px;
   /*background: white;*/
 }
@@ -83,7 +83,7 @@
   align-content: center;
   display: flex;
   position: sticky;
-  z-index: 3;
+  z-index: 4;
 }
 
 .ButtonDivIOS {
