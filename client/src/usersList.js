@@ -178,7 +178,7 @@ class UsersList extends React.Component {
             });
 
         }else {
-            if (this.state.nameAdminButton === 'Скрыть выдачу прав админа') {counter++}
+            // if (this.state.nameAdminButton === 'Скрыть выдачу прав админа') {counter++}
             this.setState({
                 selectables: false,
                 nameAdminButton: 'Выдать права админа',
@@ -191,6 +191,21 @@ class UsersList extends React.Component {
             menuCounter++;
         }
         counter2++;
+        if (this.state.CSSAddNewUserInput !== 'turnOff') {
+            this.setState({
+                CSSAddNewUserInput: 'turnOff',
+                CSSAddNewUserButton: 'turnOff',
+            });
+            ADDcounter++;
+        }
+        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
+            this.setState({
+                nameAdminButton: 'Выдать права админа',
+                selectables: false,
+                cssButtonGiveAdmin: 'turnOff',
+            })
+            counter++;
+        }
     }
 
     copyToClipboard = (text) => {
@@ -246,6 +261,13 @@ class UsersList extends React.Component {
 
         }
         counter++;
+        if (this.state.CSSAddNewUserInput !== 'turnOff') {
+            this.setState({
+                CSSAddNewUserInput: 'turnOff',
+                CSSAddNewUserButton: 'turnOff',
+                });
+            ADDcounter++;
+        }
     }
 
     closePopout = () => {
@@ -266,7 +288,30 @@ class UsersList extends React.Component {
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
                             CSSMenuDropout: 'turnOff',
+                            nameAdminButton: 'Выдать права админа',
                         });
+                        if (this.state.CSSAddNewUserInput !== 'turnOff') {
+                            ADDcounter++;
+                            this.setState({
+                                CSSAddNewUserInput: 'turnOff',
+                                CSSAddNewUserButton: 'turnOff',
+                            });
+                        }
+                        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
+                            counter++;
+                            this.setState({
+                                nameAdminButton: 'Выдать права админа',
+                                selectables: false,
+                                cssButtonGiveAdmin: 'turnOff',
+                            })
+                        }
+                        if (this.state.buttonText === 'Откл. перемещение/удаление') {
+                            counter2++;
+                            this.setState({
+                                draggable: false,
+                                buttonText: 'Вкл. перемещение/удаление',
+                            });
+                        }
 
                         this.changeUsersPositionOnServer(this.state.users);
                         menuCounter++;
@@ -618,11 +663,28 @@ class UsersList extends React.Component {
                 CSSAddNewUserInput: 'CSSAddNewUserInput',
                 CSSAddNewUserButton: 'CSSAddNewUserButton',
                 CSSMenuDropout: 'turnOff',
-                openMenuButton: 'Открыть меню действий'
+                openMenuButton: 'Открыть меню действий',
+                cssButtonGiveAdmin: 'turnOff',
+                nameAdminButton: 'Выдать права админа',
             });
             menuCounter++;
         }
         ADDcounter++;
+        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
+            this.setState({
+                nameAdminButton: 'Выдать права админа',
+                selectables: false,
+                cssButtonGiveAdmin: 'turnOff',
+            })
+            counter++;
+        }
+        if (this.state.buttonText === 'Откл. перемещение/удаление') {
+            counter2++;
+            this.setState({
+                draggable: false,
+                buttonText: 'Вкл. перемещение/удаление',
+            });
+        }
     }
 
     fetchNotFromVKUser = (newUser) => {
