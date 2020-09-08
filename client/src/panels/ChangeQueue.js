@@ -9,11 +9,12 @@ import {
     Text,
     PanelHeaderButton,
     Snackbar,
-    Avatar, FormStatus
+    Avatar, FormStatus, ScreenSpinner
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 
 
 let now = new Date().toLocaleDateString();
@@ -24,7 +25,7 @@ let IOSdateError;
 let today;
 let pickedDate;
 
-const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar}) => {
+const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
     const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
@@ -53,36 +54,54 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
     }
 
     const changeQueueOnServer = () => {
+        setPopout(<ScreenSpinner/>);
 
-        fetch('/changeQueue', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "queueName": newNameQueue,
-                "queuePlace": newPlace,
-                "queueTime": newTime,
-                "queueDate": newDate,
-                "queueAvatarURL": global.queue.picURL,
-                "queueDescription": newDescription,
-                "queueCode": global.queue.codeQueue,
-                "url": window.location.search.replace('?', '')
+        try {
+            fetch('/changeQueue', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "queueName": newNameQueue,
+                    "queuePlace": newPlace,
+                    "queueTime": newTime,
+                    "queueDate": newDate,
+                    "queueAvatarURL": global.queue.picURL,
+                    "queueDescription": newDescription,
+                    "queueCode": global.queue.codeQueue,
+                    "url": window.location.search.replace('?', '')
+                })
+            }).then(function (response) {
+                return response.json();
             })
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(function (data) {
-                setSnackbar(<Snackbar
-                    layout="vertical"
-                    onClose={() => setSnackbar(null)}
-                    before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}
-                >
-                    Изменения сохранены!
-                </Snackbar>);
-            })
-
+                .then(function (data) {
+                    setSnackbar(<Snackbar
+                        layout="vertical"
+                        onClose={() => setSnackbar(null)}
+                        before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14}
+                                                                                            height={14}/></Avatar>}
+                    >
+                        Изменения сохранены!
+                    </Snackbar>)
+                    setPopout(null);
+                })
+                .catch((e) => {
+                    setPopout(null);
+                    setSnackbar(<Snackbar
+                        layout="vertical"
+                        onClose={() => setSnackbar(null)}
+                        before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                    >
+                        Ошибка соединения! Проверьте интернет!
+                    </Snackbar>);
+                    console.log(e)
+                })
+        }
+        catch (e){
+            console.log('Ошибка при обновлении очереди...');
+        }
     };
 
     const onPhotoUpload = (e) => {
@@ -159,7 +178,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                            setNewDate(e.target.value)
                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
-                <File top="Аватарка очереди" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
+                <File top="Аватарка очереди" accept=".jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
@@ -170,6 +189,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {
+                            try {
                             fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
                                 method: 'POST',
                                 headers: {
@@ -183,8 +203,35 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                                 .then(function (data) {
                                     console.log('Картинка успешно загружена!!!');
                                 })
+                                .then(function () {
+                                    setSnackbar(<Snackbar
+                                        layout="vertical"
+                                        onClose={() => setSnackbar(null)}
+                                        before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14}
+                                                                                                            height={14}/></Avatar>}
+                                    >
+                                        Изменения сохранены!
+                                    </Snackbar>)
+                                    setPopout(null);
+                                })
+                                .catch((e) => {
+                                setPopout(null);
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                                console.log(e)
+                            })
                         }
-                        // setSnackbar(<Snackbar
+                    catch (e){
+                            console.log('Ошибка при обновлении очереди...');
+                        }
+                    }
+
+                    // setSnackbar(<Snackbar
                         //     layout="vertical"
                         //     onClose={() => setSnackbar(null)}
                         //     before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}

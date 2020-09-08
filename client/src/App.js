@@ -500,7 +500,7 @@ const App = () =>{
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
 			<Home id='home' snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 			<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-			<ChangeQueue id='changeQueue' setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+			<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
 
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
