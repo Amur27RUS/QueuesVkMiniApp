@@ -20,9 +20,11 @@ import Home from './panels/Home';
 import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import ChangeQueue from "./panels/ChangeQueue"
+import Settings from "./panels/Settings";
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 
 
 global.queue = {
@@ -487,11 +489,11 @@ const App = () =>{
 				><AddSquareOutline28/></TabbarItem>
 				{/*<TabbarItem*/}
 				{/*	onClick={onStoryChange}*/}
-				{/*	selected={activeStory === 'joinQueue'}*/}
-				{/*	data-story="joinQueue"*/}
+				{/*	selected={activeStory === 'settings'}*/}
+				{/*	data-story="settings"*/}
 				{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
-				{/*	text="Войти в очередь"*/}
-				{/*><ListAddOutline28/></TabbarItem>*/}
+				{/*	text="Настройки"*/}
+				{/*><Icon28SettingsOutline/></TabbarItem>*/}
 			</Tabbar>
 		}>
 
@@ -505,8 +507,8 @@ const App = () =>{
 			<CreateQueue setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
 
-		{/*<View id={'joinQueue'} activePanel={'JoinQueue'} popout={popout} modal={modal}>*/}
-		{/*	<JoinQueue id={'JoinQueue'}  go={go} setActiveModal={setActiveModal}/>*/}
+		{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
+		{/*	<Settings id={'Settings'} go={go}/>*/}
 		{/*</View>*/}
 		</Epic>
 	);

@@ -74,7 +74,13 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
             return response.json();
         })
             .then(function (data) {
-                setQueueCODE(data);
+                setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => setSnackbar(null)}
+                    before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}
+                >
+                    Изменения сохранены!
+                </Snackbar>);
             })
 
     };
@@ -178,13 +184,13 @@ const СhangeQueue = ({ id, go, fetchedUser, setQueueCODE, snackbar, setSnackbar
                                     console.log('Картинка успешно загружена!!!');
                                 })
                         }
-                        setSnackbar(<Snackbar
-                            layout="vertical"
-                            onClose={() => setSnackbar(null)}
-                            before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}
-                        >
-                            Изменения сохранены!
-                        </Snackbar>)
+                        // setSnackbar(<Snackbar
+                        //     layout="vertical"
+                        //     onClose={() => setSnackbar(null)}
+                        //     before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14} /></Avatar>}
+                        // >
+                        //     Изменения сохранены!
+                        // </Snackbar>)
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                     }else{

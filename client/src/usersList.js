@@ -825,8 +825,8 @@ class UsersList extends React.Component {
                     <List>
                     {this.state.users.map(info => {
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}
-                                     // onClick={() => window.open("http://vk.com/id"+info.id)}
                                      selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
+                                     // onClick={() => window.open("http://vk.com/id"+info.userid)}
                                      className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
                                      draggable={this.state.draggable}
                                      removable={!(info.userid === this.props.fetchedUser.id) ? this.state.draggable : false}
