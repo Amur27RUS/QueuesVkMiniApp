@@ -129,6 +129,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            }else{
                                setFormStatusVisibility(false);
                                setFormStatusDescription('');
+                               setFormStatusHeader('');
                            }
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
