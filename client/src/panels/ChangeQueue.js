@@ -223,8 +223,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                         }
                     }
-
-                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck) {
+                    let dataCheck = document.getElementById('dateID');
+                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {
