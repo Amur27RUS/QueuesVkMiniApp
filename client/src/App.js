@@ -52,7 +52,7 @@ global.queue = {
 	joinQueueName: undefined,
 	joinQueueCode: undefined,
 
-
+	dataCheck: false,
 }
 
 const MODAL_CARD_ABOUT = 'say-about';

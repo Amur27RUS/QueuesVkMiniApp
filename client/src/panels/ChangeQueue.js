@@ -137,7 +137,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                        onChange={e => {
                            if(e.target.value.trim() === ''){
                                setFormStatusVisibility(true);
-                               setFormStatusHeader('Введите имя очереди!')
+                               setFormStatusHeader('Введите название очереди!');
                            }else{
                                setFormStatusVisibility(false);
                            }
@@ -156,25 +156,32 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
+
                            if(dataCheck.validity.rangeUnderflow){
                                setNewDateStatus('error');
                                setFormStatusVisibility(true);
-                               setFormStatusHeader('Неверная дата!');
-                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               if(formStatusHeader === 'Введите название очереди!') {
+                                   setFormStatusHeader('Неверная дата и название!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }else{
+                                   setFormStatusHeader('Неверная дата!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }
                            }else{
                                setFormStatusVisibility(false);
                                setNewDateStatus('valid')
                            }
 
-                           if(today.getTime() > pickedDate.getTime()){
-                               setNewDateStatus('error');
-                               IOSdateError = false;
-
-                           }else {
-                               IOSdateError = true;
-                               if(!formStatusVisibility) {
-                                   e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error');
-                               }                           }
+                           // if(today.getTime() > pickedDate.getTime()){
+                           //     setNewDateStatus('error');
+                           //     IOSdateError = false;
+                           //
+                           // }else {
+                           //     IOSdateError = true;
+                           //     if(!formStatusVisibility) {
+                           //         e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error');
+                           //     }
+                           // }
                            setNewDate(e.target.value)
                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>

@@ -148,27 +148,37 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                            if(dataCheck.validity.rangeUnderflow){
                                setQueueDateStatus('error');
                                setFormStatusVisibility(true);
-                               setFormStatusHeader('Неверная дата!');
-                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               global.queue.dataCheck = false;
+                               if(formStatusHeader === 'Введите название очереди!') {
+                                   setFormStatusHeader('Неверная дата и название!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }else{
+                                   setFormStatusHeader('Неверная дата!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }
                            }else{
                                setFormStatusVisibility(false);
                                setQueueDateStatus('valid');
+                               global.queue.dataCheck = true;
                            }
                            if(queueDateStatus === 'error'){
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Неверная дата!');
                                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               global.queue.dataCheck = false;
                            }else{
+                               global.queue.dataCheck = true;
                                setFormStatusVisibility(false);
                            }
 
                            // if(today-pickedDate > 86400000){
-                           if(today.getTime() > pickedDate.getTime()){
-                               IOSdateError = false;
-                               setQueueDateStatus('error');
-                           }else {
-                               IOSdateError = true;
-                           }
+                           // if(today.getTime() > pickedDate.getTime()){
+                           //     IOSdateError = false;
+                           //     setQueueDateStatus('error');
+                           // }else {
+                           //     IOSdateError = true;
+                           //     setFormStatusVisibility(false);
+                           // }
                            setDate(e.target.value)
                         }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
@@ -177,24 +187,36 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
-                    let dataCheck = document.getElementById('dateID');
-                    if(dataCheck.validity.rangeUnderflow){
+
+                    if(!global.queue.dataCheck){
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
-                        setFormStatusHeader('Неверная дата!');
-                        setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                    }else{
-                        setFormStatusVisibility(false);
+                        if(formStatusHeader === 'Введите название очереди!') {
+                            setFormStatusHeader('Неверная дата и название!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }else{
+                            setFormStatusHeader('Неверная дата!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }
                     }
-                    if(queueDateStatus === 'error'){
-                        setFormStatusVisibility(true);
-                        setFormStatusHeader('Неверная дата!');
-                        setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                    }else{
-                        setFormStatusVisibility(false);
-                    }
-                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && !dataCheck.validity.rangeUnderflow) {
+                    // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
+                    // let dataCheck = document.getElementById('dateID');
+                    // if(dataCheck.validity.rangeUnderflow){
+                    //     setQueueDateStatus('error');
+                    //     setFormStatusVisibility(true);
+                    //     setFormStatusHeader('Неверная дата!');
+                    //     setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                    // }else{
+                    //     setFormStatusVisibility(false);
+                    // }
+                    // if(queueDateStatus === 'error'){
+                    //     setFormStatusVisibility(true);
+                    //     setFormStatusHeader('Неверная дата!');
+                    //     setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                    // }else{
+                    //     setFormStatusVisibility(false);
+                    // }
+                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck) {
                         setFormStatusVisibility(false);
                         createQueueOnServer();
 
