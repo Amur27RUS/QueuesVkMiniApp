@@ -158,6 +158,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                            let dataCheck = document.getElementById('dateID');
 
                            if(dataCheck.validity.rangeUnderflow){
+                               global.queue.dataCheck = false;
                                setNewDateStatus('error');
                                setFormStatusVisibility(true);
                                if(formStatusHeader === 'Введите название очереди!') {
@@ -170,18 +171,27 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                            }else{
                                setFormStatusVisibility(false);
                                setNewDateStatus('valid')
+                               global.queue.dataCheck = true;
                            }
 
-                           // if(today.getTime() > pickedDate.getTime()){
-                           //     setNewDateStatus('error');
-                           //     IOSdateError = false;
-                           //
-                           // }else {
-                           //     IOSdateError = true;
-                           //     if(!formStatusVisibility) {
-                           //         e.target.value.trim() ? setNewDateStatus('valid') : setNewDateStatus('error');
-                           //     }
-                           // }
+                           if(today.getTime() > pickedDate.getTime()){
+                               setNewDateStatus('error');
+                               IOSdateError = false;
+                               setFormStatusVisibility(true);
+                               global.queue.dataCheck = false;
+                               if(formStatusHeader === 'Введите название очереди!') {
+                                   setFormStatusHeader('Неверная дата и название!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }else{
+                                   setFormStatusHeader('Неверная дата!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }
+                           }else {
+                               IOSdateError = true;
+                               setNewDateStatus('valid');
+                               setFormStatusVisibility(false);
+                               global.queue.dataCheck = true
+                           }
                            setNewDate(e.target.value)
                        }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
@@ -190,9 +200,31 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    let dataCheck = document.getElementById('dateID');
+                    if(!global.queue.dataCheck){
+                        setNewDateStatus('error');
+                        setFormStatusVisibility(true);
+                        if(formStatusHeader === 'Введите название очереди!') {
+                            setFormStatusHeader('Неверная дата и название!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }else{
+                            setFormStatusHeader('Неверная дата!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }
+                    }
 
-                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && !dataCheck.validity.rangeUnderflow) {
+                    if(!IOSdateError){
+                        setNewDateStatus('error');
+                        setFormStatusVisibility(true);
+                        if(formStatusHeader === 'Введите название очереди!') {
+                            setFormStatusHeader('Неверная дата и название!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }else{
+                            setFormStatusHeader('Неверная дата!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }
+                    }
+
+                    if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck) {
                         changeQueueOnServer();
                         changedQueue();
                         if(global.queue.picURL !== undefined) {

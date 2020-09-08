@@ -206,6 +206,18 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                         }
                     }
+
+                    if(!IOSdateError){
+                        setQueueDateStatus('error');
+                        setFormStatusVisibility(true);
+                        if(formStatusHeader === 'Введите название очереди!') {
+                            setFormStatusHeader('Неверная дата и название!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }else{
+                            setFormStatusHeader('Неверная дата!');
+                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                        }
+                    }
                     // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
                     // let dataCheck = document.getElementById('dateID');
                     // if(dataCheck.validity.rangeUnderflow){
