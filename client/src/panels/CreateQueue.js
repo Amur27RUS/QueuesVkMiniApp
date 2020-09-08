@@ -199,6 +199,9 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
 
+                    let dataCheck = document.getElementById('dateID');
+
+
                     if(!global.queue.dataCheck){
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
@@ -239,7 +242,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     // }else{
                     //     setFormStatusVisibility(false);
                     // }
-                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck) {
+                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         setFormStatusVisibility(false);
                         createQueueOnServer();
 
