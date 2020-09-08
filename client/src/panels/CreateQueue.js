@@ -174,6 +174,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
 
                            if(today.getTime() > pickedDate.getTime()){
                                IOSdateError = false;
+                               global.queue.dataCheck = false;
                                setQueueDateStatus('error');
                                setFormStatusVisibility(true);
                                if(formStatusHeader === 'Введите название очереди!') {
@@ -184,6 +185,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                    setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                                }
                            }else {
+                               global.queue.dataCheck = true;
                                IOSdateError = true;
                                setFormStatusVisibility(false);
                            }
