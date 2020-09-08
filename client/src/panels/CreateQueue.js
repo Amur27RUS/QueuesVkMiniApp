@@ -171,14 +171,21 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusVisibility(false);
                            }
 
-                           // if(today-pickedDate > 86400000){
-                           // if(today.getTime() > pickedDate.getTime()){
-                           //     IOSdateError = false;
-                           //     setQueueDateStatus('error');
-                           // }else {
-                           //     IOSdateError = true;
-                           //     setFormStatusVisibility(false);
-                           // }
+                           if(today.getTime() > pickedDate.getTime()){
+                               IOSdateError = false;
+                               setQueueDateStatus('error');
+                               setFormStatusVisibility(true);
+                               if(formStatusHeader === 'Введите название очереди!') {
+                                   setFormStatusHeader('Неверная дата и название!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }else{
+                                   setFormStatusHeader('Неверная дата!');
+                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                               }
+                           }else {
+                               IOSdateError = true;
+                               setFormStatusVisibility(false);
+                           }
                            setDate(e.target.value)
                         }}/>
                 <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
