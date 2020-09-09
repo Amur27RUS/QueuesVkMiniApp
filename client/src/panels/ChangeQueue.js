@@ -30,7 +30,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
     const [newDescription, setNewDescription] = useState(global.queue.descriptionQueue);
-    const [newAvatarName, setNewAvatarName] = useState(global.queue.picName);
+    const [newAvatarName, setNewAvatarName] = useState('');
     const [newPlace, setNewPlace] = useState(global.queue.placeQueue);
     const [newDateStatus, setNewDateStatus] = useState('');
     const [newNameStatus, setNewNameStatus] = useState('');
@@ -43,8 +43,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     // let picURL = '';
 
     useEffect(() => {
-        setNewAvatarName('');
-
         today = new Date(nowIOSTime);
 
         let dataCheck = document.getElementById('dateID');
