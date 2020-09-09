@@ -227,6 +227,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
+                        setNewAvatarName('');
                         if(global.queue.picURL !== undefined) {
                             try {
                             fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
