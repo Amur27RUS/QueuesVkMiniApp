@@ -50,32 +50,14 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
 
         if(dataCheck.validity.rangeUnderflow){
             global.queue.dataCheck = false;
-            setNewDateStatus('error');
-            setFormStatusVisibility(true);
-            if(formStatusHeader === 'Введите название очереди!') {
-                setFormStatusHeader('Неверная дата и название!');
-                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-            }else{
-                setFormStatusHeader('Неверная дата!');
-                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-            }
         }else{
             setFormStatusVisibility(false);
             global.queue.dataCheck = true;
         }
 
         if(today.getTime() > pickedDate.getTime()){
-            setNewDateStatus('error');
             IOSdateError = false;
-            setFormStatusVisibility(true);
             global.queue.dataCheck = false;
-            if(formStatusHeader === 'Введите название очереди!') {
-                setFormStatusHeader('Неверная дата и название!');
-                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-            }else{
-                setFormStatusHeader('Неверная дата!');
-                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-            }
         }else {
             IOSdateError = true;
             setFormStatusVisibility(false);

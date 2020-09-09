@@ -86,11 +86,11 @@ const AboutQueue = ({id, snackbar, fetchedUser, setSnackbar, go, queues, setActi
 					<Text weight="semibold">Код очереди:  {global.queue.codeQueue}</Text>
 				</MiniInfoCell>
 
-					<Button className={cssEdit} onClick={(e) => {
+					<Button mode={'secondary'} className={cssEdit} onClick={(e) => {
 						go(e)
 						global.queue.pic = undefined;
 						global.queue.picURL = undefined;
-					}} data-to="changeQueue" mode={'tertiary'}>Редактировать
+					}} data-to="changeQueue">Редактировать
 						информацию</Button>
 
 
