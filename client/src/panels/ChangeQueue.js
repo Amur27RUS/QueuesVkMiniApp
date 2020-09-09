@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Button,
     PanelHeader,
@@ -41,6 +41,48 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     // let pic; //Картинка очереди
     // let picName;
     // let picURL = '';
+
+    useEffect(() => {
+        setNewAvatarName('');
+
+        let dataCheck = document.getElementById('dateID');
+
+        if(dataCheck.validity.rangeUnderflow){
+            global.queue.dataCheck = false;
+            setNewDateStatus('error');
+            setFormStatusVisibility(true);
+            if(formStatusHeader === 'Введите название очереди!') {
+                setFormStatusHeader('Неверная дата и название!');
+                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+            }else{
+                setFormStatusHeader('Неверная дата!');
+                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+            }
+        }else{
+            setFormStatusVisibility(false);
+            setNewDateStatus('valid')
+            global.queue.dataCheck = true;
+        }
+
+        if(today.getTime() > pickedDate.getTime()){
+            setNewDateStatus('error');
+            IOSdateError = false;
+            setFormStatusVisibility(true);
+            global.queue.dataCheck = false;
+            if(formStatusHeader === 'Введите название очереди!') {
+                setFormStatusHeader('Неверная дата и название!');
+                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+            }else{
+                setFormStatusHeader('Неверная дата!');
+                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+            }
+        }else {
+            IOSdateError = true;
+            setNewDateStatus('valid');
+            setFormStatusVisibility(false);
+            global.queue.dataCheck = true
+        }
+    });
 
     const changedQueue = () => {
         global.queue.name = newNameQueue
@@ -227,7 +269,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
-                        setNewAvatarName('');
                         if(global.queue.picURL !== undefined) {
                             try {
                             fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
