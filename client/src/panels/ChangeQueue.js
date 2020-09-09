@@ -45,7 +45,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     useEffect(() => {
         setNewAvatarName('');
 
+        today = new Date(nowIOSTime);
+
         let dataCheck = document.getElementById('dateID');
+        pickedDate = new Date(dataCheck.value);
 
         if(dataCheck.validity.rangeUnderflow){
             global.queue.dataCheck = false;
@@ -60,7 +63,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
             }
         }else{
             setFormStatusVisibility(false);
-            setNewDateStatus('valid')
             global.queue.dataCheck = true;
         }
 
@@ -78,7 +80,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
             }
         }else {
             IOSdateError = true;
-            setNewDateStatus('valid');
             setFormStatusVisibility(false);
             global.queue.dataCheck = true
         }
