@@ -64,17 +64,24 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 async function addNotFromVK(newUser, queueCode, url, res){
     try {
-        if(checkSign(url)) {
+        let userID = checkSign(url);
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-            const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
-            const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
 
-            await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname) VALUES ($1, $2, $3, $4, $5, $6)',
-                [id.rows[id.rows.length - 1].value + 1, queueCode, id.rows[id.rows.length - 1].value + 1, place.rows[place.rows.length - 1].value + 1, false, newUser]);
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
-            const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            res.send(result.rows);
+            if(isAdmin) {
+                const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
+                const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
 
+                await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname) VALUES ($1, $2, $3, $4, $5, $6)',
+                    [id.rows[id.rows.length - 1].value + 1, queueCode, id.rows[id.rows.length - 1].value + 1, place.rows[place.rows.length - 1].value + 1, false, newUser]);
+
+                const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                res.send(result.rows);
+            }else{
+
+            }
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
@@ -410,7 +417,12 @@ async function checkSign(url){
         .replace(/\//g, '_')
         .replace(/=$/, '');
 
-    return(paramsHash === urlParams.sign);
+
+    if(paramsHash === urlParams.sign){
+        return urlParams.user_id;
+    }else{
+        return 'signERROR'
+    }
 }
 
 
