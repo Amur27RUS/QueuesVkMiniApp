@@ -419,9 +419,9 @@ async function checkSign(url){
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=$/, '');
-    console.log(urlParams);
+    console.log(urlParams.vk_user_id);
     if(paramsHash === urlParams.sign){
-        return urlParams.user_id;
+        return urlParams.vk_user_id;
     }else{
         return 'signERROR'
     }
