@@ -64,16 +64,14 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 async function addNotFromVK(newUser, queueCode, url, res){
     try {
-        let userID = parseInt(checkSign(url).toString(), 10);
-
-        console.log(userID);
+        let userID = parseInt(await checkSign(url), 10);
 
         if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
 
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
-            if(isAdmin[0].value) {
+            if(isAdmin) {
                 const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
                 const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
 
