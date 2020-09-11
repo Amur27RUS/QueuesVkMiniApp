@@ -65,6 +65,9 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 async function addNotFromVK(newUser, queueCode, url, res){
     try {
         let userID = checkSign(url);
+
+        console.log(userID);
+
         if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
 
@@ -417,7 +420,7 @@ async function checkSign(url){
         .replace(/\//g, '_')
         .replace(/=$/, '');
 
-
+    console.log(urlParams.user_id);
     if(paramsHash === urlParams.sign){
         return urlParams.user_id;
     }else{
@@ -480,8 +483,6 @@ app.post('/joinQueue', (req, res) => {
     const userID = req.body.userID;
     const queueCode = req.body.serverCode;
     const url = req.body.url;
-    console.log('НИЖЕ ЮРЛ, КОТОРЫЙ ПОЛУЧАЮ ИЗ БАДИИИИИИ')
-    console.log(url);
 
     joinQueue(userID, queueCode, url, res);
 })
