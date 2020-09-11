@@ -430,7 +430,7 @@ app.post('/addNotFromVK', (req, res) => {
 app.post('/checkSign', (req, res) => {
     const url = req.body.url;
 
-    checkSign(url, res);
+    checkSign(url);
 })
 
 app.post('/addNewAdmins', (req, res) => {
@@ -468,6 +468,8 @@ app.post('/joinQueue', (req, res) => {
     const userID = req.body.userID;
     const queueCode = req.body.serverCode;
     const url = req.body.url;
+    console.log('НИЖЕ ЮРЛ, КОТОРЫЙ ПОЛУЧАЮ ИЗ БАДИИИИИИ')
+    console.log(url);
 
     joinQueue(userID, queueCode, url, res);
 })
