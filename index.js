@@ -64,7 +64,7 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 async function addNotFromVK(newUser, queueCode, url, res){
     try {
-        let userID = checkSign(url);
+        let userID = parseInt(checkSign(url).toString(), 10);
 
         console.log(userID);
 
