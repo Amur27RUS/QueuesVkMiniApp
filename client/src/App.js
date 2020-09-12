@@ -96,7 +96,6 @@ const App = () =>{
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					"userID": user.id, //user.id
 					"url": window.location.search.replace('?', '')
 				})
 			}).then(function (response) {
@@ -125,7 +124,6 @@ const App = () =>{
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({
-							"userID": user.id, //user.id
 							"queueCODE": global.queue.joinQueueCode,
 							"url": window.location.search.replace('?', '')
 						})
@@ -192,7 +190,6 @@ const App = () =>{
 								'Content-Type': 'application/json',
 							},
 							body: JSON.stringify({
-								"userID": fetchedUser.id, //user.id
 								"queueCODE": global.queue.joinQueueCode,
 								"url": window.location.search.replace('?', '')
 							})
@@ -270,7 +267,6 @@ const App = () =>{
 					},
 					body: JSON.stringify({
 						"serverCode": data,
-						"userID": fetchedUser.id,
 						"url": window.location.search.replace('?', '')
 					})
 				}).then(async function (response) {
@@ -315,7 +311,6 @@ const App = () =>{
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({
-							"userID": fetchedUser.id, //user.id
 							"url": window.location.search.replace('?', '')
 						})
 					}).then(function (response) {
@@ -347,7 +342,6 @@ const App = () =>{
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				"userID": data, //user.id
 				"url": window.location.search.replace('?', '')
 			})
 		}).then(function (response) {

@@ -70,7 +70,6 @@ async function addNotFromVK(newUser, queueCode, url, res){
             const client = await pool.connect();
 
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
-            console.log(isAdmin.rows[0].value);
             if(isAdmin.rows[0].value) {
                 const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
                 const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
@@ -80,9 +79,8 @@ async function addNotFromVK(newUser, queueCode, url, res){
 
                 const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 res.send(result.rows);
-            }else{
-
             }
+
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
@@ -94,13 +92,20 @@ async function addNotFromVK(newUser, queueCode, url, res){
 
 async function addNewAdmins(usersArray, queueCode, url, res){
     try {
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-            for (let i = 0; i < usersArray.length; i++) {
-                await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
+
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
+            if(isAdmin.rows[0].value) {
+
+                for (let i = 0; i < usersArray.length; i++) {
+                    await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
+                }
+                const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                res.send(result.rows);
             }
-            const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            res.send(result.rows);
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
@@ -112,19 +117,25 @@ async function addNewAdmins(usersArray, queueCode, url, res){
 
 async function changeUsersOrder(usersArr, queueCode, url, res){
     try{
-        if(checkSign(url)) {
-            const client = await pool.connect();
-            for (let i = 0; i < usersArr.length; i++) {
-                await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [i + 1, usersArr[i].userid, queueCode]);
-            }
+        let userID = parseInt(await checkSign(url), 10);
 
-            const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            res.send(result.rows);
-            //БОТ:
-            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-            const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        if(userID.toString() !== 'signERROR') {
+            const client = await pool.connect()
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
+
+            if(isAdmin.rows[0].value) {
+                for (let i = 0; i < usersArr.length; i++) {
+                    await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [i + 1, usersArr[i].userid, queueCode]);
+                }
+
+                const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                res.send(result.rows);
+                //БОТ:
+                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+            }
 
             await client.release();
         }else{
@@ -135,9 +146,11 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
     }
 }
 
-async function joinQueue(userID, queueCode, url, res){
+async function joinQueue(queueCode, url, res){
     try{
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
             const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1;', [queueCode]);
             if (results.rows[0] === undefined) {
@@ -171,9 +184,11 @@ async function joinQueue(userID, queueCode, url, res){
     }
 }
 
-async function getQueues(userID, url, res){
+async function getQueues(url, res){
     try{
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
             const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID = $1;', [userID]);
             if (results.rows[0] !== undefined) {
@@ -203,9 +218,11 @@ async function getQueues(userID, url, res){
     }
 }
 
-async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res) {
+async function createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res) {
     try {
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
             let codesBD = await client.query('SELECT * FROM queues WHERE code = $1', [code]);
             while (codesBD.rows.length !== 0) {
@@ -242,16 +259,23 @@ async function createQueue(userID, queuePlace, queueDescription, queueAvatarURL,
 
 async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res) {
     try {
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-            if (queueAvatarURL === undefined) {
-                await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
-                    [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
-            } else {
-                await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
-                    [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [code, userID]);
+
+            if(isAdmin.rows[0].value) {
+                if (queueAvatarURL === undefined) {
+                    await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
+                        [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
+                } else {
+                    await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
+                        [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+                }
+                await res.send(JSON.stringify(code));
             }
-            await res.send(JSON.stringify(code));
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
@@ -261,27 +285,34 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
     }
 }
 
-async function deleteUser(userID, queueCode, url) {
+async function deleteUser(queueCode, url) {
     try {
-        if(checkSign(url)) {
-            const client = await pool.connect();
-            const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
-            await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
-            const check = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
-            if (check.rows[0] === undefined) {
-                await client.query('DELETE FROM queues WHERE code = $1', [queueCode]);
-                await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
-            }
+        let userID = parseInt(await checkSign(url), 10);
 
-            if (checkPlace.rows[0].value === 1) {
-                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
-            } else if (checkPlace.rows[0].value === 2) {
-                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+        if(userID.toString() !== 'signERROR') {
+            const client = await pool.connect();
+
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
+
+            if(isAdmin.rows[0].value) {
+                const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+                await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+                const check = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
+                if (check.rows[0] === undefined) {
+                    await client.query('DELETE FROM queues WHERE code = $1', [queueCode]);
+                    await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
+                }
+
+                if (checkPlace.rows[0].value === 1) {
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                } else if (checkPlace.rows[0].value === 2) {
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                }
             }
             await client.release();
             // return (placeDeletedUser.rows[0].value)
@@ -293,26 +324,31 @@ async function deleteUser(userID, queueCode, url) {
 
 async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
     try {
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-            const deletedUser = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode])
-            console.log('DELETED PLACE2')
-            console.log(deletedUser.rows[deletedPlace].value);
-            await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [deletedUser.rows[deletedPlace].value, queueCode]);
-            const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            await res.send(data.rows);
+            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
-            if (deletedPlace === 0) {
-                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
-            } else if (deletedPlace === 1) {
-                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+            if(isAdmin.rows[0].value) {
+                const deletedUser = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode])
+                console.log('DELETED PLACE2')
+                console.log(deletedUser.rows[deletedPlace].value);
+                await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [deletedUser.rows[deletedPlace].value, queueCode]);
+                const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                await res.send(data.rows);
+
+                if (deletedPlace === 0) {
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                } else if (deletedPlace === 1) {
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                }
             }
-
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('});
@@ -324,7 +360,9 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
 
 async function getPeople(queueCode, url, res){
     try {
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
             console.log(`[/getPeople] Отправляю список людей для очереди ${queueCode}`);
             const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
@@ -340,7 +378,9 @@ async function getPeople(queueCode, url, res){
 
 async function firstToLast(queueCode, url, res) {
     try{
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
             const lenghtQueue = await client.query('SELECT userplace FROM queuesandusers WHERE qcode = $1', [queueCode])
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = 1', [lenghtQueue.rows.length, queueCode])
@@ -361,9 +401,11 @@ async function firstToLast(queueCode, url, res) {
     }
 }
 
-async function getQueueToJoin(queueCode, userID, url, res){
+async function getQueueToJoin(queueCode, url, res){
     try{
-        if(checkSign(url)) {
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
 
             const results = await client.query('SELECT * FROM queues WHERE code = $1', [queueCode]);
@@ -455,10 +497,9 @@ app.post('/addNewAdmins', (req, res) => {
 
 app.post('/getQueueToJoin', (req, res) => {
     const queueCode = req.body.queueCODE;
-    const userID = req.body.userID;
     const url = req.body.url;
 
-    getQueueToJoin(queueCode, userID, url, res);
+    getQueueToJoin(queueCode, url, res);
 })
 
 app.post('/changeUsersOrder', (req, res) => {
@@ -477,22 +518,19 @@ app.post('/getPeople', (req, res) => {
 })
 
 app.post('/joinQueue', (req, res) => {
-    const userID = req.body.userID;
     const queueCode = req.body.serverCode;
     const url = req.body.url;
 
-    joinQueue(userID, queueCode, url, res);
+    joinQueue(queueCode, url, res);
 })
 
 app.post('/getQueues', (req, res) => {
-    const userID = req.body.userID;
     const url = req.body.url;
 
-    getQueues(userID, url, res);
+    getQueues(url, res);
 })
 
 app.post('/createQueue', (req, res) => {
-    const userID = req.body.userID;
     const queueName = req.body.queueName;
     const queuePlace = req.body.queuePlace;
     const queueTime = req.body.queueTime;
@@ -503,7 +541,7 @@ app.post('/createQueue', (req, res) => {
 
     let code = generateCode()
 
-    createQueue(userID, queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
+    createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
 
 })
 
@@ -523,11 +561,10 @@ app.post('/changeQueue', (req, res) => {
 
 
 app.post('/exitQueue', (req, res) => {
-    const userID = req.body.userID;
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
-    deleteUser(userID, queueCode, url);
+    deleteUser(queueCode, url);
     // sortLast(placeDeletedUser, userID, queueCode);
 })
 

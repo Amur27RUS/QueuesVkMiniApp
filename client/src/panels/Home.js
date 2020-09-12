@@ -25,7 +25,6 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					"userID": fetchedUser.id,
 					"url": window.location.search.replace('?', '')
 				})
 			}).then(function (response) {

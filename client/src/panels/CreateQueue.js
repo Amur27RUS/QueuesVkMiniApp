@@ -52,7 +52,6 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "userID": fetchedUser.id,
                     "queueName": nameQueue,
                     "queuePlace": place,
                     "queueTime": time,

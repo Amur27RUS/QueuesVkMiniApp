@@ -501,11 +501,11 @@ class UsersList extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                "url": window.location.search.replace('?', '')
             },
             body: JSON.stringify({
                 "usersArray": usersArray,
                 "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
             })
         }).then(function (response) {
             return response.json();
