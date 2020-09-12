@@ -291,10 +291,6 @@ async function deleteUser(queueCode, url) {
 
         if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-
-            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
-
-            if(isAdmin.rows[0].value) {
                 const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
                 const check = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
@@ -313,7 +309,7 @@ async function deleteUser(queueCode, url) {
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                     bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
                 }
-            }
+
             await client.release();
             // return (placeDeletedUser.rows[0].value)
         }
