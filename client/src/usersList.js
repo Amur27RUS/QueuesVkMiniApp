@@ -329,6 +329,32 @@ class UsersList extends React.Component {
         )
     }
 
+    skipCommand = () => {
+        fetch('/skipPosition', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
+            })
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(function (data) {
+            }).catch((e) => {
+            // this.props.setSnackbar(<Snackbar
+            //     layout="vertical"
+            //     onClose={() => this.props.setSnackbar(null)}
+            //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            // >
+            //     Ошибка соединения! Проверьте интернет!
+            // </Snackbar>);
+        });
+    }
+
     skipAlert = () => {
         this.props.setPopout(
             <Alert
@@ -356,8 +382,8 @@ class UsersList extends React.Component {
                                 break;
                             }
                         }
-                        console.log('Отправлен запрос на обновление списка людей в связи с пропуском позиции...')
-                        this.changeUsersPositionOnServer(this.state.users);
+                        console.log('Пропуск одной позиции...')
+                        this.skipCommand();
                     }
                 }, {
                     title: 'Отмена',
@@ -394,7 +420,6 @@ class UsersList extends React.Component {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                "userID": this.props.fetchedUser.id,
                                 "queueCODE": this.props.queueCode,
                                 "url": window.location.search.replace('?', '')
                             })

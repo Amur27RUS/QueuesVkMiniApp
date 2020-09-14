@@ -426,6 +426,26 @@ async function getQueueToJoin(queueCode, url, res){
     }
 }
 
+async function skipCommand(queueCode, url, res){
+    try{
+        let userID = parseInt(await checkSign(url), 10);
+
+        if(userID.toString() !== 'signERROR') {
+            const client = await pool.connect();
+            const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userplace = $2 AND qcode = $3', [place.rows[0].value, place.rows[0].value++, queueCode])
+            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value++, userID, queueCode])
+            await client.release();
+        }else{
+            res.status(403).send({errorCode: 'sign rejected :('});
+        }
+
+    }catch (e){
+        console.log(e);
+    }
+
+}
+
 // Генерация кода
 function generateCode() {
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -504,6 +524,13 @@ app.post('/changeUsersOrder', (req, res) => {
     const url = req.body.url;
 
     changeUsersOrder(usersArray, queueCode, url, res);
+})
+
+app.post('/skipPosition', (req, res) => {
+    const url = req.body.url;
+    const queueCode = req.body.queueCODE;
+
+    skipCommand(queueCode, url, res);
 })
 
 app.post('/getPeople', (req, res) => {
