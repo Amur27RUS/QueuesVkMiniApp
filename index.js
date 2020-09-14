@@ -495,13 +495,13 @@ app.post('/addNotFromVK', (req, res) => {
     const url = req.body.url;
 
     addNotFromVK(newUser, queueCode, url, res);
-})
+});
 
 app.post('/checkSign', (req, res) => {
     const url = req.body.url;
 
     checkSign(url);
-})
+});
 
 app.post('/addNewAdmins', (req, res) => {
     const usersArray = req.body.usersArray;
@@ -509,14 +509,14 @@ app.post('/addNewAdmins', (req, res) => {
     const url = req.body.url;
 
     addNewAdmins(usersArray, queueCode, url, res);
-})
+});
 
 app.post('/getQueueToJoin', (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
     getQueueToJoin(queueCode, url, res);
-})
+});
 
 app.post('/changeUsersOrder', (req, res) => {
     const usersArray = req.body.usersArray;
@@ -524,34 +524,34 @@ app.post('/changeUsersOrder', (req, res) => {
     const url = req.body.url;
 
     changeUsersOrder(usersArray, queueCode, url, res);
-})
+});
 
 app.post('/skipPosition', (req, res) => {
     const url = req.body.url;
     const queueCode = req.body.queueCODE;
 
     skipCommand(queueCode, url, res);
-})
+});
 
 app.post('/getPeople', (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
     getPeople(queueCode, url, res);
-})
+});
 
 app.post('/joinQueue', (req, res) => {
     const queueCode = req.body.serverCode;
     const url = req.body.url;
 
     joinQueue(queueCode, url, res);
-})
+});
 
 app.post('/getQueues', (req, res) => {
     const url = req.body.url;
 
     getQueues(url, res);
-})
+});
 
 app.post('/createQueue', (req, res) => {
     const queueName = req.body.queueName;
@@ -565,8 +565,7 @@ app.post('/createQueue', (req, res) => {
     let code = generateCode()
 
     createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
-
-})
+});
 
 app.post('/changeQueue', (req, res) => {
     const queueName = req.body.queueName;
@@ -579,9 +578,7 @@ app.post('/changeQueue', (req, res) => {
     const url = req.body.url;
 
     changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
-
-})
-
+});
 
 app.post('/exitQueue', (req, res) => {
     const queueCode = req.body.queueCODE;
@@ -589,7 +586,7 @@ app.post('/exitQueue', (req, res) => {
 
     deleteUser(queueCode, url);
     // sortLast(placeDeletedUser, userID, queueCode);
-})
+});
 
 app.post('/deleteUser', (req, res) => {
     const deletedPlace = req.body.deletedPlace;
@@ -597,15 +594,15 @@ app.post('/deleteUser', (req, res) => {
     const url = req.body.url;
 
     deleteUserWithAdmin(deletedPlace, queueCode, url, res)
-})
+});
 
 app.post('/firstToLast', (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
     firstToLast(queueCode, url, res);
-})
+});
 
 app.listen(PORT, () => {
-    console.log(`App listening at http://localhost:${PORT}`)
-})
+    console.log(`App listening at http://localhost:${PORT}`);
+});

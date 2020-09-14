@@ -72,6 +72,9 @@ class UsersList extends React.Component {
 
         }
         menuCounter = 1;
+        counter = 1;
+        counter2= 1;
+        ADDcounter = 1;
     }
 
     async componentDidMount() {
