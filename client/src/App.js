@@ -74,6 +74,8 @@ const App = () =>{
 	const [joinQueueResponse, setJoinQueueResponse] = useState('');
 	const [joinQueueName, setJoinQueueName] = useState('');
 	const [joinQueueAvatar, setJoinQueueAvatar] = useState('');
+	const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
+	const [cssList, setCssList] = useState('turnOff')
 
 
 	//ActiveStory - это View
@@ -104,6 +106,8 @@ const App = () =>{
 			})
 				.then(function (data) {
 					queuesSet(data);
+					setCssSpinner('turnOff');
+					setCssList('')
 				}).catch((e) => {
 				setSnackbar(<Snackbar
 					layout="vertical"
@@ -492,7 +496,7 @@ const App = () =>{
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+			<Home id='home' cssList={cssList} setCssList={setCssList} cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 			<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>

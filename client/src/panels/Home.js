@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import QueueCell from "../QueueCell";
 import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
-import {Placeholder, List, Div, Group, PanelHeader, Panel, Button, Snackbar, Avatar} from "@vkontakte/vkui";
+import {Placeholder, List, Div, Group, PanelHeader, Panel, Button, Snackbar, Avatar, Spinner} from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 
@@ -11,10 +11,12 @@ const MODAL_CARD_ABOUT = 'say-about';
 
 let homePanelCounter = 0;
 
-const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
+const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
+		setCssSpinner('defaultSpinner');
+		setCssList('turnOff')
 		if (homePanelCounter !== 0) {
 			console.log('Отправлен запрос на получение очередей...')
 
@@ -32,7 +34,8 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 			})
 				.then(function (data) {
 					queuesSet(data);
-
+					setCssSpinner('turnOff');
+					setCssList('')
 				}).catch((e) => {
 				setSnackbar(<Snackbar
 					layout="vertical"
@@ -112,11 +115,35 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 		backgroundColor: 'var(--accent)'
 	};
 
+
 		return (
 			<Panel id={id}>
 				<PanelHeader className={'homeHeader'}>Ваши очереди</PanelHeader>
 
-				{queues.length === 0 &&
+				<Div>
+					<Group>
+						<List className={cssList}>
+							{queues.map(info => {
+								return <QueueCell info={info} go={go}/>
+							})}
+						</List>
+
+					</Group>
+				</Div>
+
+				<Div>
+					<Spinner className={cssSpinner} size="large" style={{marginTop: 20}}/>
+				</Div>
+
+				<Div className={'EnterDiv'}>
+					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
+						Войти с помощью кода
+					</Button>
+				</Div>
+
+
+				{queues.length === 0 && cssSpinner === 'turnOff' &&
+
 				<Div>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
@@ -128,21 +155,6 @@ const Home = ({ id, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName,
 				</Div>
 				}
 
-				<Div>
-					<Group>
-						<List>
-							{queues.map(info => {
-								return <QueueCell info={info} go={go}/>
-							})}
-						</List>
-
-					</Group>
-				</Div>
-				<Div className={'EnterDiv'}>
-					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
-						Войти с помощью кода
-					</Button>
-				</Div>
 				{snackbar}
 			</Panel>
 		)

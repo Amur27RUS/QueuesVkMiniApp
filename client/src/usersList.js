@@ -12,7 +12,7 @@ import {
     List,
     Placeholder,
     platform,
-    Separator,
+    Separator, Spinner,
     Tabs,
     TabsItem
 } from "@vkontakte/vkui";
@@ -57,7 +57,9 @@ class UsersList extends React.Component {
             openMenuButton: 'Открыть меню действий',
             activeTab: 'user',
             isAdmin: undefined,
-            isFirst: 'turnOff'
+            isFirst: 'turnOff',
+            cssSpinner: 'defaultSpinner',
+            cssUsersList: 'turnOff'
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -116,7 +118,8 @@ class UsersList extends React.Component {
 
         		}).then((usersArr) =>{
                 this.setState({
-                    users: usersArr
+                    users: usersArr,
+                    cssSpinner: 'turnOff'
                 })
                 if(global.queue.isUserAdmin) {
                     this.props.setCssEdit('editQueueButton');
@@ -911,7 +914,9 @@ class UsersList extends React.Component {
                     </div>
 
                     <Button className={this.state.cssButtonGiveAdmin} onClick={this.reqAdminUsers} size={'xl'}>Выдать выбранным пользователям права админа</Button>
-
+                    <Div>
+                        <Spinner className={this.state.cssSpinner} size="large" style={{marginTop: 20}}/>
+                    </Div>
                     <List>
                     {this.state.users.map(info => {
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}

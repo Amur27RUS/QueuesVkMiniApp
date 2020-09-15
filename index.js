@@ -5,6 +5,18 @@ const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors');
 
+const rateLimit = require("express-rate-limit");
+app.set('trust proxy', 1);
+
+const limiter = rateLimit({
+    windowMs: 2 * 1000, // 5 seconds
+    max: 8, // limit each IP to 100 requests per windowMs
+    message: "Too many  created from this IP",
+});
+
+//  apply to all requests
+app.use(limiter);
+
 // const bot = new VkBot({
 //     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
 //     confirmation: '7268987f'

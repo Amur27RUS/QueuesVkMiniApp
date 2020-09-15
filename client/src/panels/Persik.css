@@ -304,3 +304,7 @@ img {
 /*.homeHeader {*/
 /*  padding-right: 20%;*/
 /*}*/
+
+.defaultSpinner {
+  display: flex;
+}
