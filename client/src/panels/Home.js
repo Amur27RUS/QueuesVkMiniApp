@@ -18,7 +18,6 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
 		setCssSpinner('defaultSpinner');
-		setCssList('turnOff');
 		if (homePanelCounter !== 0) {
 			console.log('Отправлен запрос на получение очередей...')
 
@@ -120,7 +119,7 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 
 		return (
 			<Panel id={id}>
-				<PanelHeader className={'homeHeader'}>Ваши очереди</PanelHeader>
+				<PanelHeader>Ваши очереди</PanelHeader>
 
 				<Div className={cssList}>
 					<Group>
