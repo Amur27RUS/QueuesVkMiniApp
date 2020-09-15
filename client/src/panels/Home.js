@@ -131,9 +131,7 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 					</Group>
 				</Div>
 
-				<Div>
 					<Spinner className={cssSpinner} size="large" style={{marginTop: 20}}/>
-				</Div>
 
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
