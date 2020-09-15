@@ -253,7 +253,6 @@ const App = () =>{
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
-		setCssList('turnOff');
 	};
 
 	const onStoryChange = e => {

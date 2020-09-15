@@ -17,6 +17,7 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
+		setCssList('turnOff');
 		setCssSpinner('defaultSpinner');
 		if (homePanelCounter !== 0) {
 			console.log('Отправлен запрос на получение очередей...')
