@@ -13,10 +13,12 @@ let homePanelCounter = 0;
 
 const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
+	// const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
+
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
 		setCssSpinner('defaultSpinner');
-		setCssList('turnOff')
+		setCssList('turnOff');
 		if (homePanelCounter !== 0) {
 			console.log('Отправлен запрос на получение очередей...')
 
@@ -120,9 +122,9 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 			<Panel id={id}>
 				<PanelHeader className={'homeHeader'}>Ваши очереди</PanelHeader>
 
-				<Div>
+				<Div className={cssList}>
 					<Group>
-						<List className={cssList}>
+						<List>
 							{queues.map(info => {
 								return <QueueCell info={info} go={go}/>
 							})}
