@@ -311,7 +311,8 @@ async function deleteUser(queueCode, url) {
                     await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
                 }
 
-                if (checkPlace.rows[0].value === 1) {
+                const peopleCheck = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
+                if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length !== 1) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                     bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
