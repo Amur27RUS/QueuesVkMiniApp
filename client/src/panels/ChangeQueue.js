@@ -119,7 +119,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     >
                         Ошибка соединения! Проверьте интернет!
                     </Snackbar>);
-                    console.log(e)
+
                 })
         }
         catch (e){
