@@ -297,7 +297,7 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
     }
 }
 
-async function deleteUser(queueCode, url) {
+async function deleteUser(queueCode, url, res) {
     try {
         let userID = parseInt(await checkSign(url), 10);
 
@@ -325,6 +325,7 @@ async function deleteUser(queueCode, url) {
                 }
 
             await client.release();
+            await res.send(JSON.stringify('ok'));
             // return (placeDeletedUser.rows[0].value)
         }
     }catch(e){
@@ -598,7 +599,7 @@ app.post('/exitQueue',limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
-    deleteUser(queueCode, url);
+    deleteUser(queueCode, url, res);
     // sortLast(placeDeletedUser, userID, queueCode);
 });
 
