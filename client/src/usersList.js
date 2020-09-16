@@ -124,7 +124,7 @@ class UsersList extends React.Component {
                 if(global.queue.isUserAdmin) {
                     this.props.setCssEdit('editQueueButton');
                 }
-            }).bind(this).catch((e) => {
+            }).catch((e) => {
                 // this.props.setSnackbar(<Snackbar
                 //     layout="vertical"
                 //     onClose={() => this.props.setSnackbar(null)}
@@ -133,6 +133,7 @@ class UsersList extends React.Component {
                 //     Ошибка соединения! Проверьте интернет!
                 // </Snackbar>);
             })
+        //todo Если что, то можно добавить .bind(this) перед .catch
 
         menuCounter = 1;
 
@@ -756,15 +757,15 @@ class UsersList extends React.Component {
             }).then((usersArr) =>{
             this.setState({
                 users: usersArr
-            }).catch((e) => {
-                // this.props.setSnackbar(<Snackbar
-                //     layout="vertical"
-                //     onClose={() => this.props.setSnackbar(null)}
-                //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-                // >
-                //     Ошибка соединения! Проверьте интернет!
-                // </Snackbar>);
             })
+        }).catch((e) => {
+            // this.props.setSnackbar(<Snackbar
+            //     layout="vertical"
+            //     onClose={() => this.props.setSnackbar(null)}
+            //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            // >
+            //     Ошибка соединения! Проверьте интернет!
+            // </Snackbar>);
         })
     }
 
@@ -914,9 +915,7 @@ class UsersList extends React.Component {
                     </div>
 
                     <Button className={this.state.cssButtonGiveAdmin} onClick={this.reqAdminUsers} size={'xl'}>Выдать выбранным пользователям права админа</Button>
-                    <Div>
                         <Spinner className={this.state.cssSpinner} size="large" style={{marginTop: 20}}/>
-                    </Div>
                     <List>
                     {this.state.users.map(info => {
                         return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}

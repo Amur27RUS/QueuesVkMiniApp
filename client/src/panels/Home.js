@@ -11,15 +11,15 @@ const MODAL_CARD_ABOUT = 'say-about';
 
 let homePanelCounter = 0;
 
-const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
+const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	// const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
 
 	useEffect(() => {
 		global.queue.userID = fetchedUser.id;
-		setCssList('turnOff');
-		setCssSpinner('defaultSpinner');
+
 		if (homePanelCounter !== 0) {
+			setCssSpinner('defaultSpinner');
 			console.log('Отправлен запрос на получение очередей...')
 
 			fetch('/getQueues', {
@@ -37,7 +37,6 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 				.then(function (data) {
 					queuesSet(data);
 					setCssSpinner('turnOff');
-					setCssList('')
 				}).catch((e) => {
 				setSnackbar(<Snackbar
 					layout="vertical"
@@ -122,18 +121,17 @@ const Home = ({ id, setCssList, cssList, cssSpinner, setCssSpinner, snackbar, se
 			<Panel id={id}>
 				<PanelHeader>Ваши очереди</PanelHeader>
 
-				<Div className={cssList}>
+				<Div>
 					<Group>
 						<List>
 							{queues.map(info => {
 								return <QueueCell info={info} go={go}/>
 							})}
 						</List>
-
 					</Group>
 				</Div>
 
-					<Spinner className={cssSpinner} size="large" style={{marginTop: 20}}/>
+				<Spinner className={cssSpinner} size="large" style={{marginTop: 20}}/>
 
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>

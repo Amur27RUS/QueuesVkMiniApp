@@ -9,13 +9,13 @@ const rateLimit = require("express-rate-limit");
 app.set('trust proxy', 1);
 
 const limiter = rateLimit({
-    windowMs: 2 * 1000, // 5 seconds
-    max: 8, // limit each IP to 100 requests per windowMs
+    windowMs: 1 * 1000, // 1 seconds
+    max: 3, // limit each IP to 3 requests per windowMs
     message: "Too many  created from this IP",
 });
 
 //  apply to all requests
-app.use(limiter);
+// app.use(limiter);
 
 // const bot = new VkBot({
 //     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
@@ -313,7 +313,7 @@ async function deleteUser(queueCode, url) {
 
                 const peopleCheck = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
                 // todo Доработать условия
-                if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length > 1) {
+                if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length >= 1) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                     bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
@@ -503,7 +503,7 @@ async function checkSign(url){
 /*--------------------ЗАПРОСЫ------------------------------------------*/
 /*---------------------------------------------------------------------*/
 
-app.post('/addNotFromVK', (req, res) => {
+app.post('/addNotFromVK', limiter, (req, res) => {
     const newUser = req.body.newUser;
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
@@ -511,13 +511,13 @@ app.post('/addNotFromVK', (req, res) => {
     addNotFromVK(newUser, queueCode, url, res);
 });
 
-app.post('/checkSign', (req, res) => {
+app.post('/checkSign', limiter, (req, res) => {
     const url = req.body.url;
 
     checkSign(url);
 });
 
-app.post('/addNewAdmins', (req, res) => {
+app.post('/addNewAdmins', limiter, (req, res) => {
     const usersArray = req.body.usersArray;
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
@@ -525,14 +525,14 @@ app.post('/addNewAdmins', (req, res) => {
     addNewAdmins(usersArray, queueCode, url, res);
 });
 
-app.post('/getQueueToJoin', (req, res) => {
+app.post('/getQueueToJoin', limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
     getQueueToJoin(queueCode, url, res);
 });
 
-app.post('/changeUsersOrder', (req, res) => {
+app.post('/changeUsersOrder', limiter, (req, res) => {
     const usersArray = req.body.usersArray;
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
@@ -540,34 +540,34 @@ app.post('/changeUsersOrder', (req, res) => {
     changeUsersOrder(usersArray, queueCode, url, res);
 });
 
-app.post('/skipPosition', (req, res) => {
+app.post('/skipPosition', limiter, (req, res) => {
     const url = req.body.url;
     const queueCode = req.body.queueCODE;
 
     skipCommand(queueCode, url, res);
 });
 
-app.post('/getPeople', (req, res) => {
+app.post('/getPeople', limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
     getPeople(queueCode, url, res);
 });
 
-app.post('/joinQueue', (req, res) => {
+app.post('/joinQueue', limiter, (req, res) => {
     const queueCode = req.body.serverCode;
     const url = req.body.url;
 
     joinQueue(queueCode, url, res);
 });
 
-app.post('/getQueues', (req, res) => {
+app.post('/getQueues', limiter, (req, res) => {
     const url = req.body.url;
 
     getQueues(url, res);
 });
 
-app.post('/createQueue', (req, res) => {
+app.post('/createQueue',limiter, (req, res) => {
     const queueName = req.body.queueName;
     const queuePlace = req.body.queuePlace;
     const queueTime = req.body.queueTime;
@@ -581,7 +581,7 @@ app.post('/createQueue', (req, res) => {
     createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
 });
 
-app.post('/changeQueue', (req, res) => {
+app.post('/changeQueue',limiter, (req, res) => {
     const queueName = req.body.queueName;
     const queuePlace = req.body.queuePlace;
     const queueTime = req.body.queueTime;
@@ -594,7 +594,7 @@ app.post('/changeQueue', (req, res) => {
     changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res)
 });
 
-app.post('/exitQueue', (req, res) => {
+app.post('/exitQueue',limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
@@ -602,7 +602,7 @@ app.post('/exitQueue', (req, res) => {
     // sortLast(placeDeletedUser, userID, queueCode);
 });
 
-app.post('/deleteUser', (req, res) => {
+app.post('/deleteUser',limiter, (req, res) => {
     const deletedPlace = req.body.deletedPlace;
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
@@ -610,7 +610,7 @@ app.post('/deleteUser', (req, res) => {
     deleteUserWithAdmin(deletedPlace, queueCode, url, res)
 });
 
-app.post('/firstToLast', (req, res) => {
+app.post('/firstToLast',limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 

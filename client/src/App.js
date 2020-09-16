@@ -75,7 +75,6 @@ const App = () =>{
 	const [joinQueueName, setJoinQueueName] = useState('');
 	const [joinQueueAvatar, setJoinQueueAvatar] = useState('');
 	const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
-	const [cssList, setCssList] = useState('turnOff')
 
 
 	//ActiveStory - это View
@@ -85,10 +84,12 @@ const App = () =>{
 		console.log('Получение данных о пользователе через VK Bridge');
 
 		async function fetchData() {
+
 			const user = await bridge.send('VKWebAppGetUserInfo');
 			setUser(user);
 			global.queue.userID = user.id;
 			setPopout(null);
+
 
 			console.log('Отправлен запрос на получение очередей...')
 			fetch('/getQueues', {
@@ -102,12 +103,10 @@ const App = () =>{
 				})
 			}).then(function (response) {
 				return response.json();
-
 			})
 				.then(function (data) {
 					queuesSet(data);
 					setCssSpinner('turnOff');
-					setCssList('')
 				}).catch((e) => {
 				setSnackbar(<Snackbar
 					layout="vertical"
@@ -177,6 +176,7 @@ const App = () =>{
 		}
 
 		fetchData();
+
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
 				const schemeAttribute = document.createAttribute('scheme');
@@ -496,7 +496,7 @@ const App = () =>{
 		}>
 
 		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' cssList={cssList} setCssList={setCssList} cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+			<Home id='home' cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 			<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 			<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 		</View>
