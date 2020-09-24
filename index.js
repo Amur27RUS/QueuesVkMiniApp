@@ -166,24 +166,19 @@ async function joinQueue(queueCode, url, res){
             const client = await pool.connect();
             const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1;', [queueCode]);
             if (results.rows[0] === undefined) {
-                console.log('Очереди не существует!')
                 res.send(JSON.stringify('noQueue')); //todo выводить сообщение на фронте о том, что очереди не существует
                 await client.release();
             } else {
-                console.log('Подключаю вас к очереди...');
                 const userInQueue = await client.query('SELECT * FROM queuesandusers WHERE userid= $1 AND qcode= $2;', [userID, queueCode]);
 
                 if (userInQueue.rows[0] === undefined) {
                     const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace;', [queueCode]);
                     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id;');
-                    console.log(queueCode)
                     await client.query('INSERT INTO QueuesAndUsers VALUES ($1, $2, $3, $4, $5);', [id.rows[id.rows.length - 1].value + 1, queueCode, userID, place.rows[place.rows.length - 1].value + 1, false])
-                    console.log('Успешно подключены к очереди!')
                     await res.send(JSON.stringify('success'));
                     await client.release();
 
                 } else {
-                    console.log('Вы уже состоите в этой очереди!')
                     await res.send(JSON.stringify('alreadyThere'));
                     await client.release();
                 }
@@ -216,7 +211,6 @@ async function getQueues(url, res){
                 }
 
                 const result = await client.query(str);
-                console.log(`[/getQueues] Отправляю список очередей для id: ${userID}`);
                 await res.send(result.rows);
             } else {
                 await res.send(JSON.stringify([]));
@@ -343,8 +337,6 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
 
             if(isAdmin.rows[0].value) {
                 const deletedUser = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode])
-                console.log('DELETED PLACE2')
-                console.log(deletedUser.rows[deletedPlace].value);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [deletedUser.rows[deletedPlace].value, queueCode]);
                 const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 await res.send(data.rows);
@@ -375,7 +367,6 @@ async function getPeople(queueCode, url, res){
 
         if(userID.toString() !== 'signERROR') {
             const client = await pool.connect();
-            console.log(`[/getPeople] Отправляю список людей для очереди ${queueCode}`);
             const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
             res.send(result.rows);
             await client.release();
@@ -490,7 +481,6 @@ async function checkSign(url){
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=$/, '');
-    console.log(urlParams.vk_user_id);
     if(paramsHash === urlParams.sign){
         return urlParams.vk_user_id;
     }else{
