@@ -52,6 +52,14 @@ global.queue = {
 	joinQueueName: undefined,
 	joinQueueCode: undefined,
 
+	createName: '',
+	createTime: '',
+	createDate: '',
+	createDescription: '',
+	createPlace: '',
+
+
+
 	dataCheck: false,
 }
 
@@ -449,8 +457,9 @@ const App = () =>{
 				}, {
 					title: copyButtonTitle,
 					mode: 'secondary',
-					action: () => {
-						copyToClipboard(queueCODE);
+					action: async () => {
+						// copyToClipboard(queueCODE);
+						await bridge.send("VKWebAppCopyText", {"text": queueCODE});
 						setCopyButtonTitle('Скопировано!')
 					}
 					}]}

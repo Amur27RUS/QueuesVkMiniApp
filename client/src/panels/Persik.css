@@ -69,6 +69,10 @@
   display: none;
 }
 
+.noScrollButton{
+  overflow:hidden
+}
+
 .ButtonsDiv {
   align-content: center;
   display: flex;

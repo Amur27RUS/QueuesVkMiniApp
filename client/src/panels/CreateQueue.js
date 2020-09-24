@@ -27,12 +27,12 @@ let today;
 let pickedDate;
 
 const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
-    const [nameQueue, setNameQueue] = useState("");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
-    const [description, setDescription] = useState("");
+    const [nameQueue, setNameQueue] = useState(global.queue.createName);
+    const [date, setDate] = useState(global.queue.createDate);
+    const [time, setTime] = useState(global.queue.createTime);
+    const [description, setDescription] = useState(global.queue.createDescription);
     const [avatarName, setAvatarName] = useState("");
-    const [place, setPlace] = useState("");
+    const [place, setPlace] = useState(global.queue.createPlace);
     const [queueNameStatus, setQueueNameStatus] = useState('');
     const [queueDateStatus, setQueueDateStatus] = useState('');
     const [formStatusHeader, setFormStatusHeader] = useState('');
@@ -130,10 +130,14 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusDescription('');
                                setFormStatusHeader('');
                            }
+                           global.queue.createName = e.target.value.trim();
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
                        }}/>
-                <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>setPlace(e.target.value)}/>
+                <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>{
+                    setPlace(e.target.value);
+                    global.queue.createPlace = e.target.value;
+                }}/>
                 <Input id = {'dateID'}
                        min={nowTime}
                        top={'Дата проведения*'}
@@ -190,12 +194,19 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                                setFormStatusVisibility(false);
                            }
                            setDate(e.target.value)
+                           global.queue.createDate = e.target.value;
                         }}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => setTime(e.target.value)}/>
+                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e =>{
+                    setTime(e.target.value);
+                    global.queue.createTime = e.target.value;
+                }}/>
                 <File top="Аватарка очереди" accept=".jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
-                <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => setDescription(e.target.value)}/>
+                <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => {
+                    setDescription(e.target.value)
+                    global.queue.createDescription = e.target.value;
+                }}/>
                 <Button size="xl" onClick={() => {
 
                     let dataCheck = document.getElementById('dateID');
@@ -244,6 +255,11 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         setFormStatusVisibility(false);
                         createQueueOnServer();
+                        global.queue.createPlace = '';
+                        global.queue.createDescription = '';
+                        global.queue.createTime = '';
+                        global.queue.createDate = '';
+                        global.queue.createName = '';
 
                         if(global.queue.picURL !== undefined) {
                             try {

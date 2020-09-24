@@ -133,11 +133,13 @@ const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQue
 
 				<Spinner className={cssSpinner} size="large" style={{marginTop: 20}}/>
 
+				{queues.length !== 0 &&
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
 						Войти с помощью кода
 					</Button>
 				</Div>
+				}
 
 
 				{queues.length === 0 && cssSpinner === 'turnOff' &&

@@ -964,7 +964,7 @@ class UsersList extends React.Component {
                             onClick={() => bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${this.props.queueCode}`})}>
                         Пригласить друзей из VK</Button>
                     <br/>или
-                    <br/><Button size="l" mode="tertiary" onClick={() =>this.copyToClipboard(this.props.queueCode)}>Скопировать код: {this.props.queueCode}</Button>
+                    <br/><Button className={'noScrollButton'} size="l" mode="tertiary" onClick={async () =>await bridge.send("VKWebAppCopyText", {"text": this.props.queueCode})}>Скопировать код: {this.props.queueCode}</Button>
 
                 </Placeholder>
                 {this.props.snackbar}
