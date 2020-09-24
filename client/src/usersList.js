@@ -902,6 +902,7 @@ class UsersList extends React.Component {
 
                             this.fetchNotFromVKUser(global.queue.newUser);
                             document.getElementById('inputNotVKPerson').value = '';
+                            global.queue.newUser = '';
                         }
                     }}>Добавить</Button>
                     </div>
