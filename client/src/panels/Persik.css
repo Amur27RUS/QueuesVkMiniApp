@@ -260,8 +260,15 @@
   margin-right: auto;
   display: table;
   margin-top: -17px;
+  width: 90%;
 }
 
+.divWrapperForFileName{
+
+}
+.createQueuePanel{
+  overflow: hidden;
+}
 img {
   width:100%;
   object-fit:cover;

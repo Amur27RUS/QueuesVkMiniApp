@@ -9,7 +9,7 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar
+    Avatar, Snackbar, Div
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';

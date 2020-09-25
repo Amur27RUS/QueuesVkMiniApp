@@ -533,7 +533,7 @@ const App = () =>{
 		</View>
 
 		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
-			<CreateQueue setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			<CreateQueue className={'createQueuePanel'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 		</View>
 
 		{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
