@@ -2,7 +2,19 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import QueueCell from "../QueueCell";
 import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
-import {Placeholder, List, Div, Group, PanelHeader, Panel, Button, Snackbar, Avatar, Spinner} from "@vkontakte/vkui";
+import {
+	Placeholder,
+	List,
+	Div,
+	Group,
+	PanelHeader,
+	Panel,
+	Button,
+	Snackbar,
+	Avatar,
+	Spinner,
+	Separator
+} from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 
@@ -145,6 +157,7 @@ const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQue
 				{queues.length === 0 && cssSpinner === 'turnOff' &&
 
 				<Div>
+					<Separator/>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
 						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь с помощью кода</Button>}

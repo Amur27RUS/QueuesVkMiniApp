@@ -83,6 +83,8 @@ const App = () =>{
 	const [joinQueueName, setJoinQueueName] = useState('');
 	const [joinQueueAvatar, setJoinQueueAvatar] = useState('');
 	const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
+	const [joinInputStatus, setJoinInputStatus] = useState('');
+	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 
 
 	//ActiveStory - это View
@@ -269,6 +271,8 @@ const App = () =>{
 
 	const sendDataToServer = data => {
 		if (data !== undefined && data.trim().length === 6) {
+			setJoinInputStatus('');
+			setJoinInputStatusText('');
 			console.log('Отправлен запрос на вход в очередь...');
 
 				fetch('/joinQueue', {
@@ -342,7 +346,10 @@ const App = () =>{
 					</Snackbar>);
 				})
 
-			}
+			}else{
+			setJoinInputStatus('error');
+			setJoinInputStatusText('Минимум - 6 символов')
+		}
 	}
 
 	const updateQueues = data => {
@@ -421,13 +428,28 @@ const App = () =>{
 						title: 'Присоединиться',
 						mode: 'primary',
 						action: () => {
-							sendDataToServer(codeInput.toUpperCase());
+							if(codeInput !== undefined) {
+								sendDataToServer(codeInput.toUpperCase());
+							}else{
+								setJoinInputStatus('error');
+								setJoinInputStatusText('Введите код')
+							}
 						}
 					}
 				]}
 			>
 				<FormLayout className={'inputJoin'}>
-						<Input id='input' className={'inputJoin'} autoFocus={false} type={'text'} minlength={6} maxlength={6} onChange={(e) => setCodeInput(e.target.value)}/>
+						<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
+							   minlength={6} maxlength={6} onChange={(e) =>{
+							   	setCodeInput(e.target.value)
+								if(e.target.value.length === 6){
+									setJoinInputStatusText('');
+									setJoinInputStatus('valid');
+								}else{
+									setJoinInputStatusText('Минимум - 6 символов');
+									setJoinInputStatus('error');
+								}
+						}}/>
 				</FormLayout>
 			</ModalCard>
 
