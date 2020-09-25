@@ -77,6 +77,34 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     }else {
                         setQueueCODE(data);
                         setPopout(null);
+                        if(global.queue.picURL !== undefined) {
+                            try {
+                                fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'image/png',
+                                    },
+                                    body: global.queue.pic
+                                }).then(function (response) {
+                                    return response.json();
+                                })
+                                    .then(function (data) {
+                                        console.log('Картинка успешно загружена!');
+                                    })
+                            }catch(e){
+                                setPopout(null);
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                            }
+                        }
+                        global.queue.picURL = undefined;
+                        global.queue.pic = undefined;
                         setActiveModal(MODAL_CARD_CHAT_INVITE);
                     }
                 }).catch((e) => {
@@ -235,23 +263,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                         }
                     }
-                    // (today.getTime() <= pickedDate.getTime() || nowTime.getTime() <= pickedDate.getTime())
-                    // let dataCheck = document.getElementById('dateID');
-                    // if(dataCheck.validity.rangeUnderflow){
-                    //     setQueueDateStatus('error');
-                    //     setFormStatusVisibility(true);
-                    //     setFormStatusHeader('Неверная дата!');
-                    //     setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                    // }else{
-                    //     setFormStatusVisibility(false);
-                    // }
-                    // if(queueDateStatus === 'error'){
-                    //     setFormStatusVisibility(true);
-                    //     setFormStatusHeader('Неверная дата!');
-                    //     setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                    // }else{
-                    //     setFormStatusVisibility(false);
-                    // }
+
                     if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         setFormStatusVisibility(false);
                         createQueueOnServer();
@@ -261,34 +273,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                         global.queue.createDate = '';
                         global.queue.createName = '';
 
-                        if(global.queue.picURL !== undefined) {
-                            try {
-                                fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'image/png',
-                                    },
-                                    body: global.queue.pic
-                                }).then(function (response) {
-                                    return response.json();
-                                })
-                                    .then(function (data) {
-                                        console.log('Картинка успешно загружена!');
-                                    })
-                            }catch(e){
-                                setPopout(null);
-                                setSnackbar(<Snackbar
-                                    layout="vertical"
-                                    onClose={() => setSnackbar(null)}
-                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-                                >
-                                    Ошибка соединения! Проверьте интернет!
-                                </Snackbar>);
-                            }
-                        }
-                        global.queue.picURL = undefined;
-                        global.queue.pic = undefined;
+
                     }else{
                         if(date.trim() === '' && nameQueue.trim() === ''){
                             setQueueNameStatus('error');
