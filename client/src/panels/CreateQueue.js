@@ -77,7 +77,13 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     }else {
                         setQueueCODE(data);
                         setPopout(null);
-                        if(global.queue.picURL !== undefined) {
+                        let imgERR = false;
+                        let img = document.createElement('img')
+                        img.src = global.queue.picURL;
+                        img.onload = () => console.log();
+                        img.onerror = () => imgERR = true;
+
+                        if(global.queue.picURL !== undefined && !imgERR) {
                             try {
                                 fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
                                     method: 'POST',
