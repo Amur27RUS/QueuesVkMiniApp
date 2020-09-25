@@ -200,7 +200,7 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                <File top="Аватарка очереди" accept=".jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
+                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => {
