@@ -348,7 +348,7 @@ const App = () =>{
 
 			}else{
 			setJoinInputStatus('error');
-			setJoinInputStatusText('Минимум - 6 символов')
+			setJoinInputStatusText('Должно быть 6 символов!')
 		}
 	}
 
@@ -446,7 +446,7 @@ const App = () =>{
 									setJoinInputStatusText('');
 									setJoinInputStatus('valid');
 								}else{
-									setJoinInputStatusText('Минимум - 6 символов');
+									setJoinInputStatusText('Должно быть 6 символов!');
 									setJoinInputStatus('error');
 								}
 						}}/>
