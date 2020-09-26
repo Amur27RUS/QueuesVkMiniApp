@@ -72,7 +72,7 @@ const App = () =>{
 
 	const [activePanel, setActivePanel] = useState('home');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
-	// const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
+	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
