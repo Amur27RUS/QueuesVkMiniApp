@@ -72,6 +72,7 @@ const App = () =>{
 
 	const [activePanel, setActivePanel] = useState('home');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
+	// const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -170,6 +171,8 @@ const App = () =>{
 								setJoinQueueAvatar(data.avatar);
 								setJoinQueueName(data.name);
 								setActiveModal(MODAL_CARD_QUEUE_INVITE);
+								window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
+								history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
 							}
 						})
 				}
@@ -237,6 +240,8 @@ const App = () =>{
 									setJoinQueueAvatar(data.avatar);
 									setJoinQueueName(data.name);
 									setActiveModal(MODAL_CARD_QUEUE_INVITE);
+									window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
+									history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
 								}
 							}).catch((e) => {
 							setSnackbar(<Snackbar
@@ -279,6 +284,10 @@ const App = () =>{
 
 	const onStoryChange = e => {
 		setActiveStory(e.currentTarget.dataset.story);
+		history.pop() // удаляем последний элемент в массиве.
+		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
+		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
+		setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 	};
 
 	const sendDataToServer = data => {
@@ -400,7 +409,11 @@ const App = () =>{
 		<ModalRoot activeModal={activeModal}>
 			<ModalCard
 				id={MODAL_CARD_QUEUE_INVITE}
-				onClose={() => setActiveModal(null)}
+				onClose={() => {
+					setActiveModal(null)
+					history.pop() // удаляем последний элемент в массиве.
+					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+				}}
 				icon={<Avatar src={joinQueueAvatar} size={72} />}
 				header={joinQueueName}
 				caption="Приглашение в очередь"
@@ -408,6 +421,8 @@ const App = () =>{
 					title: 'Присоединиться',
 					mode: 'primary',
 					action: () => {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						sendDataToServer(global.queue.joinQueueCode);
 						setActiveModal(null);
 					}
@@ -432,14 +447,19 @@ const App = () =>{
 			<ModalCard
 				className={'numberInputModal'}
 				id={MODAL_CARD_ABOUT}
-				onClose={() =>
-					setActiveModal(null)}
+				onClose={() => {
+					setActiveModal(null)
+					history.pop() // удаляем последний элемент в массиве.
+					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+				}}
 				header="Введите код очереди"
 				actions={[
 					{
 						title: 'Присоединиться',
 						mode: 'primary',
 						action: () => {
+							history.pop() // удаляем последний элемент в массиве.
+							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 							if(codeInput !== undefined) {
 								sendDataToServer(codeInput.toUpperCase());
 							}else{
@@ -470,6 +490,8 @@ const App = () =>{
 				onClose={() => {
 					setActiveModal(null)
 					setCopyButtonTitle('Скопировать приглашение')
+					history.pop() // удаляем последний элемент в массиве.
+					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
 				icon={<span role="img" aria-label="Готово!" className={'emoji'}>&#128588;</span>}
 				header="Очередь создана!"
@@ -478,6 +500,10 @@ const App = () =>{
 					title: 'На страницу с очередями',
 					mode: 'primary',
 					action: () => {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+						window.history.pushState( {panel: "home"}, "home" ); // Создаём новую запись в истории браузера
+						history.push("home"); // Добавляем панель в историю
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
@@ -521,12 +547,14 @@ const App = () =>{
 					onClick={onStoryChange}
 					selected={activeStory === 'main'}
 					data-story="main"
+					data-to='home'
 					text="Очереди"
 				><ListOutline28/></TabbarItem>
 				<TabbarItem
 					onClick={onStoryChange}
 					selected={activeStory === 'createQueue'}
 					data-story="createQueue"
+					data-to="createQueuePanel"
 					text="Создать очередь"
 				><AddSquareOutline28/></TabbarItem>
 				{/*<TabbarItem*/}
@@ -543,7 +571,7 @@ const App = () =>{
 			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
 				  onSwipeBack={goBack} // При свайпе выполняется данная функция
 				 >
-				<Home id='home' cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 				<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 				<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 			</View>

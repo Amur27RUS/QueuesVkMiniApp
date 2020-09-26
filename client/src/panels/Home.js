@@ -23,7 +23,7 @@ const MODAL_CARD_ABOUT = 'say-about';
 
 let homePanelCounter = 0;
 
-const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
+const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, setJoinQueueAvatar, setJoinQueueName, go, fetchedUser, queues, setActiveStory, setQueues, setActiveModal}) => {
 
 	// const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
 
@@ -147,7 +147,11 @@ const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQue
 
 				{queues.length !== 0 &&
 				<Div className={'EnterDiv'}>
-					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>
+					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => {
+						setActiveModal(MODAL_CARD_ABOUT)
+						window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
+						history.push("MODAL_CARD_ABOUT");
+					}}>
 						Войти с помощью кода
 					</Button>
 				</Div>
@@ -160,7 +164,11 @@ const Home = ({ id, cssSpinner, setCssSpinner, snackbar, setSnackbar, setJoinQue
 					<Separator/>
 					<Placeholder
 						icon={<Icon56UsersOutline/>}
-						action={<Button size="l" mode="tertiary" onClick={() => setActiveModal(MODAL_CARD_ABOUT)}>Войти в очередь с помощью кода</Button>}
+						action={<Button size="l" mode="tertiary" onClick={() => {
+							setActiveModal(MODAL_CARD_ABOUT)
+							window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
+							history.push("MODAL_CARD_ABOUT");
+						}}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>
 						Вы не состоите в очередях

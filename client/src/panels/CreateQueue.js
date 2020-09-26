@@ -26,7 +26,7 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 
-const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
+const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
     const [date, setDate] = useState(global.queue.createDate);
     const [time, setTime] = useState(global.queue.createTime);
@@ -112,6 +112,8 @@ const CreateQueue = ({ snackbar, id, go, setActiveModal, fetchedUser, setQueueCO
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                         setActiveModal(MODAL_CARD_CHAT_INVITE);
+                        window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
+                        history.push("MODAL_CARD_CHAT_INVITE");
                     }
                 }).catch((e) => {
                 setPopout(null);

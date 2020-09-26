@@ -441,6 +441,9 @@ class UsersList extends React.Component {
                             // </Snackbar>);
                         });
                         this.props.setActivePanel('home');
+                        this.props.history.pop() // удаляем последний элемент в массиве.
+                        window.history.pushState( {panel: "home"}, "home" ); // Создаём новую запись в истории браузера
+                        this.props.history.push("home");
                     }
                 }, {
                     title: 'Отмена',
