@@ -83,11 +83,18 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                         setActiveModal(MODAL_CARD_CHAT_INVITE);
-                        window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
-                        history.push("MODAL_CARD_CHAT_INVITE");
+                        // window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
+                        // history.push("MODAL_CARD_CHAT_INVITE");
                     }
                 }).catch((e) => {
                 setPopout(null);
+                setSnackbar(<Snackbar
+                    layout="vertical"
+                    onClose={() => setSnackbar(null)}
+                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                >
+                    Ошибка соединения! Проверьте интернет!
+                </Snackbar>);
             })
         } catch (e) {
             console.log('Ошибка при создании очереди...');
