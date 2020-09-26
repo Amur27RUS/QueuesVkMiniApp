@@ -83,8 +83,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                         setActiveModal(MODAL_CARD_CHAT_INVITE);
-                        window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
-                        history.push("MODAL_CARD_CHAT_INVITE");
+                        // window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
+                        // history.push("MODAL_CARD_CHAT_INVITE");
                     }
                 }).catch((e) => {
                 setPopout(null);

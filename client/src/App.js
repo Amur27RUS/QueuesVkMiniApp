@@ -171,8 +171,8 @@ const App = () =>{
 								setJoinQueueAvatar(data.avatar);
 								setJoinQueueName(data.name);
 								setActiveModal(MODAL_CARD_QUEUE_INVITE);
-								window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-								history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								// window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
+								// history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
 							}
 						})
 				}
@@ -240,8 +240,8 @@ const App = () =>{
 									setJoinQueueAvatar(data.avatar);
 									setJoinQueueName(data.name);
 									setActiveModal(MODAL_CARD_QUEUE_INVITE);
-									window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-									history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+									// window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
+									// history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
 								}
 							}).catch((e) => {
 							setSnackbar(<Snackbar
@@ -284,10 +284,10 @@ const App = () =>{
 
 	const onStoryChange = e => {
 		setActiveStory(e.currentTarget.dataset.story);
-		history.pop() // удаляем последний элемент в массиве.
-		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
-		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
-		setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+		// history.pop() // удаляем последний элемент в массиве.
+		// window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
+		// history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
+		// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 	};
 
 	const sendDataToServer = data => {
@@ -449,8 +449,8 @@ const App = () =>{
 				id={MODAL_CARD_ABOUT}
 				onClose={() => {
 					setActiveModal(null)
-					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					// history.pop() // удаляем последний элемент в массиве.
+					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
 				header="Введите код очереди"
 				actions={[
@@ -490,8 +490,8 @@ const App = () =>{
 				onClose={() => {
 					setActiveModal(null)
 					setCopyButtonTitle('Скопировать приглашение')
-					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					// history.pop() // удаляем последний элемент в массиве.
+					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
 				icon={<span role="img" aria-label="Готово!" className={'emoji'}>&#128588;</span>}
 				header="Очередь создана!"
