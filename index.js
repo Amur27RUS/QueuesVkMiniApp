@@ -568,7 +568,7 @@ app.post('/createQueue',limiter, (req, res) => {
     const url = req.body.url;
 
     if(queueName.length > 33 || queuePlace.length > 41 || queueDescription.length > 41){
-        res.status(403).send({errorCode: 'max length reached'})
+        res.status(403).send({errorCode: 'error'})
     }else {
         let code = generateCode()
         createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res);
