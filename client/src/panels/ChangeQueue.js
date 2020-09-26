@@ -143,7 +143,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
 
     return(
         <Panel id={id} >
-            <PanelHeader left={<PanelHeaderButton onClick={go} data-to="aboutQueue">
+            <PanelHeader left={<PanelHeaderButton onClick={() => window.history.back()} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}
             </PanelHeaderButton>}
             > Редактирование </PanelHeader>

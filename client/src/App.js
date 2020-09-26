@@ -12,6 +12,7 @@ import {
 	View,
 	Avatar,
 	Snackbar,
+	ConfigProvider,
 } from "@vkontakte/vkui";
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
 import AddSquareOutline28 from '@vkontakte/icons/dist/28/add_square_outline'
@@ -70,6 +71,7 @@ const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 const App = () =>{
 
 	const [activePanel, setActivePanel] = useState('home');
+	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -252,17 +254,27 @@ const App = () =>{
 
 		});
 
-
+		window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
 	}, []);
 
+	const goBack = () => {
+		if( history.length === 1 ) {  // Если в массиве одно значение:
+			bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
+		} else if( history.length > 1 ) { // Если в массиве больше одного значения:
+			history.pop() // удаляем последний элемент в массиве.
+			setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+		}
+	}
 
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
+		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
+		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 	};
 
 	const onStoryChange = e => {
@@ -502,6 +514,7 @@ const App = () =>{
 	}
 
 	return (
+		<ConfigProvider>
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
@@ -526,20 +539,27 @@ const App = () =>{
 			</Tabbar>
 		}>
 
-		<View id={'main'} activePanel={activePanel} popout={popout} modal={modal}>
-			<Home id='home' cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-			<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-			<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
-		</View>
 
-		<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}>
-			<CreateQueue className={'createQueuePanel'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
-		</View>
+			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
+				  onSwipeBack={goBack} // При свайпе выполняется данная функция
+				 >
+				<Home id='home' cssSpinner={cssSpinner} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+				<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+				<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+			</View>
 
-		{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
+
+
+			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
+				  onSwipeBack={goBack} // При свайпе выполняется данная функция.
+				>
+				<CreateQueue className={'createQueuePanel'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			</View>
+			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 		{/*	<Settings id={'Settings'} go={go}/>*/}
 		{/*</View>*/}
 		</Epic>
+		</ConfigProvider>
 	);
 }
 
