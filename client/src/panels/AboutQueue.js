@@ -32,7 +32,7 @@ const AboutQueue = ({id,  snackbar, fetchedUser, setSnackbar, go, queues, setAct
 	return (
 		<Panel id={id}>
 			<PanelHeader
-				left={<PanelHeaderButton onClick={go} data-to="home">
+				left={<PanelHeaderButton onClick={() => window.history.back()}>
 					{<Icon28ChevronBack/>}
 				</PanelHeaderButton>}
 			>
