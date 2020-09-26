@@ -283,6 +283,7 @@ const App = () =>{
 	};
 
 	const onStoryChange = e => {
+		setPopout(null);
 		setActiveStory(e.currentTarget.dataset.story);
 		history.pop() // удаляем последний элемент в массиве.
 		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
