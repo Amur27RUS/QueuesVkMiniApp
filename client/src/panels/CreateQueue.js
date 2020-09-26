@@ -25,6 +25,7 @@ let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError = true;
 let today;
 let pickedDate;
+let imgERR = false;
 
 const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
@@ -38,13 +39,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [formStatusHeader, setFormStatusHeader] = useState('');
     const [formStatusDescription, setFormStatusDescription] = useState('');
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
+    const [checkPhoto, setCheckPhoto] = useState(false);
 
-    const createQueueOnServer = () => {
+    const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
         console.log('Отправлен запрос на создание очереди...');
 
         try {
-
             fetch('/createQueue', {
                 method: 'POST',
                 headers: {
@@ -64,7 +65,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 return response.json();
             })
                 .then(function (data) {
-                    if(data === 'LIMIT REACHED'){
+                    if (data === 'LIMIT REACHED') {
                         setSnackbar(<Snackbar
                             layout="vertical"
                             onClose={() => setSnackbar(null)}
@@ -74,41 +75,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         </Snackbar>)
                         setPopout(null);
 
-                    }else {
+                    } else {
                         setQueueCODE(data);
                         setPopout(null);
-                        let imgERR = false;
-                        let img = document.createElement('img')
-                        img.src = global.queue.picURL;
-                        img.onload = () => console.log();
-                        img.onerror = () => imgERR = true;
 
-                        if(global.queue.picURL !== undefined && !imgERR) {
-                            try {
-                                fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'image/png',
-                                    },
-                                    body: global.queue.pic
-                                }).then(function (response) {
-                                    return response.json();
-                                })
-                                    .then(function (data) {
-                                        console.log('Картинка успешно загружена!');
-                                    })
-                            }catch(e){
-                                setPopout(null);
-                                setSnackbar(<Snackbar
-                                    layout="vertical"
-                                    onClose={() => setSnackbar(null)}
-                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-                                >
-                                    Ошибка соединения! Проверьте интернет!
-                                </Snackbar>);
-                            }
-                        }
+
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                         setActiveModal(MODAL_CARD_CHAT_INVITE);
@@ -125,16 +96,16 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     Ошибка соединения! Проверьте интернет!
                 </Snackbar>);
             })
-        }catch (e){
+        } catch (e) {
             console.log('Ошибка при создании очереди...');
         }
     };
 
     const onPhotoUpload = (e) => {
         global.queue.pic = e.target.files[0];
-        global.queue.picName = nameQueue.replace(/\s+/g,'-').replace('?', '')
-            .replace('!', '').replace('!', '')
-            + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
+        global.queue.picName = nameQueue.replace(/\s+/g, '-').replace('?', '')
+                .replace('!', '').replace('!', '')
+            + '_' + (e.target.files[0].name).replace(/\s+/g, '') + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         setAvatarName(e.target.files[0].name);
     }
@@ -143,8 +114,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    return(
-        <Panel id={id} >
+    return (
+        <Panel id={id}>
             <PanelHeader> Создание </PanelHeader>
             <FormLayout noValidate={true}>
                 {formStatusVisibility &&
@@ -155,13 +126,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                 <Input top={'Название очереди*'}
                        value={nameQueue}
-                       maxlength = "32"
+                       maxlength="32"
                        status={queueNameStatus}
                        onChange={e => {
-                           if(e.target.value.trim() === ''){
+                           if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!')
-                           }else{
+                           } else {
                                setFormStatusVisibility(false);
                                setFormStatusDescription('');
                                setFormStatusHeader('');
@@ -170,140 +141,206 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value);
                        }}/>
-                <Input top={'Место проведения'} maxlength = "40" value={place} onChange={e =>{
+                <Input top={'Место проведения'} maxlength="40" value={place} onChange={e => {
                     setPlace(e.target.value);
                     global.queue.createPlace = e.target.value;
                 }}/>
-                <Input id = {'dateID'}
+                <Input id={'dateID'}
                        min={nowTime}
                        top={'Дата проведения*'}
                        novalidate
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       onChange={e =>{
+                       onChange={e => {
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
 
-                           if(dataCheck.validity.rangeUnderflow){
+                           if (dataCheck.validity.rangeUnderflow) {
                                setQueueDateStatus('error');
                                setFormStatusVisibility(true);
                                global.queue.dataCheck = false;
-                               if(formStatusHeader === 'Введите название очереди!') {
+                               if (formStatusHeader === 'Введите название очереди!') {
                                    setFormStatusHeader('Неверная дата и название!');
                                    setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               }else{
+                               } else {
                                    setFormStatusHeader('Неверная дата!');
                                    setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                                }
-                           }else{
+                           } else {
                                setFormStatusVisibility(false);
                                setQueueDateStatus('valid');
                                global.queue.dataCheck = true;
                            }
-                           if(queueDateStatus === 'error'){
+                           if (queueDateStatus === 'error') {
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Неверная дата!');
                                setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                                global.queue.dataCheck = false;
-                           }else{
+                           } else {
                                global.queue.dataCheck = true;
                                setFormStatusVisibility(false);
                            }
 
-                           if(today.getTime() > pickedDate.getTime()){
+                           if (today.getTime() > pickedDate.getTime()) {
                                IOSdateError = false;
                                global.queue.dataCheck = false;
                                setQueueDateStatus('error');
                                setFormStatusVisibility(true);
-                               if(formStatusHeader === 'Введите название очереди!') {
+                               if (formStatusHeader === 'Введите название очереди!') {
                                    setFormStatusHeader('Неверная дата и название!');
                                    setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               }else{
+                               } else {
                                    setFormStatusHeader('Неверная дата!');
                                    setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                                }
-                           }else {
+                           } else {
                                global.queue.dataCheck = true;
                                IOSdateError = true;
                                setFormStatusVisibility(false);
                            }
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
-                        }}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e =>{
+                       }}/>
+                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
-                      onChange={(e) => {onPhotoUpload(e)}}/>
+                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                      mode="secondary"
+                      onChange={(e) => {
+                          onPhotoUpload(e)
+                      }}/>
                 <Text className={'uploadedImgName'}>{avatarName}</Text>
-                <Input top={'Краткое описание очереди'} maxlength = "40" value={description} onChange={e => {
+                <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
                     setDescription(e.target.value)
                     global.queue.createDescription = e.target.value;
                 }}/>
-                <Button size="xl" onClick={() => {
+                <Button size="xl" onClick={async () => {
 
                     let dataCheck = document.getElementById('dateID');
 
 
-                    if(!global.queue.dataCheck){
+                    if (!global.queue.dataCheck) {
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
-                        if(formStatusHeader === 'Введите название очереди!') {
+                        if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }else{
+                        } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                         }
                     }
 
-                    if(!IOSdateError){
+                    if (!IOSdateError) {
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
-                        if(formStatusHeader === 'Введите название очереди!') {
+                        if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }else{
+                        } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                         }
                     }
 
-                    if(nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
+                    if (nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
+                        setPopout(<ScreenSpinner/>);
                         setFormStatusVisibility(false);
-                        createQueueOnServer();
-                        global.queue.createPlace = '';
-                        global.queue.createDescription = '';
-                        global.queue.createTime = '';
-                        global.queue.createDate = '';
-                        global.queue.createName = '';
+                        setCheckPhoto(false);
 
+                        if (global.queue.picURL !== undefined) {
+                            try {
+                                await fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'image/png',
+                                    },
+                                    body: global.queue.pic
+                                }).then(function (response) {
+                                    return response.json();
+                                })
+                                    .then(async function (data) {
+                                        console.log('Картинка успешно загружена!');
+                                    })
+                            } catch (e) {
+                                setPopout(null);
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                            }
 
-                    }else{
-                        if(date.trim() === '' && nameQueue.trim() === ''){
+                            async function testImage(URL) {
+                                return new Promise((resolve, reject) => {
+                                    let tester = new Image();
+                                    tester.src = URL;
+                                    tester.onload = () => {
+                                        setCheckPhoto(false);
+                                        resolve(global.queue.picURL);
+                                        return 'ok';
+                                    }
+                                    tester.onerror = () => {
+                                        setCheckPhoto(true);
+                                        reject();
+                                        setPopout(null);
+                                        setSnackbar(<Snackbar
+                                            layout="vertical"
+                                            onClose={() => setSnackbar(null)}
+                                            before={<Avatar size={24}><Icon16Clear fill="red" width={14}
+                                                                                   height={14}/></Avatar>}
+                                        >
+                                            Картинка повреждена! Выберите другую.
+                                        </Snackbar>);
+                                        setCheckPhoto(false);
+                                    };
+                                });
+                            }
+                            await testImage(global.queue.picURL);
+                        }
+                        console.log(checkPhoto);
+                        if (!checkPhoto) {
+                            await createQueueOnServer();
+                            global.queue.createPlace = '';
+                            global.queue.createDescription = '';
+                            global.queue.createTime = '';
+                            global.queue.createDate = '';
+                            global.queue.createName = '';
+                        }
+                        setCheckPhoto(false);
+
+                    } else {
+                        if (date.trim() === '' && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название и дату!')
+                            setPopout(null);
 
-                        }else if((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === ''){
+                        } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название и корректную дату!')
+                            setPopout(null);
 
-                        }else if(nameQueue.trim() === '') {
+                        } else if (nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название!')
+                            setPopout(null);
 
-                        }else if(date.trim() === '') {
+                        } else if (date.trim() === '') {
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите дату!')
+                            setPopout(null);
                         }
                     }
                 }}>Создать</Button>

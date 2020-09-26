@@ -542,7 +542,7 @@ const App = () =>{
 	return (
 		<ConfigProvider>
 		<Epic activeStory={activeStory} tabbar={
-			<Tabbar>
+			<Tabbar className={'createQueuePanel'}>
 				<TabbarItem
 					onClick={onStoryChange}
 					selected={activeStory === 'main'}
