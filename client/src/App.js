@@ -277,10 +277,11 @@ const App = () =>{
 		}
 		else {setPopout(null)}
 	}
+
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
-		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
+		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
 		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 	};
 
