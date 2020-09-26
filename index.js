@@ -567,8 +567,8 @@ app.post('/createQueue',limiter, (req, res) => {
     const queueDescription = req.body.queueDescription;
     const url = req.body.url;
 
-    if(queueName.length > 33 || queuePlace.length > 41 || queueDescription.length > 41){
-        res.status(403).send({errorCode: 'max length reached'})
+    if(queueName.length > 33 || queueName.trim() === '' || queueDate.trim() !== '' || queuePlace.length > 41 || queueDescription.length > 41){
+        res.status(403).send({errorCode: 'error'})
     }else {
         let code = generateCode()
         createQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res);
@@ -585,7 +585,7 @@ app.post('/changeQueue',limiter, (req, res) => {
     const code = req.body.queueCode
     const url = req.body.url;
 
-    if(queueName.length > 33 || queuePlace.length > 41 || queueDescription.length > 41){
+    if(queueName.length > 33 || queueName.trim() === '' || queueDate.trim() !== '' || queuePlace.length > 41 || queueDescription.length > 41){
         res.status(403).send({errorCode: 'max length reached'})
     }else {
 
