@@ -412,8 +412,8 @@ const App = () =>{
 				id={MODAL_CARD_QUEUE_INVITE}
 				onClose={() => {
 					setActiveModal(null)
-					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					// history.pop() // удаляем последний элемент в массиве.
+					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
 				icon={<Avatar src={joinQueueAvatar} size={72} />}
 				header={joinQueueName}
@@ -422,8 +422,8 @@ const App = () =>{
 					title: 'Присоединиться',
 					mode: 'primary',
 					action: () => {
-						history.pop() // удаляем последний элемент в массиве.
-						setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+						// history.pop() // удаляем последний элемент в массиве.
+						// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						sendDataToServer(global.queue.joinQueueCode);
 						setActiveModal(null);
 					}
