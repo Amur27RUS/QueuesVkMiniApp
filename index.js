@@ -154,7 +154,7 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
             res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch(e){
-        // console.log(e);
+        console.log(e);
     }
 }
 
@@ -259,7 +259,7 @@ async function createQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
             res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch (e){
-        // console.log(e);
+        console.log(e);
     }
 }
 
@@ -287,7 +287,7 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
             res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch(e){
-        // console.log(e);
+        console.log(e);
     }
 }
 
@@ -323,7 +323,7 @@ async function deleteUser(queueCode, url, res) {
             // return (placeDeletedUser.rows[0].value)
         }
     }catch(e){
-        // console.log(e);
+        console.log(e);
     }
 }
 
@@ -357,7 +357,7 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
             res.status(403).send({errorCode: 'sign rejected :('});
         }
     }catch(e){
-        // console.log(e);
+        console.log(e);
     }
 }
 
