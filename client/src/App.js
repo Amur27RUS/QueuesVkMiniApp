@@ -268,6 +268,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
+		setSnackbar(null);
 		if (popout === null) {
 			if (history.length === 1) {  // Если в массиве одно значение:
 				bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.

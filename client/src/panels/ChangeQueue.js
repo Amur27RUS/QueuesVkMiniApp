@@ -71,7 +71,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
         global.queue.timeQueue = newTime
         global.queue.descriptionQueue = newDescription
         global.queue.placeQueue = newPlace
-        if(global.queue.picURL !== undefined){
+        if(global.queue.picURLNew !== undefined){
             global.queue.avatarQueue = global.queue.picURLNew
         }
     }
@@ -100,15 +100,15 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                 return response.json();
             })
                 .then(function (data) {
-                    setSnackbar(<Snackbar
+                    setTimeout(() => setPopout(null), 3000);
+                    setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
                         before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14}
                                                                                             height={14}/></Avatar>}
                     >
                         Изменения сохранены!
-                    </Snackbar>)
-                    setTimeout(() => setPopout(null), 3000);
+                    </Snackbar>), 3000);
                 })
                 .catch((e) => {
                     setPopout(null);
@@ -305,7 +305,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                         // </Snackbar>)
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
-                        global.queue.picURLNew = undefined;
                     }else{
                         if(newDate.trim() === '' && newNameQueue.trim() === ''){
                             setNewNameStatus('error');
