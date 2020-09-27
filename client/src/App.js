@@ -454,6 +454,8 @@ const App = () =>{
 				id={MODAL_CARD_ABOUT}
 				onClose={() => {
 					setActiveModal(null)
+					setJoinInputStatus('');
+					setJoinInputStatusText('');
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
