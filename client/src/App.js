@@ -48,6 +48,7 @@ global.queue = {
 	pic: undefined,
 	picName: undefined,
 	picURL: undefined,
+	picURLNew: undefined,
 
 	joinQueueAvatar: undefined,
 	joinQueueName: undefined,
@@ -274,8 +275,7 @@ const App = () =>{
 				history.pop() // удаляем последний элемент в массиве.
 				setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 			}
-		}
-		else {setPopout(null)}
+		} else {setPopout(null)}
 	}
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);

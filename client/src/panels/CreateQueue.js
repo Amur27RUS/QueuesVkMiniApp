@@ -40,6 +40,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [formStatusDescription, setFormStatusDescription] = useState('');
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
     const [checkPhoto, setCheckPhoto] = useState(false);
+    const [floodError, setFloodError] = useState(false);
 
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
@@ -57,14 +58,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     "queuePlace": place,
                     "queueTime": time,
                     "queueDate": date,
-                    "queueAvatarURL": global.queue.picURL,
+                    "queueAvatarURL": global.queue.picURLNew,
                     "queueDescription": description,
                     "url": window.location.search.replace('?', '')
                 })
             }).then(function (response) {
                 return response.json();
             })
-                .then(function (data) {
+                .then(async function (data) {
                     if (data === 'LIMIT REACHED') {
                         setSnackbar(<Snackbar
                             layout="vertical"
@@ -77,12 +78,12 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                     } else {
                         setQueueCODE(data);
-                        setPopout(null);
+                        setTimeout(() => setPopout(null), 3000)
 
 
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
-                        setActiveModal(MODAL_CARD_CHAT_INVITE);
+                        setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
                         // window.history.pushState( {panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE" ); // Создаём новую запись в истории браузера
                         // history.push("MODAL_CARD_CHAT_INVITE");
                     }
@@ -102,11 +103,15 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     };
 
     const onPhotoUpload = (e) => {
+        let tmpArr = e.target.files[0].name.split('.');
         global.queue.pic = e.target.files[0];
         global.queue.picName = nameQueue.replace(/\s+/g, '-').replace('?', '')
                 .replace('!', '').replace('!', '')
-            + '_' + (e.target.files[0].name).replace(/\s+/g, '') + getRandomInt(1000);
+            + '_' + (e.target.files[0].name).replace(/\s+/g, '')
+            + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+        global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+
         setAvatarName(e.target.files[0].name);
     }
 
@@ -251,91 +256,122 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         setFormStatusVisibility(false);
                         setCheckPhoto(false);
 
-                        if (global.queue.picURL !== undefined) {
-                            try {
-                                await fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'image/png',
-                                    },
-                                    body: global.queue.pic
-                                }).then(function (response) {
-                                    return response.json();
-                                })
-                                    .then(async function (data) {
-                                        console.log('Картинка успешно загружена!');
-                                    })
-                            } catch (e) {
+                        await fetch('/checkCreation', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "url": window.location.search.replace('?', '')
+                            })
+                        }).then(function (response) {
+                            return response.json();
+                        })
+                            .then(async function (data) {
+                                if (data === 'LIMIT REACHED') {
+                                    setSnackbar(<Snackbar
+                                        layout="vertical"
+                                        onClose={() => setSnackbar(null)}
+                                        before={<Avatar size={24}><Icon16Clear fill="red" width={14}
+                                                                               height={14}/></Avatar>}
+                                    >
+                                        Лимит в создании 5 очередей в день исчерпан!
+                                    </Snackbar>)
+                                    setPopout(null);
+                                    setFloodError(true);
+                                }else {
+                                    if (global.queue.picURL !== undefined) {
+                                        console.log(global.queue.picURL);
+                                        try {
+                                            await fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'image/png',
+                                                },
+                                                body: global.queue.pic
+                                            }).then(function (response) {
+                                                return response.json();
+                                            })
+                                                .then(async function (data) {
+                                                    console.log('Картинка успешно загружена!');
+                                                })
+                                        } catch (e) {
+                                            setPopout(null);
+                                        }
+
+                                        async function testImage(URL) {
+                                            return new Promise((resolve, reject) => {
+                                                let tester = new Image();
+                                                tester.src = URL;
+                                                tester.onload = () => {
+                                                    setCheckPhoto(false);
+                                                    resolve(global.queue.picURL);
+                                                    return 'ok';
+                                                }
+                                                tester.onerror = () => {
+                                                    setCheckPhoto(true);
+                                                    reject();
+                                                    setPopout(null);
+                                                    setSnackbar(<Snackbar
+                                                        layout="vertical"
+                                                        onClose={() => setSnackbar(null)}
+                                                        before={<Avatar size={24}><Icon16Clear fill="red" width={14}
+                                                                                               height={14}/></Avatar>}
+                                                    >
+                                                        Картинка повреждена! Выберите другую.
+                                                    </Snackbar>);
+                                                    setCheckPhoto(false);
+                                                };
+                                            });
+                                        }
+
+
+                                        await testImage(global.queue.picURL);
+                                    }
+                                    console.log(checkPhoto);
+                                    if (!checkPhoto) {
+                                        await createQueueOnServer();
+                                        global.queue.createPlace = '';
+                                        global.queue.createDescription = '';
+                                        global.queue.createTime = '';
+                                        global.queue.createDate = '';
+                                        global.queue.createName = '';
+                                    }
+                                    setCheckPhoto(false);
+                                }
+                                setFloodError(false);
+                            });
+                        }else {
+                            if (date.trim() === '' && nameQueue.trim() === '') {
+                                setQueueNameStatus('error');
+                                setQueueDateStatus('error');
+                                setFormStatusVisibility(true);
+                                setFormStatusHeader('Введите название и дату!')
+                                setPopout(null);
+
+                            } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
+                                setQueueNameStatus('error');
+                                setQueueDateStatus('error');
+                                setFormStatusVisibility(true);
+                                setFormStatusHeader('Введите название и корректную дату!')
+                                setPopout(null);
+
+                            } else if (nameQueue.trim() === '') {
+                                setQueueNameStatus('error');
+                                setFormStatusVisibility(true);
+                                setFormStatusHeader('Введите название!')
+                                setPopout(null);
+
+                            } else if (date.trim() === '') {
+                                setQueueDateStatus('error');
+                                setFormStatusVisibility(true);
+                                setFormStatusHeader('Введите дату!')
                                 setPopout(null);
                             }
-
-                            async function testImage(URL) {
-                                return new Promise((resolve, reject) => {
-                                    let tester = new Image();
-                                    tester.src = URL;
-                                    tester.onload = () => {
-                                        setCheckPhoto(false);
-                                        resolve(global.queue.picURL);
-                                        return 'ok';
-                                    }
-                                    tester.onerror = () => {
-                                        setCheckPhoto(true);
-                                        reject();
-                                        setPopout(null);
-                                        setSnackbar(<Snackbar
-                                            layout="vertical"
-                                            onClose={() => setSnackbar(null)}
-                                            before={<Avatar size={24}><Icon16Clear fill="red" width={14}
-                                                                                   height={14}/></Avatar>}
-                                        >
-                                            Картинка повреждена! Выберите другую.
-                                        </Snackbar>);
-                                        setCheckPhoto(false);
-                                    };
-                                });
-                            }
-                            await testImage(global.queue.picURL);
                         }
-                        console.log(checkPhoto);
-                        if (!checkPhoto) {
-                            await createQueueOnServer();
-                            global.queue.createPlace = '';
-                            global.queue.createDescription = '';
-                            global.queue.createTime = '';
-                            global.queue.createDate = '';
-                            global.queue.createName = '';
-                        }
-                        setCheckPhoto(false);
 
-                    } else {
-                        if (date.trim() === '' && nameQueue.trim() === '') {
-                            setQueueNameStatus('error');
-                            setQueueDateStatus('error');
-                            setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите название и дату!')
-                            setPopout(null);
-
-                        } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
-                            setQueueNameStatus('error');
-                            setQueueDateStatus('error');
-                            setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите название и корректную дату!')
-                            setPopout(null);
-
-                        } else if (nameQueue.trim() === '') {
-                            setQueueNameStatus('error');
-                            setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите название!')
-                            setPopout(null);
-
-                        } else if (date.trim() === '') {
-                            setQueueDateStatus('error');
-                            setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите дату!')
-                            setPopout(null);
-                        }
-                    }
                 }}>Создать</Button>
             </FormLayout>
             {snackbar}

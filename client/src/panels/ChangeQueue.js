@@ -72,7 +72,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
         global.queue.descriptionQueue = newDescription
         global.queue.placeQueue = newPlace
         if(global.queue.picURL !== undefined){
-            global.queue.avatarQueue = global.queue.picURL
+            global.queue.avatarQueue = global.queue.picURLNew
         }
     }
 
@@ -91,7 +91,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     "queuePlace": newPlace,
                     "queueTime": newTime,
                     "queueDate": newDate,
-                    "queueAvatarURL": global.queue.picURL,
+                    "queueAvatarURL": global.queue.picURLNew,
                     "queueDescription": newDescription,
                     "queueCode": global.queue.codeQueue,
                     "url": window.location.search.replace('?', '')
@@ -108,7 +108,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     >
                         Изменения сохранены!
                     </Snackbar>)
-                    setPopout(null);
+                    setTimeout(() => setPopout(null), 3000);
                 })
                 .catch((e) => {
                     setPopout(null);
@@ -128,9 +128,12 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     };
 
     const onPhotoUpload = (e) => {
+        let tmpArr = e.target.files[0].name.split('.');
         global.queue.pic = e.target.files[0];
         global.queue.picName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+        global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+
         setNewAvatarName(e.target.files[0].name);
     }
 
@@ -302,6 +305,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                         // </Snackbar>)
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
+                        global.queue.picURLNew = undefined;
                     }else{
                         if(newDate.trim() === '' && newNameQueue.trim() === ''){
                             setNewNameStatus('error');

@@ -488,6 +488,27 @@ async function checkSign(url){
     }
 }
 
+async function checkCreation(url, res){
+    try {
+        let userID = parseInt(await checkSign(url), 10);
+        if(userID.toString() !== 'signERROR') {
+            const client = await pool.connect();
+
+            let now = new Date().toLocaleDateString();
+            const floodCheck = await client.query('SELECT * FROM queuesandusers WHERE userid = $1 AND createdate = $2', [userID, now])
+
+            if (floodCheck.rows.length >= 5) {
+                await res.send(JSON.stringify('LIMIT REACHED'));
+            }else{
+                await res.send(JSON.stringify('ok'));
+            }
+        }
+
+    }catch (e){
+        console.log(e);
+    }
+}
+
 
 
 /*---------------------------------------------------------------------*/
@@ -557,6 +578,12 @@ app.post('/getQueues', limiter, (req, res) => {
 
     getQueues(url, res);
 });
+
+app.post('/checkCreation', limiter, (req, res) => {
+    const url = req.body.url;
+
+    checkCreation(url, res);
+})
 
 app.post('/createQueue',limiter, (req, res) => {
     const queueName = req.body.queueName;
