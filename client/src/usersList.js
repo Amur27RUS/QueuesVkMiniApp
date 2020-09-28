@@ -64,7 +64,8 @@ class UsersList extends React.Component {
             isAdmin: undefined,
             isFirst: 'turnOff',
             cssSpinner: 'defaultSpinner',
-            cssUsersList: 'turnOff'
+            cssUsersList: 'turnOff',
+            exitAlertText: '',
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -453,7 +454,7 @@ class UsersList extends React.Component {
                 onClose={this.closePopout}
             >
                 <h2>Подтвердите действие</h2>
-                <p>Вы уверены, что хотите покинуть очередь? Если вы снова зайдёте в очередь, то окажетесь в конце списка.</p>
+                <p>{this.state.exitAlertText}</p>
             </Alert>
         )
     }
@@ -768,6 +769,24 @@ class UsersList extends React.Component {
             // </Snackbar>);
         })
     }
+    checkHowManyUsersForExit = () =>{
+        let pplCounter = 0;
+        for(let i = 0; i<this.state.users.length; i++){
+            if(this.state.users[i].notvkname === null){
+                pplCounter++;
+            }
+        }
+        if(pplCounter === 1){
+            console.log(1);
+            this.setState({
+                exitAlertText: 'Вы уверены, что хотите покинуть очередь? Вы последний участник. Если вы покините очередь, то она будет удалена.'
+            });
+        }else{
+            this.setState({
+                exitAlertText: 'Вы уверены, что хотите покинуть очередь? Если вы снова зайдёте в очередь, то окажетесь в конце списка.'
+            });
+        }
+    }
 
     deleteUser = (deletedUserPlace) => {
         fetch('/deleteUser', {
@@ -877,7 +896,10 @@ class UsersList extends React.Component {
                     <Button className={this.state.cssAdminButton} size={'xl'} onClick={this.adminButton} mode={'secondary'} stretched={true}>{this.state.buttonText}</Button>
                     <Button className={this.state.cssAddAdminButton} size={'xl'} onClick={this.addAdminButton} mode={'secondary'} stretched={true}>{this.state.nameAdminButton}</Button>
                     <Button className={this.state.cssShuffleButton} size={'xl'} onClick={() => {this.shuffleAlert()}} mode={'secondary'} stretched={true}>Перемешать очередь</Button>
-                    <Button className={this.state.CSSExitQueueButton} size={'xl'} onClick={() => this.exitAlert()} mode={'secondary'} stretched={true}>Покинуть очередь</Button>
+                    <Button className={this.state.CSSExitQueueButton} size={'xl'} onClick={async () =>{
+                        await this.checkHowManyUsersForExit();
+                        this.exitAlert();
+                    }} mode={'secondary'} stretched={true}>Покинуть очередь</Button>
                     <Button className={this.state.CSSAddPersonButton} size={'xl'} onClick={() => this.AddPersonNotFromVK()} mode="secondary" stretched={true}>Добавить человека не из VK</Button>
                     </Div>
 

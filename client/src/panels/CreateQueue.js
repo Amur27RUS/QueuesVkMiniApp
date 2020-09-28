@@ -13,6 +13,7 @@ import {
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -41,6 +42,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
     const [checkPhoto, setCheckPhoto] = useState(false);
     const [floodError, setFloodError] = useState(false);
+    const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
+    const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
@@ -221,9 +224,23 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
-                          onPhotoUpload(e)
+                          setDeleteImgButtonCSS('deleteImgButton');
+                          setDelDivCSS('divForDel');
+                          onPhotoUpload(e);
                       }}/>
-                <Text className={'uploadedImgName'}>{avatarName}</Text>
+                      <div className={delDivCSS}>
+                <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}
+                                                                        mode={'tertiary'}
+                                                                        before={<Icon12Cancel/>}
+                                                                        onClick={()=>{
+                                                                            setAvatarName('');
+                                                                            global.queue.picURLNew = undefined;
+                                                                            global.queue.picURL = undefined;
+                                                                            setDeleteImgButtonCSS('turnOff');
+                                                                            setDelDivCSS('turnOff');
+                                                                        }}/></Text>
+
+                      </div>
                 <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
                     setDescription(e.target.value)
                     global.queue.createDescription = e.target.value;
@@ -231,7 +248,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <Button size="xl" onClick={async () => {
 
                     let dataCheck = document.getElementById('dateID');
-
 
                     if (!global.queue.dataCheck) {
                         setQueueDateStatus('error');

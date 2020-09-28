@@ -19,6 +19,17 @@
   display: none;
 }
 
+.deleteImgButton{
+  height: auto;
+  width: auto;
+  margin-top: 5px;
+}
+.divForDel{
+  display: -webkit-box;
+  margin-left: 15px;
+  word-break: break-all;
+}
+
 .img {
   width: 30px;
   height: 30px;
@@ -258,7 +269,7 @@
 .uploadedImgName {
   margin-left: auto;
   margin-right: auto;
-  display: table;
+  display: flex;
   margin-top: -17px;
   width: 90%;
 }
