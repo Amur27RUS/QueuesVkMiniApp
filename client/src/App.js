@@ -285,6 +285,8 @@ const App = () =>{
 		setSnackbar(null); //При переходе
 		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
 		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
+
+		global.queue.isFirstPlace = undefined;
 	};
 
 	const onStoryChange = e => {
