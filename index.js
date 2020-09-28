@@ -99,6 +99,7 @@ async function addNotFromVK(newUser, queueCode, url, res){
         }
     }catch(e){
         console.log(e);
+
     }
 }
 
@@ -167,7 +168,6 @@ async function joinQueue(queueCode, url, res){
             const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1;', [queueCode]);
             if (results.rows[0] === undefined) {
                 res.send(JSON.stringify('noQueue')); //todo выводить сообщение на фронте о том, что очереди не существует
-                await client.release();
             } else {
                 const userInQueue = await client.query('SELECT * FROM queuesandusers WHERE userid= $1 AND qcode= $2;', [userID, queueCode]);
 
@@ -176,13 +176,13 @@ async function joinQueue(queueCode, url, res){
                     const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id;');
                     await client.query('INSERT INTO QueuesAndUsers VALUES ($1, $2, $3, $4, $5);', [id.rows[id.rows.length - 1].value + 1, queueCode, userID, place.rows[place.rows.length - 1].value + 1, false])
                     await res.send(JSON.stringify('success'));
-                    await client.release();
 
                 } else {
                     await res.send(JSON.stringify('alreadyThere'));
-                    await client.release();
                 }
             }
+
+            await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
         }
@@ -321,6 +321,8 @@ async function deleteUser(queueCode, url, res) {
             await client.release();
             await res.send(JSON.stringify('ok'));
             // return (placeDeletedUser.rows[0].value)
+        }else{
+            res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch(e){
         console.log(e);
@@ -502,6 +504,9 @@ async function checkCreation(url, res){
             }else{
                 await res.send(JSON.stringify('ok'));
             }
+            await client.release();
+        }else{
+            res.status(403).send({errorCode: 'sign rejected :('});
         }
 
     }catch (e){
