@@ -269,20 +269,18 @@ const App = () =>{
 
 	const goBack = () => {
 		setSnackbar(null);
-		if (popout !== null) {
-			setPopout(null);
-		} else { if (activeModal !== null) {
-			setActiveModal(null);
-		}
-			else {if (history.length === 1) {  // Если в массиве одно значение:
+		setActiveModal(null);
+		setPopout(null);
+		if (history.length === 1) {  // Если в массиве одно значение:
 				// bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
-			} else if (history.length > 1) { // Если в массиве больше одного значения:
+		} else
+			if (history.length > 1) { // Если в массиве больше одного значения:
 				history.pop() // удаляем последний элемент в массиве.
 				setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 			}
-		}
-		}
 	}
+
+
 
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
@@ -461,8 +459,8 @@ const App = () =>{
 					setActiveModal(null)
 					setJoinInputStatus('');
 					setJoinInputStatusText('');
-					// history.pop() // удаляем последний элемент в массиве.
-					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					history.pop() // удаляем последний элемент в массиве.
+					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
 				header="Введите код очереди"
 				actions={[
@@ -470,8 +468,8 @@ const App = () =>{
 						title: 'Присоединиться',
 						mode: 'primary',
 						action: () => {
-							// history.pop() // удаляем последний элемент в массиве.
-							// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							history.pop() // удаляем последний элемент в массиве.
+							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 							if(codeInput !== undefined) {
 								sendDataToServer(codeInput.toUpperCase());
 							}else{

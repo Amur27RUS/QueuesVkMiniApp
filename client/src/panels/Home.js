@@ -149,8 +149,8 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => {
 						setActiveModal(MODAL_CARD_ABOUT)
-						// window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
-						// history.push("MODAL_CARD_ABOUT");
+						window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
+						history.push("MODAL_CARD_ABOUT");
 					}}>
 						Войти с помощью кода
 					</Button>
@@ -166,8 +166,8 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						icon={<Icon56UsersOutline/>}
 						action={<Button size="l" mode="tertiary" onClick={() => {
 							setActiveModal(MODAL_CARD_ABOUT)
-							// window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
-							// history.push("MODAL_CARD_ABOUT");
+							window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
+							history.push("MODAL_CARD_ABOUT");
 						}}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>
