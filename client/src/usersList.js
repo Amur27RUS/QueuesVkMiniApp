@@ -917,6 +917,7 @@ class UsersList extends React.Component {
 
                     <Button className={this.state.cssButtonGiveAdmin} onClick={this.reqAdminUsers} size={'xl'}>Выдать выбранным пользователям права админа</Button>
                         <Spinner className={this.state.cssSpinner} size="large" style={{marginTop: 20}}/>
+
                     <List>
                     {this.state.users.map(info => {
                         return <Cell id={info.name} key={info.userid} description={info.isadmin ? 'Admin' : ''}
