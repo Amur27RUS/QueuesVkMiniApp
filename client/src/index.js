@@ -17,6 +17,12 @@ bridge.subscribe(({ detail: { type, data }}) => {
     if (type === 'VKWebAppUpdateConfig') {
         const schemeAttribute = document.createAttribute('scheme');
         schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+        console.log(schemeAttribute.value);
+        if(schemeAttribute.value === 'bright_light'){
+            bridge.send("VKWebAppSetViewSettings", {"status_bar_style": "dark"});
+        }else{
+            bridge.send("VKWebAppSetViewSettings", {"status_bar_style": "light"});
+        }
         document.body.attributes.setNamedItem(schemeAttribute);
         global.scheme.scheme = schemeAttribute.value;
     }

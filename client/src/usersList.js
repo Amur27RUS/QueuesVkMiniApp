@@ -919,7 +919,7 @@ class UsersList extends React.Component {
                         <Spinner className={this.state.cssSpinner} size="large" style={{marginTop: 20}}/>
                     <List>
                     {this.state.users.map(info => {
-                        return <Cell id={info.name} key={info.name} description={info.isadmin ? 'Admin' : ''}
+                        return <Cell id={info.name} key={info.userid} description={info.isadmin ? 'Admin' : ''}
                                      selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
                                      // onClick={() => window.open("http://vk.com/id"+info.userid)}
                                      className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
