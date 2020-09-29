@@ -481,8 +481,9 @@ const App = () =>{
 			>
 				<FormLayout className={'inputJoin'}>
 						<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
-							   minlength={6} maxlength={6} onChange={(e) =>{
-							   	setCodeInput(e.target.value)
+							   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
+
+							   	setCodeInput(e.target.value.substring(0, 6))
 								if(e.target.value.length === 6){
 									setJoinInputStatusText('');
 									setJoinInputStatus('valid');
