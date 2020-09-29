@@ -316,6 +316,8 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
+							history.pop() // удаляем последний элемент в массиве.
+							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 
 							if (res === 'noQueue') {
 								setActiveModal(null);
@@ -487,8 +489,8 @@ const App = () =>{
 								if(e.target.value.length === 6){
 									setJoinInputStatusText('');
 									setJoinInputStatus('valid');
-									history.pop() // удаляем последний элемент в массиве.
-									setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+									// history.pop() // удаляем последний элемент в массиве.
+									// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 								}else{
 									setJoinInputStatusText('Должно быть 6 символов!');
 									setJoinInputStatus('error');
