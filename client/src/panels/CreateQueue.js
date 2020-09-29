@@ -153,10 +153,10 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            }
                            global.queue.createName = e.target.value.trim();
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
-                           setNameQueue(e.target.value);
+                           setNameQueue(e.target.value.substring(0, 32));
                        }}/>
                 <Input top={'Место проведения'} maxlength="40" value={place} onChange={e => {
-                    setPlace(e.target.value);
+                    setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
                 <Input id={'dateID'}
@@ -221,12 +221,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
+                          document.getElementById("MyButton").disabled = true;
                           setDeleteImgButtonCSS('deleteImgButton');
                           setDelDivCSS('divForDel');
                           onPhotoUpload(e);
+                          document.getElementById("MyButton").disabled = false;
                       }}/>
                       <div className={delDivCSS}>
                 <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}
@@ -242,7 +244,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                       </div>
                 <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
-                    setDescription(e.target.value)
+                    setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
                 }}/>
                 <Button size="xl" onClick={async () => {
