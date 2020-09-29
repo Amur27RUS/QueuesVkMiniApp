@@ -452,6 +452,7 @@ const App = () =>{
 				{/*>Алексей, Илья, Михаил<br />и ещё 3 человека</UsersStack>*/}
 			</ModalCard>
 
+
 			<ModalCard
 				className={'numberInputModal'}
 				id={MODAL_CARD_ABOUT}
