@@ -56,6 +56,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
             global.queue.dataCheck = true;
         }
 
+
         if(today.getTime() > pickedDate.getTime()){
             IOSdateError = false;
             global.queue.dataCheck = false;
