@@ -325,7 +325,10 @@ class UsersList extends React.Component {
                 }, {
                     title: 'Отмена',
                     autoclose: true,
-                    mode: 'cancel'
+                    mode: 'cancel',
+                    action:() => {
+                        this.props.history.pop()
+                    }
                 }]}
                 onClose={this.closePopout}
             >
@@ -395,7 +398,10 @@ class UsersList extends React.Component {
                 }, {
                     title: 'Отмена',
                     autoclose: true,
-                    mode: 'cancel'
+                    mode: 'cancel',
+                    action:() => {
+                        this.props.history.pop()
+                    }
                 }]}
                 onClose={this.closePopout}
             >
@@ -453,7 +459,10 @@ class UsersList extends React.Component {
                 }, {
                     title: 'Отмена',
                     autoclose: true,
-                    mode: 'cancel'
+                    mode: 'cancel',
+                    action:() => {
+                        this.props.history.pop()
+                    }
                 }]}
                 onClose={this.closePopout}
             >
