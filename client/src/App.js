@@ -12,7 +12,7 @@ import {
 	View,
 	Avatar,
 	Snackbar,
-	ConfigProvider,
+	ConfigProvider, platform, IOS,
 } from "@vkontakte/vkui";
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
 import AddSquareOutline28 from '@vkontakte/icons/dist/28/add_square_outline'
@@ -26,6 +26,7 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
+import vkBridge from '@vkontakte/vk-bridge';
 
 
 global.queue = {
@@ -68,6 +69,7 @@ global.queue = {
 const MODAL_CARD_ABOUT = 'say-about';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
+const osName = platform();
 
 const App = () =>{
 
@@ -268,6 +270,10 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
+		if (osName === IOS && history.length === 1) {
+			vkBridge.send('VKWebAppDisableSwipeBack');
+		}
+		else {vkBridge.send('VKWebAppEnableSwipeBack');
 		setSnackbar(null);
 		setActiveModal(null);
 		setPopout(null);
@@ -278,6 +284,8 @@ const App = () =>{
 				history.pop() // удаляем последний элемент в массиве.
 				setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 			}
+
+		}
 	}
 
 	const go = e => {
@@ -314,9 +322,10 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
-							history.pop() // удаляем последний элемент в массиве.
-							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-
+							if (osName === IOS){
+								history.pop() // удаляем последний элемент в массиве.
+								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							}
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -460,8 +469,10 @@ const App = () =>{
 					setActiveModal(null)
 					setJoinInputStatus('');
 					setJoinInputStatusText('');
-					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					if (osName === IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"

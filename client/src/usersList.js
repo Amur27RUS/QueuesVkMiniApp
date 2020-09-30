@@ -87,7 +87,12 @@ class UsersList extends React.Component {
 
     async componentDidMount() {
         	console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
+            console.log(document.getElementById("menuButton").onClick)
+            document.getElementById("menuButton").disabled = true;
+            document.getElementById("menuButton").onClick = null;
 
+            // document.getElementById("menuButton").disabled = true;
+            // document.getElementById("menuButton").onClick = null;
             // /*ИМИТАЦИЯ ПОЛУЧЕНИЯ ДАННЫХ*/
             // let usersArr = [
             //     {id: 1, name: 'Павел Сергеевич', avatar: cowboy, isAdmin: true},
@@ -130,6 +135,8 @@ class UsersList extends React.Component {
                 if(global.queue.isUserAdmin) {
                     this.props.setCssEdit('editQueueButton');
                 }
+                document.getElementById("menuButton").disabled = false;
+                console.log(document.getElementById("menuButton").onClick)
             })
         //todo Если что, то можно добавить .bind(this) перед .catch
 
@@ -782,6 +789,7 @@ class UsersList extends React.Component {
             // </Snackbar>);
         })
     }
+
     checkHowManyUsersForExit = () =>{
         let pplCounter = 0;
         for(let i = 0; i<this.state.users.length; i++){
@@ -856,7 +864,7 @@ class UsersList extends React.Component {
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
-                    <Button size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
+                    <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
 
                 <div className={this.state.CSSMenuDropout}>
                     {global.queue.isUserAdmin === true &&

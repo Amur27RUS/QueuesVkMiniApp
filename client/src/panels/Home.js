@@ -13,13 +13,13 @@ import {
 	Snackbar,
 	Avatar,
 	Spinner,
-	Separator
+	Separator, IOS, platform
 } from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 
 const MODAL_CARD_ABOUT = 'say-about';
-
+const osName = platform();
 
 let homePanelCounter = 0;
 
@@ -150,9 +150,10 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => {
 						console.log(history)
 						setActiveModal(MODAL_CARD_ABOUT)
-						window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
-						history.push("MODAL_CARD_ABOUT");
-						console.log(history)
+						if (osName !== IOS) {
+							window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+							history.push("MODAL_CARD_ABOUT");
+						}
 					}}>
 						Войти с помощью кода
 					</Button>
@@ -168,8 +169,10 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						icon={<Icon56UsersOutline/>}
 						action={<Button size="l" mode="tertiary" onClick={() => {
 							setActiveModal(MODAL_CARD_ABOUT)
-							window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
-							history.push("MODAL_CARD_ABOUT");
+							if (osName !== IOS) {
+								window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+								history.push("MODAL_CARD_ABOUT");
+							}
 						}}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>
