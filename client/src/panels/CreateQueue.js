@@ -224,11 +224,9 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
-                          document.getElementById("MyButton").disabled = true;
                           setDeleteImgButtonCSS('deleteImgButton');
                           setDelDivCSS('divForDel');
                           onPhotoUpload(e);
-                          document.getElementById("MyButton").disabled = false;
                       }}/>
                       <div className={delDivCSS}>
                 <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}

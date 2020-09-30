@@ -148,9 +148,11 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 				{queues.length !== 0 &&
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => {
+						console.log(history)
 						setActiveModal(MODAL_CARD_ABOUT)
 						window.history.pushState( {panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT" ); // Создаём новую запись в истории браузера
 						history.push("MODAL_CARD_ABOUT");
+						console.log(history)
 					}}>
 						Войти с помощью кода
 					</Button>

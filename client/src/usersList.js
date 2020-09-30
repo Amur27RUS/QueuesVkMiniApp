@@ -280,6 +280,7 @@ class UsersList extends React.Component {
     }
 
     shuffleAlert = () => {
+        this.props.history.push("alert");
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -361,6 +362,7 @@ class UsersList extends React.Component {
     }
 
     skipAlert = () => {
+        this.props.history.push("alert");
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -404,6 +406,7 @@ class UsersList extends React.Component {
     }
 
     exitAlert = () => {
+        this.props.history.push("alert");
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -441,11 +444,11 @@ class UsersList extends React.Component {
                             //     Ошибка соединения! Проверьте интернет!
                             // </Snackbar>);
                         });
+                        console.log(this.props.history)
                         this.props.setActivePanel('home');
-                        this.props.history.pop() // удаляем последний элемент в массиве.
-                        this.props.history.pop() // удаляем последний элемент в массиве.
-                        window.history.pushState( {panel: "home"}, "home" ); // Создаём новую запись в истории браузера
-                        this.props.history.push("home");
+                        this.props.history.pop()
+                        this.props.history.pop()
+                        console.log(this.props.history)
                     }
                 }, {
                     title: 'Отмена',
