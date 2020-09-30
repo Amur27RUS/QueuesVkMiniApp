@@ -270,7 +270,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		if (osName === IOS && history.length === 1) {
+		if (osName === IOS && (activePanel === 'home' || activePanel === 'createQueuePanel')) {
 			vkBridge.send('VKWebAppDisableSwipeBack');
 		}
 		else {vkBridge.send('VKWebAppEnableSwipeBack');
