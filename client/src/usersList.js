@@ -874,6 +874,7 @@ class UsersList extends React.Component {
                                 }
                             }} selected={this.state.activeTab === 'user'}>Основные</TabsItem>
 
+
                             <TabsItem onClick={() => {
                                 this.setState({
                                     activeTab: 'admin',
