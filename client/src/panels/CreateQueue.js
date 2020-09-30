@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Button,
     PanelHeader,
@@ -44,6 +44,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [uploadedPhoto, setUploadedPhoto] = useState(undefined);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+
+    useEffect(() => {
+        setAvatarName(global.queue.avatarName);
+        if(global.queue.avatarName !== undefined){
+            setDeleteImgButtonCSS('deleteImgButton');
+            setDelDivCSS('divForDel');
+        }
+    })
 
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
@@ -120,8 +128,9 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
             + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
-
+        global.queue.avatarName = e.target.files[0].name;
         setAvatarName(e.target.files[0].name);
+
     }
 
     const getRandomInt = (max) => {
@@ -238,6 +247,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                             global.queue.picURL = undefined;
                                                                             setDeleteImgButtonCSS('turnOff');
                                                                             setDelDivCSS('turnOff');
+                                                                            global.queue.avatarName = undefined;
                                                                         }}/></Text>
 
                       </div>
@@ -347,6 +357,15 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                         global.queue.createTime = '';
                                         global.queue.createDate = '';
                                         global.queue.createName = '';
+                                        global.queue.avatarName = undefined;
+                                        setNameQueue('');
+                                        setDate('');
+                                        setDescription('');
+                                        setTime('');
+                                        setAvatarName('');
+                                        setPlace('');
+                                        setDeleteImgButtonCSS('turnOff');
+                                        setDelDivCSS('turnOff');
                                     }
                                     setCheckPhoto(false);
                                 }

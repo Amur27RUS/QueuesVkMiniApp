@@ -49,6 +49,7 @@ global.queue = {
 	picName: undefined,
 	picURL: undefined,
 	picURLNew: undefined,
+	avatarName: undefined,
 
 	joinQueueAvatar: undefined,
 	joinQueueName: undefined,
