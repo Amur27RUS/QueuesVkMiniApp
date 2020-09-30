@@ -292,10 +292,9 @@ const App = () =>{
 	const onStoryChange = e => {
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
-		// history.pop() // удаляем последний элемент в массиве.
-		// window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
-		// history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
-		// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+		setHistory([]) // очищаем массив
+		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
+		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 	};
 
 	const sendDataToServer = data => {
@@ -316,6 +315,8 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
+							history.pop() // удаляем последний элемент в массиве.
+							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 
 							if (res === 'noQueue') {
 								setActiveModal(null);
@@ -452,6 +453,7 @@ const App = () =>{
 				{/*>Алексей, Илья, Михаил<br />и ещё 3 человека</UsersStack>*/}
 			</ModalCard>
 
+
 			<ModalCard
 				className={'numberInputModal'}
 				id={MODAL_CARD_ABOUT}
@@ -461,6 +463,7 @@ const App = () =>{
 					setJoinInputStatusText('');
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"
 				actions={[
@@ -480,13 +483,14 @@ const App = () =>{
 			>
 				<FormLayout className={'inputJoin'}>
 						<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
-							   minlength={6} maxlength={6} onChange={(e) =>{
-							   	setCodeInput(e.target.value)
+							   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
+
+							   	setCodeInput(e.target.value.substring(0, 6))
 								if(e.target.value.length === 6){
 									setJoinInputStatusText('');
 									setJoinInputStatus('valid');
-									history.pop() // удаляем последний элемент в массиве.
-									setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+									// history.pop() // удаляем последний элемент в массиве.
+									// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 								}else{
 									setJoinInputStatusText('Должно быть 6 символов!');
 									setJoinInputStatus('error');

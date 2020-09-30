@@ -171,9 +171,9 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                                setFormStatusVisibility(false);
                            }
                            e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
-                           setNewNameQueue(e.target.value)
+                           setNewNameQueue(e.target.value.substring(0, 32))
                        }}/>
-                <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value)}/>
+                <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value.substring(0, 40))}/>
                 <Input top={'Дата проведения*'}
                        name={'date'}
                        type={'date'}
@@ -227,7 +227,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                 <File top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
-                <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
+                <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value.substring(0, 40))}/>
                 <Button size="xl" onClick={() => {
 
                     if(!global.queue.dataCheck || !IOSdateError){
