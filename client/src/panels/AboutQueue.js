@@ -49,7 +49,7 @@ const AboutQueue = ({id,  snackbar, history, fetchedUser, setSnackbar, go, queue
 					<br/>
 					<br/>
 					<Headline weight="medium" className={"HeaderOfQueue"}>{global.queue.name}</Headline>
-				{ global.queue.descriptionQueue !== '' &&
+				{ global.queue.descriptionQueue.trim() !== '' &&
 					<MiniInfoCell
 						before={<Icon20ArticleOutline/>}
 						multiline
@@ -57,7 +57,7 @@ const AboutQueue = ({id,  snackbar, history, fetchedUser, setSnackbar, go, queue
 						{global.queue.descriptionQueue}
 					</MiniInfoCell>
 				}
-				{ global.queue.placeQueue !== '' &&
+				{ global.queue.placeQueue.trim() !== '' &&
 					<MiniInfoCell
 						before={<Icon20PlaceOutline/>}
 					>

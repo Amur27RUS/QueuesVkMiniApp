@@ -78,7 +78,7 @@ async function addNotFromVK(newUser, queueCode, url, res){
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
 
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
@@ -107,7 +107,7 @@ async function addNewAdmins(usersArray, queueCode, url, res){
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
 
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
@@ -132,7 +132,7 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect()
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
@@ -163,7 +163,7 @@ async function joinQueue(queueCode, url, res){
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const results = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1;', [queueCode]);
             if (results.rows[0] === undefined) {
@@ -195,7 +195,7 @@ async function getQueues(url, res){
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const results = await client.query('SELECT qCode AS VALUE FROM QueuesAndUsers WHERE userID = $1;', [userID]);
             if (results.rows[0] !== undefined) {
@@ -228,7 +228,7 @@ async function createQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             let codesBD = await client.query('SELECT * FROM queues WHERE code = $1', [code]);
             while (codesBD.rows.length !== 0) {
@@ -268,7 +268,7 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
         let userID = parseInt(await checkSign(url), 10);
 
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [code, userID]);
 
@@ -295,7 +295,7 @@ async function deleteUser(queueCode, url, res) {
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
                 const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
@@ -333,7 +333,7 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
@@ -367,7 +367,7 @@ async function getPeople(queueCode, url, res){
     try {
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
             res.send(result.rows);
@@ -384,7 +384,7 @@ async function firstToLast(queueCode, url, res) {
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const lenghtQueue = await client.query('SELECT userplace FROM queuesandusers WHERE qcode = $1', [queueCode])
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = 1', [lenghtQueue.rows.length, queueCode])
@@ -409,7 +409,7 @@ async function getQueueToJoin(queueCode, url, res){
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
 
             const results = await client.query('SELECT * FROM queues WHERE code = $1', [queueCode]);
@@ -438,7 +438,7 @@ async function skipCommand(queueCode, url, res){
     try{
         let userID = parseInt(await checkSign(url), 10);
 
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
             const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userplace = $2 AND qcode = $3', [place.rows[0].value, place.rows[0].value++, queueCode])
@@ -486,14 +486,14 @@ async function checkSign(url){
     if(paramsHash === urlParams.sign){
         return urlParams.vk_user_id;
     }else{
-        return 'signERROR'
+        return 3;
     }
 }
 
 async function checkCreation(url, res){
     try {
         let userID = parseInt(await checkSign(url), 10);
-        if(userID.toString() !== 'signERROR') {
+        if(userID !== 3) {
             const client = await pool.connect();
 
             let now = new Date().toLocaleDateString();
@@ -598,8 +598,22 @@ app.post('/createQueue',limiter, (req, res) => {
     const queueAvatarURL = req.body.queueAvatarURL;
     const queueDescription = req.body.queueDescription;
     const url = req.body.url;
+    let date = new Date(queueDate);
+    let today = new Date();
+    let isTime = true;
+    if(queueTime !== '') {
+        let timeArr = queueTime.split(':');
+        if (timeArr.length !== 2) {
+            isTime = false;
+        } else {
+            if (isNaN(Number(timeArr[0])) || isNaN(Number(timeArr[1]))) {
+                isTime = false;
+            }
+        }
+    }
 
-    if(queueName.length > 33 || queueName.trim() === '' || queuePlace.length > 41 || queueDescription.length > 41){
+    if(queueName.length > 33 || queueName.trim() === '' || queuePlace.length > 41 || queueDescription.length > 41
+        || date.getTime()+86000000 < today.getTime() || isNaN(date.getTime()) || !isTime){
         res.status(403).send({errorCode: 'error'})
     }else {
         let code = generateCode()
@@ -614,13 +628,27 @@ app.post('/changeQueue',limiter, (req, res) => {
     const queueDate = req.body.queueDate;
     const queueAvatarURL = req.body.queueAvatarURL;
     const queueDescription = req.body.queueDescription;
-    const code = req.body.queueCode
+    const code = req.body.queueCode;
     const url = req.body.url;
 
-    if(queueName.length > 33 || queueName.trim() === '' || queuePlace.length > 41 || queueDescription.length > 41){
-        res.status(403).send({errorCode: 'max length reached'})
-    }else {
+    let date = new Date(queueDate);
+    let today = new Date();
+    let isTime = true;
+    if(queueTime !== '') {
+        let timeArr = queueTime.split(':');
+        if (timeArr.length !== 2) {
+            isTime = false;
+        } else {
+            if (isNaN(Number(timeArr[0])) || isNaN(Number(timeArr[1]))) {
+                isTime = false;
+            }
+        }
+    }
 
+    if(queueName.length > 33 || code.length < 6 || queueName.trim() === '' || queuePlace.length > 41 ||
+        queueDescription.length > 41 || date.getTime()+86000000 < today.getTime() || isNaN(date.getTime()) || !isTime){
+        res.status(403).send({errorCode: 'Do not modify data!'})
+    }else {
         changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res);
     }
 });

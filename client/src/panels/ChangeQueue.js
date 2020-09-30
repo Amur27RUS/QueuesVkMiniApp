@@ -50,6 +50,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
 
         if(dataCheck.validity.rangeUnderflow){
             global.queue.dataCheck = false;
+            setNewDateStatus('error');
         }else{
             setFormStatusVisibility(false);
             global.queue.dataCheck = true;
@@ -58,6 +59,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
         if(today.getTime() > pickedDate.getTime()){
             IOSdateError = false;
             global.queue.dataCheck = false;
+            setNewDateStatus('error');
         }else {
             IOSdateError = true;
             setFormStatusVisibility(false);
@@ -226,7 +228,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
                 <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value)}/>
                 <Button size="xl" onClick={() => {
-                    if(!global.queue.dataCheck){
+
+                    if(!global.queue.dataCheck || !IOSdateError){
                         setNewDateStatus('error');
                         setFormStatusVisibility(true);
                         if(formStatusHeader === 'Введите название очереди!') {
@@ -238,17 +241,6 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                         }
                     }
 
-                    if(!IOSdateError){
-                        setNewDateStatus('error');
-                        setFormStatusVisibility(true);
-                        if(formStatusHeader === 'Введите название очереди!') {
-                            setFormStatusHeader('Неверная дата и название!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }else{
-                            setFormStatusHeader('Неверная дата!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }
-                    }
                     let dataCheck = document.getElementById('dateID');
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();

@@ -41,7 +41,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [formStatusDescription, setFormStatusDescription] = useState('');
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
     const [checkPhoto, setCheckPhoto] = useState(false);
-    const [floodError, setFloodError] = useState(false);
+    const [uploadedPhoto, setUploadedPhoto] = useState(undefined);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
@@ -221,9 +221,10 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                <File top="Аватарка очереди" value={uploadedPhoto} accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
+                          setUploadedPhoto(e.target.value);
                           setDeleteImgButtonCSS('deleteImgButton');
                           setDelDivCSS('divForDel');
                           onPhotoUpload(e);
@@ -238,6 +239,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                             global.queue.picURL = undefined;
                                                                             setDeleteImgButtonCSS('turnOff');
                                                                             setDelDivCSS('turnOff');
+                                                                            setUploadedPhoto(undefined);
                                                                         }}/></Text>
 
                       </div>
@@ -249,19 +251,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                     let dataCheck = document.getElementById('dateID');
 
-                    if (!global.queue.dataCheck) {
-                        setQueueDateStatus('error');
-                        setFormStatusVisibility(true);
-                        if (formStatusHeader === 'Введите название очереди!') {
-                            setFormStatusHeader('Неверная дата и название!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        } else {
-                            setFormStatusHeader('Неверная дата!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }
-                    }
-
-                    if (!IOSdateError) {
+                    if (!global.queue.dataCheck || !IOSdateError) {
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
                         if (formStatusHeader === 'Введите название очереди!') {
@@ -301,7 +291,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                         Лимит в создании 5 очередей в день исчерпан!
                                     </Snackbar>)
                                     setPopout(null);
-                                    setFloodError(true);
                                 }else {
                                     if (global.queue.picURL !== undefined) {
                                         console.log(global.queue.picURL);
@@ -363,7 +352,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                     }
                                     setCheckPhoto(false);
                                 }
-                                setFloodError(false);
                             });
                         }else {
                             if (date.trim() === '' && nameQueue.trim() === '') {
