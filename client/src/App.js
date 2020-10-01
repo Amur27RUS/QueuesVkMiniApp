@@ -561,7 +561,7 @@ const App = () =>{
 
 
 	return (
-		<ConfigProvider isWebView={true}>
+		<ConfigProvider className={CSSForCreateQueue} isWebView={true}>
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
@@ -599,10 +599,10 @@ const App = () =>{
 
 
 
-			<View id={'createQueue'} className={CSSForCreateQueue} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}
+			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}
 				onSwipeBack={goBack}
 				>
-				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				<CreateQueue id={'CreateQueue'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 				{/*	<Settings id={'Settings'} go={go}/>*/}
