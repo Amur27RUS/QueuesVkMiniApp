@@ -292,7 +292,7 @@ class UsersList extends React.Component {
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {bridge.send('VKWebAppDisableSwipeBack');}
+        } else {bridge.send('VKWebAppDisableSwipeBack'); console.log('DISABLE ETO SAMOE')}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
