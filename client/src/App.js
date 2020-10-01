@@ -272,7 +272,7 @@ const App = () =>{
 
 	const goBack = () => {
 		console.log('ActivePanel: ' + activePanel)
-		if (osName === IOS && (activePanel === 'home' || activePanel === 'CreateQueue' || activeStory === 'createQueue')) {
+		if (osName === IOS && (activePanel === 'home' || activePanel === 'CreateQueue' || activeStory === 'createQueue' || popout !== null || activeModal !== null)) {
 			bridge.send('VKWebAppDisableSwipeBack');
 		}
 		else {
