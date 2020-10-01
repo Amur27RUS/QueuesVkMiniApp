@@ -271,7 +271,6 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -297,11 +296,13 @@ const App = () =>{
 	const onStoryChange = e => {
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
+		setActivePanel(e.currentTarget.dataset.to);
 		if (e.currentTarget.dataset.story === 'createQueue') {
 			bridge.send('VKWebAppDisableSwipeBack');
 			console.log('ToSamoe: ' + activeStory)
+			console.log('ToSamoePanel: ' + activePanel)
+			console.log('ToSamoeTo: ' + e.currentTarget.dataset.story)
 		}
-		setActivePanel(e.currentTarget.dataset.to)
 	};
 
 	const sendDataToServer = data => {
