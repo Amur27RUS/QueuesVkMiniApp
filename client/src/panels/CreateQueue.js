@@ -178,8 +178,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       onClose = {() =>{
-                           document.getElementById('qName').focus();
+                       onClick = {() =>{
                            document.getElementById('qName').blur();
                        }}
                        onChange={e => {
