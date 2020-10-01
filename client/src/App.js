@@ -303,6 +303,7 @@ const App = () =>{
 		console.log(history)
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
+		setActivePanel(e.currentTarget.dataset.to)
 		console.log(history)
 	};
 
@@ -581,7 +582,7 @@ const App = () =>{
 					onClick={onStoryChange}
 					selected={activeStory === 'createQueue'}
 					data-story="createQueue"
-					data-to="createQueuePanel"
+					data-to="createQueue"
 					text="Создать очередь"
 				><AddSquareOutline28/></TabbarItem>
 				{/*<TabbarItem*/}
