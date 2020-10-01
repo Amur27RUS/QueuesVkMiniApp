@@ -180,7 +180,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        status={queueDateStatus}
                        onClick = {e=>{
                            let nameInput = document.getElementById('qName');
-                           hideKeyboard(nameInput);
+                           nameInput.focus();
                            // setCSSForCreateQueue('');
                        }}
                        onChange={e => {
