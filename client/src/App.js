@@ -272,7 +272,7 @@ const App = () =>{
 
 	const goBack = () => {
 		console.log(activePanel)
-		if (activePanel === 'home' || activePanel === 'CreateQueue') {
+		if (activePanel === 'home' || activePanel === 'CreateQueue' || activeStory === 'createQueue') {
 			bridge.send('VKWebAppDisableSwipeBack');
 		}
 		else {bridge.send('VKWebAppEnableSwipeBack');
@@ -303,6 +303,9 @@ const App = () =>{
 		console.log(history)
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
+		// if (e.currentTarget.dataset.story === 'createQueue') {
+		// 	bridge.send('VKWebAppDisableSwipeBack');
+		// }
 		setActivePanel(e.currentTarget.dataset.to)
 		console.log(history)
 	};
@@ -583,7 +586,6 @@ const App = () =>{
 				<TabbarItem
 					onClick={() => {
 						onStoryChange();
-						bridge.send('VKWebAppDisableSwipeBack');
 					}}
 					selected={activeStory === 'createQueue'}
 					data-story="createQueue"
