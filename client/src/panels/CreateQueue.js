@@ -366,6 +366,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                         setPlace('');
                                         setDeleteImgButtonCSS('turnOff');
                                         setDelDivCSS('turnOff');
+                                        setQueueDateStatus('');
+                                        setQueueNameStatus('');
                                     }
                                     setCheckPhoto(false);
                                 }
