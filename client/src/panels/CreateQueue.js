@@ -178,10 +178,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       onClick = {e=>{
-                           let nameInput = document.getElementById('qName');
-                           nameInput.focus();
-                           // setCSSForCreateQueue('');
+                       onClose = {() =>{
+                           document.getElementById('qName').focus();
+                           document.getElementById('qName').blur();
                        }}
                        onChange={e => {
                            today = new Date(nowIOSTime);
@@ -234,7 +233,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
+                <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
