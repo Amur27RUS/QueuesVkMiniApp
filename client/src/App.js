@@ -26,7 +26,7 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
-import vkBridge from '@vkontakte/vk-bridge';
+
 
 
 global.queue = {
@@ -272,9 +272,9 @@ const App = () =>{
 
 	const goBack = () => {
 		if (activePanel === 'home' || activePanel === 'CreateQueue') {
-			vkBridge.send('VKWebAppDisableSwipeBack');
+			bridge.send('VKWebAppDisableSwipeBack');
 		}
-		else {vkBridge.send('VKWebAppEnableSwipeBack');
+		else {bridge.send('VKWebAppEnableSwipeBack');
 		setSnackbar(null);
 		setActiveModal(null);
 		setPopout(null);
