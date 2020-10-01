@@ -19,6 +19,7 @@ import {
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import vkBridge from "@vkontakte/vk-bridge";
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -284,10 +285,15 @@ class UsersList extends React.Component {
 
     closePopout = () => {
         this.props.setPopout(null);
+        if (osName !== IOS) {
+            this.props.history.pop()
+        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
     }
 
     shuffleAlert = () => {
-        this.props.history.push("alert");
+        if (osName !== IOS) {
+            this.props.history.push("alert");
+        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -297,6 +303,9 @@ class UsersList extends React.Component {
                     mode: 'destructive',
                     action: () => {
                         let newArr = this.shuffle(this.state.users);
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
@@ -334,7 +343,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        this.props.history.pop()
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -372,7 +383,9 @@ class UsersList extends React.Component {
     }
 
     skipAlert = () => {
-        this.props.history.push("alert");
+        if (osName !== IOS) {
+            this.props.history.push("alert");
+        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -381,6 +394,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
@@ -407,7 +423,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        this.props.history.pop()
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -419,7 +437,9 @@ class UsersList extends React.Component {
     }
 
     exitAlert = () => {
-        this.props.history.push("alert");
+        if (osName !== IOS) {
+            this.props.history.push("alert");
+        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -460,7 +480,9 @@ class UsersList extends React.Component {
                         console.log(this.props.history)
                         this.props.setActivePanel('home');
                         this.props.history.pop()
-                        this.props.history.pop()
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                         console.log(this.props.history)
                     }
                 }, {
@@ -468,7 +490,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        this.props.history.pop()
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -480,6 +504,9 @@ class UsersList extends React.Component {
     }
 
     firstToLast = () => {
+        if (osName !== IOS) {
+            this.props.history.push("alert");
+        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -488,6 +515,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        }
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
@@ -536,7 +566,12 @@ class UsersList extends React.Component {
     }} , {
                     title: 'Отмена',
                     autoclose: true,
-                    mode: 'cancel'
+                    mode: 'cancel',
+                    action:() => {
+                        if (osName !== IOS) {
+                            this.props.history.pop()
+                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                    }
                 }]}
                 onClose={this.closePopout}
             >
