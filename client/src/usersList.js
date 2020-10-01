@@ -19,7 +19,6 @@ import {
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
-import vkBridge from "@vkontakte/vk-bridge";
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -287,13 +286,13 @@ class UsersList extends React.Component {
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
-        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+        } else {bridge.send('VKWebAppEnableSwipeBack');}
     }
 
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
+        } else {bridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -305,7 +304,7 @@ class UsersList extends React.Component {
                         let newArr = this.shuffle(this.state.users);
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
@@ -345,7 +344,7 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -385,7 +384,7 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
+        } else {bridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -396,7 +395,7 @@ class UsersList extends React.Component {
                     action: () => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
@@ -425,7 +424,7 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -439,7 +438,7 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
+        } else {bridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -482,7 +481,7 @@ class UsersList extends React.Component {
                         this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                         console.log(this.props.history)
                     }
                 }, {
@@ -492,7 +491,7 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
@@ -506,7 +505,7 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {vkBridge.send('VKWebAppDisableSwipeBack');}
+        } else {bridge.send('VKWebAppDisableSwipeBack');}
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -570,7 +569,7 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {vkBridge.send('VKWebAppEnableSwipeBack');}
+                        } else {bridge.send('VKWebAppEnableSwipeBack');}
                     }
                 }]}
                 onClose={this.closePopout}
