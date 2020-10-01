@@ -178,8 +178,10 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       onClose={() => {
-                           document.getElementById('qName').focus({preventScroll: true});
+                       onClick={() => {
+                           document.getElementById('qName').focus();
+                           document.getElementById('qName').blur();
+                           document.getElementById('dateID').focus();
                        }}
                        onChange={e => {
                            today = new Date(nowIOSTime);
