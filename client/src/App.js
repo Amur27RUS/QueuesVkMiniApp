@@ -271,6 +271,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
+		console.log(activePanel)
 		if (activePanel === 'home' || activePanel === 'CreateQueue') {
 			bridge.send('VKWebAppDisableSwipeBack');
 		}
