@@ -286,7 +286,9 @@ class UsersList extends React.Component {
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
-        } else {bridge.send('VKWebAppEnableSwipeBack');}
+        } else {
+            bridge.send('VKWebAppEnableSwipeBack');
+        }
     }
 
     shuffleAlert = async () => {
@@ -307,7 +309,9 @@ class UsersList extends React.Component {
                         let newArr = this.shuffle(this.state.users);
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            bridge.send('VKWebAppEnableSwipeBack');
+                        }
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
