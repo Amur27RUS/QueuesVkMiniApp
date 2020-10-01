@@ -28,7 +28,7 @@ let today;
 let pickedDate;
 let imgERR = false;
 
-const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
+const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
     const [date, setDate] = useState(global.queue.createDate);
     const [time, setTime] = useState(global.queue.createTime);
@@ -166,7 +166,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
+                       onClick = {e=>{
+                           setCSSForCreateQueue('createQueuePanel');
+                       }}
                        onChange={e => {
+                           setCSSForCreateQueue('');
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
