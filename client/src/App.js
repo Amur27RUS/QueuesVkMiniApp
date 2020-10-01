@@ -575,18 +575,14 @@ const App = () =>{
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
-					onClick={() => {
-						onStoryChange();
-					}}
+					onClick={onStoryChange}
 					selected={activeStory === 'main'}
 					data-story="main"
 					data-to='home'
 					text="Очереди"
 				><ListOutline28/></TabbarItem>
 				<TabbarItem
-					onClick={() => {
-						onStoryChange();
-					}}
+					onClick={onStoryChange}
 					selected={activeStory === 'createQueue'}
 					data-story="createQueue"
 					data-to="CreateQueue"
