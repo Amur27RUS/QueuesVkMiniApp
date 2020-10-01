@@ -582,7 +582,7 @@ const App = () =>{
 					onClick={onStoryChange}
 					selected={activeStory === 'createQueue'}
 					data-story="createQueue"
-					data-to="createQueue"
+					data-to="CreateQueue"
 					text="Создать очередь"
 				><AddSquareOutline28/></TabbarItem>
 				{/*<TabbarItem*/}
