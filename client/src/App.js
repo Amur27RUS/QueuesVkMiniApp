@@ -271,12 +271,6 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		console.log('ActivePanel: ' + activePanel)
-		if (osName === IOS && (activePanel === 'home' || activePanel === 'CreateQueue' || activeStory === 'createQueue' || popout !== null || activeModal !== null)) {
-			bridge.send('VKWebAppDisableSwipeBack');
-		}
-		else {
-			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -288,8 +282,6 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 				}
 			}
-
-		}
 	}
 
 	const go = e => {
@@ -305,10 +297,6 @@ const App = () =>{
 		console.log(history)
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
-		if (e.currentTarget.dataset.story === 'createQueue') {
-			bridge.send('VKWebAppDisableSwipeBack');
-		}
-		setActivePanel(e.currentTarget.dataset.to)
 		console.log(history)
 	};
 
@@ -333,7 +321,7 @@ const App = () =>{
 							if (osName !== IOS){
 								history.pop() // удаляем последний элемент в массиве.
 								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							}
+							} else {bridge.send('VKWebAppEnableSwipeBack');}
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -480,7 +468,7 @@ const App = () =>{
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
 						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
-					}
+					} else {bridge.send('VKWebAppEnableSwipeBack');}
 					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"

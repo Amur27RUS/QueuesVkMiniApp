@@ -17,6 +17,7 @@ import {
 } from "@vkontakte/vkui";
 import ListAddOutline28 from '@vkontakte/icons/dist/28/list_add_outline'
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+import bridge from "@vkontakte/vk-bridge";
 
 const MODAL_CARD_ABOUT = 'say-about';
 const osName = platform();
@@ -153,7 +154,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						if (osName !== IOS) {
 							window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 							history.push("MODAL_CARD_ABOUT");
-						}
+						} else {bridge.send('VKWebAppDisableSwipeBack');}
 					}}>
 						Войти с помощью кода
 					</Button>
@@ -172,7 +173,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 							if (osName !== IOS) {
 								window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 								history.push("MODAL_CARD_ABOUT");
-							}
+							} else {bridge.send('VKWebAppDisableSwipeBack');}
 						}}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>
