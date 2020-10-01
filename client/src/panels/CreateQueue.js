@@ -167,10 +167,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={date}
                        status={queueDateStatus}
                        onClick = {e=>{
-                           setCSSForCreateQueue('createQueuePanel');
+                           // setCSSForCreateQueue('');
                        }}
                        onChange={e => {
-                           setCSSForCreateQueue('');
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
