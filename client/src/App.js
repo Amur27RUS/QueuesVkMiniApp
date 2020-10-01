@@ -271,7 +271,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		if (osName === IOS && ((activePanel === 'home') || (activePanel === 'createQueuePanel'))) {
+		if (activePanel === 'home' || activePanel === 'CreateQueue') {
 			vkBridge.send('VKWebAppDisableSwipeBack');
 		}
 		else {vkBridge.send('VKWebAppEnableSwipeBack');
@@ -607,7 +607,7 @@ const App = () =>{
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
 				  onSwipeBack={goBack} // При свайпе выполняется данная функция.
 				>
-				<CreateQueue setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 		{/*	<Settings id={'Settings'} go={go}/>*/}
