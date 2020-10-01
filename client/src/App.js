@@ -561,8 +561,8 @@ const App = () =>{
 
 
 	return (
-		<ConfigProvider className={CSSForCreateQueue} isWebView={true}>
-		<Epic activeStory={activeStory} tabbar={
+		<ConfigProvider  isWebView={true}>
+		<Epic className={CSSForCreateQueue} activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
 					onClick={onStoryChange}
