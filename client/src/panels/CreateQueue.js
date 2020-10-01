@@ -81,10 +81,10 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
 
                     } else {
                         setQueueCODE(data);
-                        if(global.queue.picURLNew === undefined){
+                        if (global.queue.picURLNew === undefined) {
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
-                        }else{
+                        } else {
                             setTimeout(() => setPopout(null), 3000);
                             setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
 
@@ -114,7 +114,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const hideKeyboard = (element) => {
         element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
         element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
-        setTimeout(function() {
+        setTimeout(function () {
             element.blur();  //actually close the keyboard
             // Remove readonly attribute after keyboard is hidden.
             element.removeAttr('readonly');
@@ -178,8 +178,8 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        name={'date'} type={'date'}
                        value={date}
                        status={queueDateStatus}
-                       onClick = {() =>{
-                           document.getElementById('qName').blur();
+                       onClick={() => {
+                           document.getElementById('dateID').focus({preventScroll: true});
                        }}
                        onChange={e => {
                            today = new Date(nowIOSTime);
@@ -236,26 +236,27 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>}
+                      controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
                           setDeleteImgButtonCSS('deleteImgButton');
                           setDelDivCSS('divForDel');
                           onPhotoUpload(e);
                       }}/>
-                      <div className={delDivCSS}>
-                <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}
-                                                                        mode={'tertiary'}
-                                                                        before={<Icon12Cancel/>}
-                                                                        onClick={()=>{
-                                                                            setAvatarName('');
-                                                                            global.queue.picURLNew = undefined;
-                                                                            global.queue.picURL = undefined;
-                                                                            setDeleteImgButtonCSS('turnOff');
-                                                                            setDelDivCSS('turnOff');
-                                                                        }}/></Text>
+                <div className={delDivCSS}>
+                    <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}
+                                                                            mode={'tertiary'}
+                                                                            before={<Icon12Cancel/>}
+                                                                            onClick={() => {
+                                                                                setAvatarName('');
+                                                                                global.queue.picURLNew = undefined;
+                                                                                global.queue.picURL = undefined;
+                                                                                setDeleteImgButtonCSS('turnOff');
+                                                                                setDelDivCSS('turnOff');
+                                                                            }}/></Text>
 
-                      </div>
+                </div>
                 <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
                     setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
@@ -317,7 +318,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                                     </Snackbar>)
                                     setPopout(null);
                                     setFloodError(true);
-                                }else {
+                                } else {
                                     if (global.queue.picURL !== undefined) {
                                         console.log(global.queue.picURL);
                                         try {
@@ -380,34 +381,34 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                                 }
                                 setFloodError(false);
                             });
-                        }else {
-                            if (date.trim() === '' && nameQueue.trim() === '') {
-                                setQueueNameStatus('error');
-                                setQueueDateStatus('error');
-                                setFormStatusVisibility(true);
-                                setFormStatusHeader('Введите название и дату!')
-                                setPopout(null);
+                    } else {
+                        if (date.trim() === '' && nameQueue.trim() === '') {
+                            setQueueNameStatus('error');
+                            setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите название и дату!')
+                            setPopout(null);
 
-                            } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
-                                setQueueNameStatus('error');
-                                setQueueDateStatus('error');
-                                setFormStatusVisibility(true);
-                                setFormStatusHeader('Введите название и корректную дату!')
-                                setPopout(null);
+                        } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
+                            setQueueNameStatus('error');
+                            setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите название и корректную дату!')
+                            setPopout(null);
 
-                            } else if (nameQueue.trim() === '') {
-                                setQueueNameStatus('error');
-                                setFormStatusVisibility(true);
-                                setFormStatusHeader('Введите название!')
-                                setPopout(null);
+                        } else if (nameQueue.trim() === '') {
+                            setQueueNameStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите название!')
+                            setPopout(null);
 
-                            } else if (date.trim() === '') {
-                                setQueueDateStatus('error');
-                                setFormStatusVisibility(true);
-                                setFormStatusHeader('Введите дату!')
-                                setPopout(null);
-                            }
+                        } else if (date.trim() === '') {
+                            setQueueDateStatus('error');
+                            setFormStatusVisibility(true);
+                            setFormStatusHeader('Введите дату!')
+                            setPopout(null);
                         }
+                    }
 
                 }}>Создать</Button>
             </FormLayout>
