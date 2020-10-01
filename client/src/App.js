@@ -271,11 +271,6 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		console.log('ActivePanel: ' + activePanel)
-		if (activePanel === 'home' || activePanel === 'CreateQueue' || activeStory === 'createQueue') {
-			bridge.send('VKWebAppDisableSwipeBack');
-		}
-		else {
 			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
@@ -288,8 +283,6 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 				}
 			}
-
-		}
 	}
 
 	const go = e => {
@@ -302,14 +295,13 @@ const App = () =>{
 	};
 
 	const onStoryChange = e => {
-		console.log(history)
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
 		if (e.currentTarget.dataset.story === 'createQueue') {
 			bridge.send('VKWebAppDisableSwipeBack');
+			console.log('ToSamoe: ' + activeStory)
 		}
 		setActivePanel(e.currentTarget.dataset.to)
-		console.log(history)
 	};
 
 	const sendDataToServer = data => {
