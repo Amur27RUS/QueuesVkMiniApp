@@ -568,13 +568,12 @@ const App = () =>{
 
 
 	return (
-		<ConfigProvider>
+		<ConfigProvider isWebView={true}>
 		<Epic activeStory={activeStory} tabbar={
 			<Tabbar>
 				<TabbarItem
 					onClick={() => {
-						onStoryChange;
-						bridge.send('VKWebAppEnableSwipeBack');
+						onStoryChange();
 					}}
 					selected={activeStory === 'main'}
 					data-story="main"
@@ -583,7 +582,7 @@ const App = () =>{
 				><ListOutline28/></TabbarItem>
 				<TabbarItem
 					onClick={() => {
-						onStoryChange;
+						onStoryChange();
 						bridge.send('VKWebAppDisableSwipeBack');
 					}}
 					selected={activeStory === 'createQueue'}
