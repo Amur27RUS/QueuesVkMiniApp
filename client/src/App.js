@@ -91,6 +91,7 @@ const App = () =>{
 	const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
 	const [joinInputStatus, setJoinInputStatus] = useState('');
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
+	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 
 
 	//ActiveStory - это View
@@ -567,7 +568,7 @@ const App = () =>{
 	return (
 		<ConfigProvider>
 		<Epic activeStory={activeStory} tabbar={
-			<Tabbar className={'createQueuePanel'}>
+			<Tabbar>
 				<TabbarItem
 					onClick={onStoryChange}
 					selected={activeStory === 'main'}
@@ -606,7 +607,7 @@ const App = () =>{
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
 				  onSwipeBack={goBack} // При свайпе выполняется данная функция.
 				>
-				<CreateQueue className={'createQueuePanel'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				<CreateQueue setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 		{/*	<Settings id={'Settings'} go={go}/>*/}
