@@ -187,7 +187,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        top={'Дата проведения*'}
                        novalidate
                        name={'date'}
-                       readonly={true}
+                       readOnly
                        onClick={()=>document.getElementById('dateID').blur()}
                        value={date}
                        status={queueDateStatus}
