@@ -99,7 +99,6 @@ const App = () =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
-		bridge.send('VKWebAppDisableSwipeBack');
 		console.log('Получение данных о пользователе через VK Bridge');
 
 		async function fetchData() {

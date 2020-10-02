@@ -46,10 +46,6 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
-    useEffect(()=>{
-        bridge.send('VKWebAppDisableSwipeBack');
-    })
-
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
         console.log('Отправлен запрос на создание очереди...');
