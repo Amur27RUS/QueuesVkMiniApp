@@ -182,7 +182,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        novalidate
                        name={'date'}
                        readOnly={true}
-                       onClick={()=>this.blur()}
+                       onClick={()=>document.getElementById('dateID').blur()}
                        value={date}
                        status={queueDateStatus}
                        onChange={e => {
