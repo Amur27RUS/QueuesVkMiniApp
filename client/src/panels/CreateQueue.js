@@ -14,6 +14,7 @@ import {
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
+import Icon28CalendarOutline from '@vkontakte/icons/dist/28/calendar_outline';
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -186,7 +187,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
-                <Button className={dateAndTimeButton} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                <Button className={dateAndTimeButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
                     document.getElementById('qName').blur();
                     document.getElementById('qDesc').blur();
                     document.getElementById('qPlace').blur();
@@ -197,6 +198,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setDateAndTimeButton('turnOff');
 
                 }}>Выбрать дату и время</Button>
+                <div className={dateInput}>
                 <div className={dateInput}>
                 <Input id={'dateID'}
                        className={dateInput}
@@ -263,6 +265,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
+                </div>
                 </div>
 
                 <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
