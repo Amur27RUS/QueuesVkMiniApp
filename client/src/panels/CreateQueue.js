@@ -241,11 +241,13 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            }
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
-                       }}/><Button mode={'secondary'} onClick={()=>{
+                       }}/>
+                       <Button mode={'secondary'} onClick={()=>{
+                           document.getElementById('qName').blur();
                             document.getElementById('dateID').readOnly = false;
                             document.getElementById('dateID').focus();
                             document.getElementById('dateID').onblur = function () {
-                                document.getElementById('dateID').readOnly = true;
+                            document.getElementById('dateID').readOnly = true;
 
                             }
                        }}>Установить</Button>
