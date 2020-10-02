@@ -154,7 +154,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						if (osName !== IOS) {
 							window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 							history.push("MODAL_CARD_ABOUT");
-						} else {global.queue.goBackIOS = false}
+						}
 					}}>
 						Войти с помощью кода
 					</Button>
@@ -173,7 +173,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 							if (osName !== IOS) {
 								window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 								history.push("MODAL_CARD_ABOUT");
-							} else {global.queue.goBackIOS = false}
+							}
 						}}>Войти в очередь с помощью кода</Button>}
 						stretched
 					>

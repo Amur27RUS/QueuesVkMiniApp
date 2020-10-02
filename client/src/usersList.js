@@ -285,17 +285,14 @@ class UsersList extends React.Component {
     closePopout = () => {
         this.props.setPopout(null);
         if (osName !== IOS) {
-            this.props.history.pop();
-        } else {
-            global.queue.goBackIOS = true;
+            this.props.history.pop()
         }
     }
 
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {
-            global.queue.goBackIOS = false
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -308,8 +305,6 @@ class UsersList extends React.Component {
                         let newArr = this.shuffle(this.state.users);
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                         this.setState({
                             users: newArr,
@@ -350,8 +345,6 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                     }
                 }]}
@@ -392,8 +385,7 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {
-            global.queue.goBackIOS = false
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -405,8 +397,6 @@ class UsersList extends React.Component {
                     action: () => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
@@ -436,8 +426,6 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                     }
                 }]}
@@ -452,8 +440,7 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {
-            global.queue.goBackIOS = false
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -497,8 +484,6 @@ class UsersList extends React.Component {
                         this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                         console.log(this.props.history)
                     }
@@ -509,8 +494,6 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                     }
                 }]}
@@ -525,8 +508,7 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {
-            global.queue.goBackIOS = false
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -591,8 +573,6 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {
-                            global.queue.goBackIOS = true
                         }
                     }
                 }]}
