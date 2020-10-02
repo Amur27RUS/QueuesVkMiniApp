@@ -25,7 +25,7 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id,  snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const [cssEdit, setCssEdit] = useState('turnOff');
 
@@ -102,7 +102,7 @@ const AboutQueue = ({id,  snackbar, history, setHistory, fetchedUser, setSnackba
 			</Group>
 			</Div>
 
-			<UsersList go={go} history={history} setHistory={setHistory} snackbar={snackbar} setSnackbar={setSnackbar} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} bridge={bridge} history={history} setHistory={setHistory} snackbar={snackbar} setSnackbar={setSnackbar} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)
