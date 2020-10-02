@@ -301,9 +301,13 @@ const App = () =>{
 	};
 
 	const onStoryChange = e => {
-		console.log(history)
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
+		if(e.currentTarget.dataset.story === 'createQueue'){
+			bridge.send('VKWebAppDisableSwipeBack');
+		}else{
+			bridge.send('VKWebAppEnableSwipeBack');
+		}
 		console.log(history)
 	};
 
