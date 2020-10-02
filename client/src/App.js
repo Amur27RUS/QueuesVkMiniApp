@@ -321,7 +321,9 @@ const App = () =>{
 							if (osName !== IOS){
 								history.pop() // удаляем последний элемент в массиве.
 								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							} else {bridge.send('VKWebAppEnableSwipeBack');}
+							} else {
+								bridge.send('VKWebAppEnableSwipeBack');
+							}
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -468,7 +470,9 @@ const App = () =>{
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
 						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
-					} else {bridge.send('VKWebAppEnableSwipeBack');}
+					} else {
+						bridge.send('VKWebAppEnableSwipeBack');
+					}
 					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"

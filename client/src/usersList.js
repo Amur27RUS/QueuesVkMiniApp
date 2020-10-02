@@ -955,7 +955,9 @@ class UsersList extends React.Component {
                         if (osName !== IOS) {
                             this.props.history.push("alert");
                         } else {
-                            await bridge.send('VKWebAppDisableSwipeBack');
+                            await bridge.send('VKWebAppDisableSwipeBack').catch(e=>{
+                                console.log(e);
+                            });
                             console.log('DISABLE ETO SAMOE')
                         }
                         this.shuffleAlert();
