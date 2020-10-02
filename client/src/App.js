@@ -62,6 +62,7 @@ global.queue = {
 	createPlace: '',
 
 
+	goBackIOS: false,
 
 	dataCheck: false,
 }
@@ -283,6 +284,7 @@ const App = () =>{
 				}
 			}
 	}
+
 
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
@@ -601,8 +603,8 @@ const App = () =>{
 				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
-		{/*	<Settings id={'Settings'} go={go}/>*/}
-		{/*</View>*/}
+				{/*	<Settings id={'Settings'} go={go}/>*/}
+			{/*</View>*/}
 		</Epic>
 		</ConfigProvider>
 	);

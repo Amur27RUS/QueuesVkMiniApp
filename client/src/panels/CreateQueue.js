@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Button,
     PanelHeader,
@@ -14,6 +14,7 @@ import {
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
+import bridge from "@vkontakte/vk-bridge";
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -44,6 +45,12 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [floodError, setFloodError] = useState(false);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+
+    useEffect(()=>{
+        document.getElementById('dateID').onfocus = function (){
+            document.getElementById('dateID').blur();
+        }
+    })
 
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
@@ -154,6 +161,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
+
                        onChange={e => {
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
@@ -171,16 +179,17 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
+                <div className={'dateInputDiv'}>
                 <Input id={'dateID'}
+                       className={'dateInput'}
                        type={'date'}
                        min={nowTime}
                        top={'Дата проведения*'}
                        novalidate
                        name={'date'}
-
+                       readOnly={true}
                        value={date}
                        status={queueDateStatus}
-                       onClick={()=>document.getElementById('qName').blur()}
                        onChange={e => {
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
@@ -232,6 +241,16 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
+                       <Button mode={'secondary'} onClick={async ()=>{
+                            await document.getElementById('qName').blur();
+                            document.getElementById('dateID').readOnly = false;
+                            document.getElementById('dateID').focus();
+                            document.getElementById('dateID').onblur = function () {
+                            document.getElementById('dateID').readOnly = true;
+
+                            }
+                       }}>Установить</Button>
+                </div>
                 <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
