@@ -25,7 +25,7 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id,  snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const [cssEdit, setCssEdit] = useState('turnOff');
 

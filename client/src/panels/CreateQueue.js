@@ -172,15 +172,15 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                     global.queue.createPlace = e.target.value;
                 }}/>
                 <Input id={'dateID'}
+                       type={'date'}
                        min={nowTime}
                        top={'Дата проведения*'}
                        novalidate
-                       name={'date'} type={'date'}
+                       name={'date'}
+
                        value={date}
                        status={queueDateStatus}
-                       onClose={() => {
-                           document.getElementById('qName').focus({preventScroll: true});
-                       }}
+                       onClick={document.getElementById('qName').blur()}
                        onChange={e => {
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);

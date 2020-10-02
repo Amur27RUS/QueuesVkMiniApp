@@ -285,14 +285,18 @@ class UsersList extends React.Component {
     closePopout = () => {
         this.props.setPopout(null);
         if (osName !== IOS) {
-            this.props.history.pop()
-        } else {global.queue.goBackIOS = true}
+            this.props.history.pop();
+        } else {
+            global.queue.goBackIOS = true;
+        }
     }
 
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {global.queue.goBackIOS = false}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -304,7 +308,9 @@ class UsersList extends React.Component {
                         let newArr = this.shuffle(this.state.users);
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
@@ -344,7 +350,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -384,7 +392,9 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {global.queue.goBackIOS = false}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -395,7 +405,9 @@ class UsersList extends React.Component {
                     action: () => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
@@ -424,7 +436,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -438,7 +452,9 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {global.queue.goBackIOS = false}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -481,7 +497,9 @@ class UsersList extends React.Component {
                         this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                         console.log(this.props.history)
                     }
                 }, {
@@ -491,7 +509,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -505,7 +525,9 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {global.queue.goBackIOS = false}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -569,7 +591,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {global.queue.goBackIOS = true}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
