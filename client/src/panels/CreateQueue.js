@@ -199,7 +199,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                 }}>Выбрать дату и время</Button>
                 <div className={dateInput}>
-                <div className={dateInput}>
                 <Input id={'dateID'}
                        className={dateInput}
                        min={nowTime}
@@ -259,13 +258,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-                </div>
-                <div className={timeInput}>
+
                 <Input id={'timeID'} className={timeInput} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
-                </div>
                 </div>
 
                 <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
