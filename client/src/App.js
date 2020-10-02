@@ -272,7 +272,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		if (global.queue.goBackIOS !== true) {
+		if (global.queue.goBackIOS === true) {
 			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
