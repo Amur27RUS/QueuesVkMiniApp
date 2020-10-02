@@ -99,6 +99,7 @@ const App = () =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+		bridge.send('VKWebAppDisableSwipeBack');
 		console.log('Получение данных о пользователе через VK Bridge');
 
 		async function fetchData() {
@@ -303,13 +304,13 @@ const App = () =>{
 	const onStoryChange = e => {
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
-		if(e.currentTarget.dataset.story === 'createQueue'){
-			bridge.send('VKWebAppDisableSwipeBack').then(r => console.log(r));
-			console.log('Отключён свайп')
-		}else{
-			bridge.send('VKWebAppEnableSwipeBack').then(r => console.log(r));
-			console.log('свайп включён!')
-		}
+		// if(e.currentTarget.dataset.story === 'createQueue'){
+		// 	bridge.send('VKWebAppDisableSwipeBack').then(r => console.log(r));
+		// 	console.log('Отключён свайп')
+		// }else{
+		// 	bridge.send('VKWebAppEnableSwipeBack').then(r => console.log(r));
+		// 	console.log('свайп включён!')
+		// }
 		console.log(history)
 	};
 
