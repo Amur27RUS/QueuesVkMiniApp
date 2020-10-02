@@ -155,9 +155,8 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
-                       onClick={()=>{}}
+
                        onChange={e => {
-                           document.getElementById('qName').blur();
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!')
@@ -180,11 +179,11 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        top={'Дата проведения*'}
                        novalidate
                        name={'date'}
-
+                       readOnly={true}
                        value={date}
                        status={queueDateStatus}
-                       onClick={()=>document.getElementById('qName').blur()}
                        onChange={e => {
+                           document.getElementById('qName').blur();
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
@@ -234,7 +233,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            }
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
-                       }}/>
+                       }}/><Button>Установить</Button>
                 <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
