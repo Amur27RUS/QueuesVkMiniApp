@@ -44,6 +44,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [uploadedPhoto, setUploadedPhoto] = useState(undefined);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+    const [timeInput, setTimeInput] = useState('turnOff');
+    const [dateInput, setDateInput] = useState('turnOff');
+    const [dateAndTimeButton, setDateAndTimeButton] = useState('dateAndTimeInputButton');
+    const [dateInputTop, setDateInputTop] = useState('Дата проведения*');
+    const [timeInputTop, setTimeInputTop] = useState('Время проведения')
 
     useEffect(() => {
         setAvatarName(global.queue.avatarName);
@@ -147,10 +152,17 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 </FormStatus>
                 }
 
-                <Input top={'Название очереди*'}
+                <Input id={'qName'} top={'Название очереди*'}
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputTop('Время проведения');
+                           setDateInputTop('Дата проведения*');
+                           setDateAndTimeButton('dateAndTimeInputButton');
+                       }}
                        onChange={e => {
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
@@ -164,11 +176,30 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value.substring(0, 32));
                        }}/>
-                <Input top={'Место проведения'} maxlength="40" value={place} onChange={e => {
+                <Input id={'qPlace'} top={'Место проведения'} maxlength="40" value={place} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setTimeInputTop('Время проведения');
+                    setDateInputTop('Дата проведения*');
+                    setDateAndTimeButton('dateAndTimeInputButton');
+                }} onChange={e => {
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
+                <Button className={dateAndTimeButton} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                    document.getElementById('qName').blur();
+                    document.getElementById('qDesc').blur();
+                    document.getElementById('qPlace').blur();
+                    setDateInput('dateInput');
+                    setTimeInput('timeInput');
+                    setTimeInputTop('Время проведения');
+                    setDateInputTop('Дата проведения*');
+                    setDateAndTimeButton('turnOff');
+
+                }}>Выбрать дату и время</Button>
+                <div className={dateInput}>
                 <Input id={'dateID'}
+                       className={dateInput}
                        min={nowTime}
                        top={'Дата проведения*'}
                        novalidate
@@ -226,10 +257,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
+                </div>
+                <div className={timeInput}>
+                <Input id={'timeID'} className={timeInput} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
+                </div>
+
                 <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
@@ -251,7 +286,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                         }}/></Text>
 
                       </div>
-                <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="40" value={description} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setTimeInputTop('Время проведения');
+                    setDateInputTop('Дата проведения*');
+                    setDateAndTimeButton('dateAndTimeInputButton');
+                }} onChange={e => {
                     setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
                 }}/>
