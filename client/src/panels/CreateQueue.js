@@ -243,8 +243,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        }}/>
                        <Button mode={'secondary'} onClick={async ()=>{
                             document.getElementById('qName').blur();
+                            await setTimeout(console.log, 1000)
                             document.getElementById('dateID').readOnly = false;
-                            await setTimeout(document.getElementById('dateID').focus, 1000);
+                            document.getElementById('dateID').focus();
                             document.getElementById('dateID').onblur = function () {
                             document.getElementById('dateID').readOnly = true;
 
