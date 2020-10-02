@@ -180,7 +180,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
 
                        value={date}
                        status={queueDateStatus}
-                       onClick={document.getElementById('qName').blur()}
+                       onClick={()=>document.getElementById('qName').blur()}
                        onChange={e => {
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
