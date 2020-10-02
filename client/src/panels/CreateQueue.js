@@ -173,7 +173,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
+                <div className={'dateInputDiv'}>
                 <Input id={'dateID'}
+                       className={'dateInput'}
                        type={'date'}
                        min={nowTime}
                        top={'Дата проведения*'}
@@ -183,7 +185,6 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={date}
                        status={queueDateStatus}
                        onChange={e => {
-                           document.getElementById('qName').blur();
                            today = new Date(nowIOSTime);
                            pickedDate = new Date(e.target.value);
                            let dataCheck = document.getElementById('dateID');
@@ -233,7 +234,14 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            }
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
-                       }}/><Button>Установить</Button>
+                       }}/><Button mode={'secondary'} onClick={()=>{
+                            document.getElementById('dateID').readOnly = false;
+                            document.getElementById('dateID').focus();
+                            document.getElementById('dateID').onblur = function () {
+                                document.getElementById('dateID').readOnly = true;
+                            }
+                       }}>Установить</Button>
+                </div>
                 <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
