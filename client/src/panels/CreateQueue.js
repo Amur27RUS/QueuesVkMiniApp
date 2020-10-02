@@ -155,10 +155,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
-                       onClick={()=>{
-                           setTimeout(document.getElementById('qName').blur, 1000);
-                       }}
+                       onClick={()=>{}}
                        onChange={e => {
+                           document.getElementById('qName').blur();
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!')
