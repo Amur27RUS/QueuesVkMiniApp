@@ -292,6 +292,7 @@ class UsersList extends React.Component {
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -384,6 +385,7 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -438,6 +440,7 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -505,6 +508,7 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
+            window.history.pushState({panel: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
