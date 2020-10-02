@@ -46,6 +46,12 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
+    useEffect(()=>{
+        document.getElementById('dateID').onfocus = function (){
+            document.getElementById('dateID').blur();
+        }
+    })
+
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
         console.log('Отправлен запрос на создание очереди...');
@@ -181,7 +187,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        top={'Дата проведения*'}
                        novalidate
                        name={'date'}
-                       readOnly={true}
+                       readonly
                        onClick={()=>document.getElementById('dateID').blur()}
                        value={date}
                        status={queueDateStatus}
