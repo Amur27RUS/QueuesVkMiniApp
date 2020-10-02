@@ -62,6 +62,7 @@ global.queue = {
 	createPlace: '',
 
 
+	goBackIOS: false,
 
 	dataCheck: false,
 }
@@ -271,6 +272,8 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
+		if (global.queue.goBackIOS !== true) {
+			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -282,6 +285,10 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 				}
 			}
+		}
+		else {
+			bridge.send('VKWebAppDisableSwipeBack');
+		}
 	}
 
 	const go = e => {
@@ -321,7 +328,9 @@ const App = () =>{
 							if (osName !== IOS){
 								history.pop() // удаляем последний элемент в массиве.
 								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							} else {bridge.send('VKWebAppEnableSwipeBack');}
+							} else {
+								global.queue.goBackIOS = true
+							}
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -468,7 +477,9 @@ const App = () =>{
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
 						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
-					} else {bridge.send('VKWebAppEnableSwipeBack');}
+					} else {
+						global.queue.goBackIOS = true
+					}
 					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"
