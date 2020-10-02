@@ -29,6 +29,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 	// const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
 
 	useEffect(() => {
+		bridge.send('VKWebAppDisableSwipeBack');
 		global.queue.userID = fetchedUser.id;
 
 		if (homePanelCounter !== 0) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Button,
     PanelHeader,
@@ -14,6 +14,7 @@ import {
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
+import bridge from "@vkontakte/vk-bridge";
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -44,6 +45,10 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [floodError, setFloodError] = useState(false);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+
+    useEffect(()=>{
+        bridge.send('VKWebAppDisableSwipeBack');
+    })
 
     const createQueueOnServer = async () => {
         setPopout(<ScreenSpinner/>);
