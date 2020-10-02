@@ -291,13 +291,7 @@ class UsersList extends React.Component {
         }
     }
 
-    shuffleAlert = async () => {
-        if (osName !== IOS) {
-            this.props.history.push("alert");
-        } else {
-            await bridge.send('VKWebAppDisableSwipeBack');
-            console.log('DISABLE ETO SAMOE')
-        }
+    shuffleAlert = () => {
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -957,7 +951,15 @@ class UsersList extends React.Component {
                     <Button className={this.state.cssSkipButton} size={'xl'} onClick={() => this.skipAlert()} mode={'secondary'} stretched={true}>Опуститься на позицию ниже</Button>
                     <Button className={this.state.cssAdminButton} size={'xl'} onClick={this.adminButton} mode={'secondary'} stretched={true}>{this.state.buttonText}</Button>
                     <Button className={this.state.cssAddAdminButton} size={'xl'} onClick={this.addAdminButton} mode={'secondary'} stretched={true}>{this.state.nameAdminButton}</Button>
-                    <Button className={this.state.cssShuffleButton} size={'xl'} onClick={() => {this.shuffleAlert()}} mode={'secondary'} stretched={true}>Перемешать очередь</Button>
+                    <Button className={this.state.cssShuffleButton} size={'xl'} onClick={() => {
+                        if (osName !== IOS) {
+                            this.props.history.push("alert");
+                        } else {
+                            bridge.send('VKWebAppDisableSwipeBack');
+                            console.log('DISABLE ETO SAMOE')
+                        }
+                        this.shuffleAlert();
+                    }} mode={'secondary'} stretched={true}>Перемешать очередь</Button>
                     <Button className={this.state.CSSExitQueueButton} size={'xl'} onClick={async () =>{
                         await this.checkHowManyUsersForExit();
                         this.exitAlert();
