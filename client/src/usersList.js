@@ -285,13 +285,18 @@ class UsersList extends React.Component {
     closePopout = () => {
         this.props.setPopout(null);
         if (osName !== IOS) {
-            this.props.history.pop()
+            this.props.history.pop();
         } else {
-            bridge.send('VKWebAppEnableSwipeBack');
+            global.queue.goBackIOS = true;
         }
     }
 
     shuffleAlert = () => {
+        if (osName !== IOS) {
+            this.props.history.push("alert");
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -304,7 +309,7 @@ class UsersList extends React.Component {
                         if (osName !== IOS) {
                             this.props.history.pop()
                         } else {
-                            bridge.send('VKWebAppEnableSwipeBack');
+                            global.queue.goBackIOS = true
                         }
                         this.setState({
                             users: newArr,
@@ -345,7 +350,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -385,7 +392,9 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {bridge.send('VKWebAppDisableSwipeBack');}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -396,7 +405,9 @@ class UsersList extends React.Component {
                     action: () => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
@@ -425,7 +436,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -439,7 +452,9 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {bridge.send('VKWebAppDisableSwipeBack');}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -482,7 +497,9 @@ class UsersList extends React.Component {
                         this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                         console.log(this.props.history)
                     }
                 }, {
@@ -492,7 +509,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -506,7 +525,9 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-        } else {bridge.send('VKWebAppDisableSwipeBack');}
+        } else {
+            global.queue.goBackIOS = false
+        }
         this.props.setPopout(
             <Alert
                 actionsLayout="vertical"
@@ -570,7 +591,9 @@ class UsersList extends React.Component {
                     action:() => {
                         if (osName !== IOS) {
                             this.props.history.pop()
-                        } else {bridge.send('VKWebAppEnableSwipeBack');}
+                        } else {
+                            global.queue.goBackIOS = true
+                        }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -951,15 +974,7 @@ class UsersList extends React.Component {
                     <Button className={this.state.cssSkipButton} size={'xl'} onClick={() => this.skipAlert()} mode={'secondary'} stretched={true}>Опуститься на позицию ниже</Button>
                     <Button className={this.state.cssAdminButton} size={'xl'} onClick={this.adminButton} mode={'secondary'} stretched={true}>{this.state.buttonText}</Button>
                     <Button className={this.state.cssAddAdminButton} size={'xl'} onClick={this.addAdminButton} mode={'secondary'} stretched={true}>{this.state.nameAdminButton}</Button>
-                    <Button className={this.state.cssShuffleButton} size={'xl'} onClick={async () => {
-                        if (osName !== IOS) {
-                            this.props.history.push("alert");
-                        } else {
-                            await bridge.send('VKWebAppDisableSwipeBack');
-                            console.log('DISABLE ETO SAMOE')
-                        }
-                        this.shuffleAlert();
-                    }} mode={'secondary'} stretched={true}>Перемешать очередь</Button>
+                    <Button className={this.state.cssShuffleButton} size={'xl'} onClick={() => {this.shuffleAlert()}} mode={'secondary'} stretched={true}>Перемешать очередь</Button>
                     <Button className={this.state.CSSExitQueueButton} size={'xl'} onClick={async () =>{
                         await this.checkHowManyUsersForExit();
                         this.exitAlert();
