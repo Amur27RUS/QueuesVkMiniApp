@@ -182,6 +182,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        novalidate
                        name={'date'}
                        readOnly={true}
+                       onClick={()=>this.blur()}
                        value={date}
                        status={queueDateStatus}
                        onChange={e => {
@@ -239,6 +240,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                             document.getElementById('dateID').focus();
                             document.getElementById('dateID').onblur = function () {
                                 document.getElementById('dateID').readOnly = true;
+
                             }
                        }}>Установить</Button>
                 </div>
