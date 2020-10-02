@@ -9,7 +9,8 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar, Div
+    platform,
+    Avatar, Snackbar, Div, IOS
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
@@ -28,6 +29,7 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 let imgERR = false;
+const osName = platform()
 
 const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
@@ -87,6 +89,10 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                         setPopout(null);
 
                     } else {
+                        if (osName !== IOS) {
+                            window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+                            history.push("MODAL_CARD_ABOUT");
+                        }
                         setQueueCODE(data);
                         if (global.queue.picURLNew === undefined) {
                             setPopout(null);

@@ -426,6 +426,10 @@ const App = () =>{
 				id={MODAL_CARD_QUEUE_INVITE}
 				onClose={() => {
 					setActiveModal(null)
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
@@ -436,6 +440,9 @@ const App = () =>{
 					title: 'Присоединиться',
 					mode: 'primary',
 					action: () => {
+						if (osName !== IOS) {
+							history.pop() // удаляем последний элемент в массиве.
+						}
 						// history.pop() // удаляем последний элемент в массиве.
 						// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						sendDataToServer(global.queue.joinQueueCode);
@@ -512,6 +519,10 @@ const App = () =>{
 				onClose={() => {
 					setActiveModal(null)
 					setCopyButtonTitle('Скопировать приглашение')
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
@@ -526,6 +537,9 @@ const App = () =>{
 						// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						// window.history.pushState( {panel: "home"}, "home" ); // Создаём новую запись в истории браузера
 						// history.push("home"); // Добавляем панель в историю
+						if (osName !== IOS) {
+							history.pop() // удаляем последний элемент в массиве.
+						}
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
