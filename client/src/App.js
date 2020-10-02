@@ -62,7 +62,6 @@ global.queue = {
 	createPlace: '',
 
 
-	goBackIOS: false,
 
 	dataCheck: false,
 }
@@ -272,8 +271,6 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		if (global.queue.goBackIOS === true) {
-			bridge.send('VKWebAppEnableSwipeBack');
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -285,10 +282,6 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 				}
 			}
-		}
-		else {
-			bridge.send('VKWebAppDisableSwipeBack');
-		}
 	}
 
 	const go = e => {
@@ -328,8 +321,6 @@ const App = () =>{
 							if (osName !== IOS){
 								history.pop() // удаляем последний элемент в массиве.
 								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							} else {
-								global.queue.goBackIOS = true
 							}
 							if (res === 'noQueue') {
 								setActiveModal(null);
@@ -477,8 +468,6 @@ const App = () =>{
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
 						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
-					} else {
-						global.queue.goBackIOS = true
 					}
 					setCodeInput(undefined)
 				}}
@@ -600,9 +589,7 @@ const App = () =>{
 		}>
 
 
-			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}
-				  onSwipeBack={goBack}
-				 >
+			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
 				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
@@ -610,14 +597,12 @@ const App = () =>{
 
 
 
-			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}
-				onSwipeBack={goBack}
-				>
-				<CreateQueue id={'CreateQueue'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
-				{/*	<Settings id={'Settings'} go={go}/>*/}
-			{/*</View>*/}
+		{/*	<Settings id={'Settings'} go={go}/>*/}
+		{/*</View>*/}
 		</Epic>
 		</ConfigProvider>
 	);
