@@ -45,6 +45,11 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [floodError, setFloodError] = useState(false);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+    const [timeInput, setTimeInput] = useState('turnOff');
+    const [dateInput, setDateInput] = useState('turnOff');
+    const [dateAndTimeButton, setDateAndTimeButton] = useState('dateAndTimeInputButton');
+    const [dateInputTop, setDateInputTop] = useState('Дата проведения*');
+    const [timeInputTop, setTimeInputTop] = useState('Время проведения')
 
     useEffect(()=>{
         document.getElementById('dateID').onfocus = function (){
@@ -161,7 +166,13 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
-
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputTop('Время проведения');
+                           setDateInputTop('Дата проведения*');
+                           setDateAndTimeButton('dateAndTimeInputButton');
+                       }}
                        onChange={e => {
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
@@ -175,19 +186,39 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value.substring(0, 32));
                        }}/>
-                <Input top={'Место проведения'} maxlength="40" value={place} onChange={e => {
+                <Input id={'qPlace'} top={'Место проведения'} maxlength="40" value={place}
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputTop('Время проведения');
+                           setDateInputTop('Дата проведения*');
+                           setDateAndTimeButton('dateAndTimeInputButton');
+                       }}
+                       onChange={e => {
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
-                <div className={'dateInputDiv'}>
+                <Button className={dateAndTimeButton} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setDateInput('dateInput');
+                        setTimeInput('timeInput');
+                        setTimeInputTop('Время проведения');
+                        setDateInputTop('Дата проведения*');
+                        setDateAndTimeButton('turnOff');
+
+                }}>Выбрать дату и время</Button>
+
+                <div className={dateInput}>
                 <Input id={'dateID'}
-                       className={'dateInput'}
+                       className={dateInput}
                        type={'date'}
                        min={nowTime}
-                       top={'Дата проведения*'}
+                       top={dateInputTop}
+                       placeholder={'Дата'}
                        novalidate
                        name={'date'}
-                       readOnly={true}
                        value={date}
                        status={queueDateStatus}
                        onChange={e => {
@@ -241,20 +272,13 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-                       <Button mode={'secondary'} onClick={async ()=>{
-                            await document.getElementById('qName').blur();
-                            document.getElementById('dateID').readOnly = false;
-                            document.getElementById('dateID').focus();
-                            document.getElementById('dateID').onblur = function () {
-                            document.getElementById('dateID').readOnly = true;
-
-                            }
-                       }}>Установить</Button>
                 </div>
-                <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
+                <div>
+                <Input id={'timeInput'} placeholder={'Время'} className={timeInput} top={timeInputTop} name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
+                </div>
                 <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>}
                       controlSize="xl"
                       mode="secondary"
@@ -276,7 +300,15 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                                                                             }}/></Text>
 
                 </div>
-                <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="40" value={description}
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputTop('Время проведения');
+                           setDateInputTop('Дата проведения*');
+                           setDateAndTimeButton('dateAndTimeInputButton');
+                       }}
+                       onChange={e => {
                     setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
                 }}/>
