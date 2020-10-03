@@ -97,17 +97,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                     } else {
                         setQueueCODE(data);
-                        if (osName !== IOS) {
-                            window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
-                            history.push("MODAL_CARD_ABOUT");
-                        }
+
                         if(global.queue.picURLNew === undefined){
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
                         }else{
                             setTimeout(() => setPopout(null), 3000);
                             setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
-
                         }
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
@@ -460,6 +456,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setQueueNameStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название!')
+                            setFormStatusDescription('');
                             setPopout(null);
 
                         } else if (date.trim() === '') {
