@@ -12,7 +12,7 @@ import {
 	View,
 	Avatar,
 	Snackbar,
-	ConfigProvider,
+	ConfigProvider, platform, IOS,
 } from "@vkontakte/vkui";
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
 import AddSquareOutline28 from '@vkontakte/icons/dist/28/add_square_outline'
@@ -62,12 +62,17 @@ global.queue = {
 	createPlace: '',
 	counterForCalendar: 0,
 
+
+	goBackIOS: false,
+
+
 	dataCheck: false,
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
+const osName = platform();
 
 const App = () =>{
 
@@ -89,6 +94,7 @@ const App = () =>{
 	const [cssSpinner, setCssSpinner] = useState('defaultSpinner');
 	const [joinInputStatus, setJoinInputStatus] = useState('');
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
+	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 
 
 	//ActiveStory - это View
@@ -268,15 +274,16 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		setSnackbar(null);
-		setActiveModal(null);
-		setPopout(null);
-		if (history.length === 1) {  // Если в массиве одно значение:
+			setSnackbar(null);
+			setActiveModal(null);
+			setPopout(null);
+			if (history.length === 1) {  // Если в массиве одно значение:
 				// bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
-		} else
-			if (history.length > 1) { // Если в массиве больше одного значения:
-				history.pop() // удаляем последний элемент в массиве.
-				setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+			} else {
+				if (history.length > 1) { // Если в массиве больше одного значения:
+					history.pop() // удаляем последний элемент в массиве.
+					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+				}
 			}
 	}
 
@@ -293,9 +300,6 @@ const App = () =>{
 	const onStoryChange = e => {
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
-		setHistory([]) // очищаем массив
-		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории браузера
-		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 	};
 
 	const sendDataToServer = data => {
@@ -316,9 +320,10 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
-							history.pop() // удаляем последний элемент в массиве.
-							setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-
+							if (osName !== IOS){
+								history.pop() // удаляем последний элемент в массиве.
+								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							}
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -421,6 +426,10 @@ const App = () =>{
 				id={MODAL_CARD_QUEUE_INVITE}
 				onClose={() => {
 					setActiveModal(null)
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
@@ -431,6 +440,9 @@ const App = () =>{
 					title: 'Присоединиться',
 					mode: 'primary',
 					action: () => {
+						if (osName !== IOS) {
+							history.pop() // удаляем последний элемент в массиве.
+						}
 						// history.pop() // удаляем последний элемент в массиве.
 						// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						sendDataToServer(global.queue.joinQueueCode);
@@ -462,8 +474,10 @@ const App = () =>{
 					setActiveModal(null)
 					setJoinInputStatus('');
 					setJoinInputStatusText('');
-					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					setCodeInput(undefined)
 				}}
 				header="Введите код очереди"
@@ -505,6 +519,10 @@ const App = () =>{
 				onClose={() => {
 					setActiveModal(null)
 					setCopyButtonTitle('Скопировать приглашение')
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
+					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 				}}
@@ -519,6 +537,9 @@ const App = () =>{
 						// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
 						// window.history.pushState( {panel: "home"}, "home" ); // Создаём новую запись в истории браузера
 						// history.push("home"); // Добавляем панель в историю
+						if (osName !== IOS) {
+							history.pop() // удаляем последний элемент в массиве.
+						}
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
@@ -584,24 +605,20 @@ const App = () =>{
 		}>
 
 
-			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
-				  onSwipeBack={goBack} // При свайпе выполняется данная функция
-				 >
+			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
 				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-				<AboutQueue id='aboutQueue' snackbar={snackbar} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-				<ChangeQueue id='changeQueue' setPopout={setPopout} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 			</View>
 
 
 
-			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history} // Ставим историю из массива панелей.
-				  onSwipeBack={goBack} // При свайпе выполняется данная функция.
-				>
-				<CreateQueue className={'createQueuePanel'} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} id={'CreateQueue'} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
-		{/*	<Settings id={'Settings'} go={go}/>*/}
-		{/*</View>*/}
+				{/*	<Settings id={'Settings'} go={go}/>*/}
+			{/*</View>*/}
 		</Epic>
 		</ConfigProvider>
 	);

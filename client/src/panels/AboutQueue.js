@@ -25,14 +25,18 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 
 // const osName = platform(); - Определяет ОС устройства
 
-const AboutQueue = ({id,  snackbar, history, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
+const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const [cssEdit, setCssEdit] = useState('turnOff');
 
 	return (
 		<Panel id={id}>
 			<PanelHeader
-				left={<PanelHeaderButton onClick={() => window.history.back()}>
+				left={<PanelHeaderButton onClick={() =>
+				{
+					history.pop()
+					setActivePanel(history[history.length - 1])
+				}}>
 					{<Icon28ChevronBack/>}
 				</PanelHeaderButton>}
 			>
@@ -98,7 +102,7 @@ const AboutQueue = ({id,  snackbar, history, fetchedUser, setSnackbar, go, queue
 			</Group>
 			</Div>
 
-			<UsersList go={go} history={history} snackbar={snackbar} setSnackbar={setSnackbar} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} history={history} setHistory={setHistory} snackbar={snackbar} setSnackbar={setSnackbar} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)

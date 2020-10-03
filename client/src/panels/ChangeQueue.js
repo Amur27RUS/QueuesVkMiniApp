@@ -27,7 +27,7 @@ let IOSdateError;
 let today;
 let pickedDate;
 
-const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, setSnackbar}) => {
+const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout, setQueueCODE, snackbar, setSnackbar}) => {
     const [newNameQueue, setNewNameQueue] = useState(global.queue.name);
     const [newDate, setNewDate] = useState(global.queue.dateQueue.slice(0,10));
     const [newTime, setNewTime] = useState(global.queue.timeQueue);
@@ -164,7 +164,11 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
 
     return(
         <Panel id={id} >
-            <PanelHeader left={<PanelHeaderButton onClick={() => window.history.back()} data-to="aboutQueue">
+            <PanelHeader left={<PanelHeaderButton onClick={() =>
+            {
+                history.pop()
+                setActivePanel(history[history.length - 1])
+            }} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}
             </PanelHeaderButton>}
             > Редактирование </PanelHeader>
