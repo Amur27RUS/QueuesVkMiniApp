@@ -120,6 +120,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         // history.push("MODAL_CARD_CHAT_INVITE");
                     }
                 }).catch((e) => {
+                console.log(e);
                 setPopout(null);
                 setSnackbar(<Snackbar
                     layout="vertical"
