@@ -29,6 +29,7 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 let imgERR = false;
+const osName = platform();
 
 const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
@@ -50,8 +51,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [dateInput, setDateInput] = useState('turnOff');
     const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
     const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
-
-    const osName = platform();
 
     useEffect(() => {
         setAvatarName(global.queue.avatarName);
