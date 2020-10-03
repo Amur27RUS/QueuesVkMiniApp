@@ -49,6 +49,7 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     // let picURL = '';
 
     useEffect(() => {
+        global.queue.counterForCalendar++;
         today = new Date(nowIOSTime);
 
         let dataCheck = document.getElementById('dateID');
@@ -57,8 +58,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
         if(dataCheck.validity.rangeUnderflow){
             global.queue.dataCheck = false;
             setNewDateStatus('error');
-            setDateInputButton('turnOff');
-            setDateInput('dateAndTimeInput');
+            if(global.queue.counterForCalendar ===1) {
+                setDateInputButton('turnOff');
+                setDateInput('dateAndTimeInput');
+            }
         }else{
             setFormStatusVisibility(false);
             global.queue.dataCheck = true;
@@ -69,8 +72,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
             IOSdateError = false;
             global.queue.dataCheck = false;
             setNewDateStatus('error');
-            setDateInputButton('turnOff');
-            setDateInput('dateAndTimeInput');
+            if(global.queue.counterForCalendar ===1) {
+                setDateInputButton('turnOff');
+                setDateInput('dateAndTimeInput');
+            }
         }else {
             IOSdateError = true;
             setFormStatusVisibility(false);
@@ -293,9 +298,13 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                         if(formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateAndTimeInput');
+                            setDateInputButton('turnOff');
                         }else{
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateAndTimeInput');
+                            setDateInputButton('turnOff');
                         }
                     }
 

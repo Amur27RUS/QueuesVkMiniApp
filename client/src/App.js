@@ -60,8 +60,7 @@ global.queue = {
 	createDate: '',
 	createDescription: '',
 	createPlace: '',
-
-
+	counterForCalendar: 0,
 
 	dataCheck: false,
 }
@@ -287,6 +286,7 @@ const App = () =>{
 		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
 		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 
+		global.queue.counterForCalendar = 0;
 		global.queue.isFirstPlace = undefined;
 	};
 
