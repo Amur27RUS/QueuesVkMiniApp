@@ -9,7 +9,7 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar, Div
+    Avatar, Snackbar, Div, FormLayoutGroup
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
@@ -187,6 +187,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
+
+                <FormLayoutGroup top="Дата* и время проведения:">
                 <Button className={dateAndTimeButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
                     document.getElementById('qName').blur();
                     document.getElementById('qDesc').blur();
@@ -202,7 +204,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <Input id={'dateID'}
                        className={dateInput}
                        min={nowTime}
-                       top={'Дата проведения*'}
+                       top="Дата проведения*"
                        novalidate
                        name={'date'} type={'date'}
                        value={date}
@@ -258,12 +260,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-
-                <Input id={'timeID'} className={timeInput} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
+                <br/>
+                <Input id={'timeID'} className={timeInput} top="Время начала" name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
                 }}/>
                 </div>
+                </FormLayoutGroup>
 
                 <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
@@ -306,9 +309,19 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateInput');
+                            setTimeInput('timeInput');
+                            setTimeInputTop('Время проведения');
+                            setDateInputTop('Дата проведения*');
+                            setDateAndTimeButton('turnOff');
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateInput');
+                            setTimeInput('timeInput');
+                            setTimeInputTop('Время проведения');
+                            setDateInputTop('Дата проведения*');
+                            setDateAndTimeButton('turnOff');
                         }
                     }
 
@@ -420,6 +433,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusVisibility(true);
                                 setFormStatusHeader('Введите название и дату!')
                                 setPopout(null);
+                                setDateInput('dateInput');
+                                setTimeInput('timeInput');
+                                setTimeInputTop('Время проведения');
+                                setDateInputTop('Дата проведения*');
+                                setDateAndTimeButton('turnOff');
 
                             } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
                                 setQueueNameStatus('error');
@@ -427,6 +445,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusVisibility(true);
                                 setFormStatusHeader('Введите название и корректную дату!')
                                 setPopout(null);
+                                setDateInput('dateInput');
+                                setTimeInput('timeInput');
+                                setTimeInputTop('Время проведения');
+                                setDateInputTop('Дата проведения*');
+                                setDateAndTimeButton('turnOff');
 
                             } else if (nameQueue.trim() === '') {
                                 setQueueNameStatus('error');
@@ -439,6 +462,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusVisibility(true);
                                 setFormStatusHeader('Введите дату!')
                                 setPopout(null);
+                                setDateInput('dateInput');
+                                setTimeInput('timeInput');
+                                setTimeInputTop('Время проведения');
+                                setDateInputTop('Дата проведения*');
+                                setDateAndTimeButton('turnOff');
                             }
                         }
 
