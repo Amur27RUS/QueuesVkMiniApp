@@ -9,12 +9,14 @@ import {
     Text,
     PanelHeaderButton,
     Snackbar,
-    Avatar, FormStatus, ScreenSpinner
+    Avatar, FormStatus, ScreenSpinner, FormLayoutGroup
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+import Icon28CalendarOutline from "@vkontakte/icons/dist/28/calendar_outline";
+import Icon28RecentOutline from "@vkontakte/icons/dist/28/recent_outline";
 
 
 let now = new Date().toLocaleDateString();
@@ -37,6 +39,10 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
     const [formStatusHeader, setFormStatusHeader] = useState('');
     const [formStatusDescription, setFormStatusDescription] = useState('');
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
+    const [timeInput, setTimeInput] = useState('turnOff');
+    const [dateInput, setDateInput] = useState('turnOff');
+    const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
+    const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
 
     // let pic; //Картинка очереди
     // let picName;
@@ -51,6 +57,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
         if(dataCheck.validity.rangeUnderflow){
             global.queue.dataCheck = false;
             setNewDateStatus('error');
+            setDateInputButton('turnOff');
+            setDateInput('dateAndTimeInput');
         }else{
             setFormStatusVisibility(false);
             global.queue.dataCheck = true;
@@ -61,6 +69,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
             IOSdateError = false;
             global.queue.dataCheck = false;
             setNewDateStatus('error');
+            setDateInputButton('turnOff');
+            setDateInput('dateAndTimeInput');
         }else {
             IOSdateError = true;
             setFormStatusVisibility(false);
@@ -159,10 +169,16 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                     {formStatusDescription}
                 </FormStatus>
                 }
-                <Input top={'Название очереди*'}
+                <Input id={'qName'} top={'Название очереди*'}
                        value={newNameQueue}
                        maxlength = "32"
                        status={newNameStatus}
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputButton('dateAndTimeInputButton');
+                           setDateInputButton('dateAndTimeInputButton')
+                       }}
                        onChange={e => {
                            if(e.target.value.trim() === ''){
                                setFormStatusVisibility(true);
@@ -173,8 +189,27 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                            e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
                            setNewNameQueue(e.target.value.substring(0, 32))
                        }}/>
-                <Input top={'Место проведения'} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value.substring(0, 40))}/>
+                <Input id={'qPlace'} top={'Место проведения'} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setTimeInputButton('dateAndTimeInputButton');
+                    setDateInputButton('dateAndTimeInputButton')
+                }} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value.substring(0, 40))}/>
+
+                <FormLayoutGroup top="Дата проведения*">
+                    <Button className={dateInputButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setDateInput('dateInput');
+                        setDateInputButton('turnOff');
+                        setTimeInput('turnOff');
+                        setTimeInputButton('dateAndTimeInputButton');
+
+                    }}>Выбрать дату</Button>
+                    <div className={dateInput}>
                 <Input top={'Дата проведения*'}
+                       className={dateInput}
                        name={'date'}
                        type={'date'}
                        id = {'dateID'}
@@ -223,11 +258,33 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                            }
                            setNewDate(e.target.value)
                        }}/>
-                <Input top={'Время начала'} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
+                    </div>
+                </FormLayoutGroup>
+
+                <FormLayoutGroup top="Время проведения">
+                    <Button className={timeInputButton} before={<Icon28RecentOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setTimeInput('timeInput');
+                        setTimeInputButton('turnOff');
+                        setDateInput('turnOff');
+                        setDateInputButton('dateAndTimeInputButton');
+
+                    }}>Выбрать время</Button>
+                    <div className={timeInput}>
+                <Input top={'Время начала'} className={timeInput} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
+                    </div>
+                </FormLayoutGroup>
                 <File top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {onPhotoUpload(e)}}/>
                 <Text className={'uploadedImgName'}>{newAvatarName}</Text>
-                <Input top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onChange={e => setNewDescription(e.target.value.substring(0, 40))}/>
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setTimeInputButton('dateAndTimeInputButton');
+                    setDateInputButton('dateAndTimeInputButton');
+                }} onChange={e => setNewDescription(e.target.value.substring(0, 40))}/>
                 <Button size="xl" onClick={() => {
 
                     if(!global.queue.dataCheck || !IOSdateError){
@@ -304,6 +361,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                             setNewDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите имя и дату!')
+                            setDateInputButton('turnOff');
+                            setDateInput('dateAndTimeInput');
 
                         }else if(newNameQueue.trim() === '') {
                             setNewNameStatus('error');
@@ -314,6 +373,8 @@ const СhangeQueue = ({ id, go, fetchedUser, setPopout,setQueueCODE, snackbar, s
                             setNewDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите дату!')
+                            setDateInputButton('turnOff');
+                            setDateInput('dateAndTimeInput');
                         }
                     }
                 }}>Сохранить</Button>

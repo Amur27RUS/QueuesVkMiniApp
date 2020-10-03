@@ -49,7 +49,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [timeInput, setTimeInput] = useState('turnOff');
     const [dateInput, setDateInput] = useState('turnOff');
     const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
-    const [timeInputButton, setTimeInputButton] = useState('timeInputButton')
+    const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
 
     useEffect(() => {
         setAvatarName(global.queue.avatarName);
