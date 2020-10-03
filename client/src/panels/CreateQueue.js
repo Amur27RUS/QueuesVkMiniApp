@@ -9,13 +9,13 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    platform,
-    Avatar, Snackbar, Div, IOS
+    Avatar, Snackbar, Div, FormLayoutGroup
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
-import bridge from "@vkontakte/vk-bridge";
+import Icon28CalendarOutline from '@vkontakte/icons/dist/28/calendar_outline';
+import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -29,9 +29,8 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 let imgERR = false;
-const osName = platform()
 
-const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
+const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
     const [date, setDate] = useState(global.queue.createDate);
     const [time, setTime] = useState(global.queue.createTime);
@@ -44,13 +43,19 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
     const [formStatusDescription, setFormStatusDescription] = useState('');
     const [formStatusVisibility, setFormStatusVisibility] = useState(false);
     const [checkPhoto, setCheckPhoto] = useState(false);
-    const [floodError, setFloodError] = useState(false);
+    const [uploadedPhoto, setUploadedPhoto] = useState(undefined);
     const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
+    const [timeInput, setTimeInput] = useState('turnOff');
+    const [dateInput, setDateInput] = useState('turnOff');
+    const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
+    const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
 
-    useEffect(()=>{
-        document.getElementById('dateID').onfocus = function (){
-            document.getElementById('dateID').blur();
+    useEffect(() => {
+        setAvatarName(global.queue.avatarName);
+        if(global.queue.avatarName !== undefined){
+            setDeleteImgButtonCSS('deleteImgButton');
+            setDelDivCSS('divForDel');
         }
     })
 
@@ -89,15 +94,11 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                         setPopout(null);
 
                     } else {
-                        if (osName !== IOS) {
-                            window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
-                            history.push("MODAL_CARD_ABOUT");
-                        }
                         setQueueCODE(data);
-                        if (global.queue.picURLNew === undefined) {
+                        if(global.queue.picURLNew === undefined){
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
-                        } else {
+                        }else{
                             setTimeout(() => setPopout(null), 3000);
                             setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
 
@@ -124,17 +125,6 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
         }
     };
 
-    const hideKeyboard = (element) => {
-        element.attr('readonly', 'readonly'); // Force keyboard to hide on input field.
-        element.attr('disabled', 'true'); // Force keyboard to hide on textarea field.
-        setTimeout(function () {
-            element.blur();  //actually close the keyboard
-            // Remove readonly attribute after keyboard is hidden.
-            element.removeAttr('readonly');
-            element.removeAttr('disabled');
-        }, 100);
-    }
-
     const onPhotoUpload = (e) => {
         let tmpArr = e.target.files[0].name.split('.');
         global.queue.pic = e.target.files[0];
@@ -144,8 +134,9 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
             + getRandomInt(1000);
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
-
+        global.queue.avatarName = e.target.files[0].name;
         setAvatarName(e.target.files[0].name);
+
     }
 
     const getRandomInt = (max) => {
@@ -162,12 +153,16 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                 </FormStatus>
                 }
 
-                <Input top={'Название очереди*'}
-                       id={'qName'}
+                <Input id={'qName'} top={'Название очереди*'}
                        value={nameQueue}
                        maxlength="32"
                        status={queueNameStatus}
-
+                       onClick={()=>{
+                           setDateInput('turnOff');
+                           setTimeInput('turnOff');
+                           setTimeInputButton('dateAndTimeInputButton');
+                           setDateInputButton('dateAndTimeInputButton')
+                       }}
                        onChange={e => {
                            if (e.target.value.trim() === '') {
                                setFormStatusVisibility(true);
@@ -181,88 +176,111 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                            e.target.value.trim() ? setQueueNameStatus('valid') : setQueueNameStatus('error');
                            setNameQueue(e.target.value.substring(0, 32));
                        }}/>
-                <Input top={'Место проведения'} maxlength="40" value={place} onChange={e => {
+                <Input id={'qPlace'} top={'Место проведения'} maxlength="40" value={place} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setDateInputButton('dateAndTimeInputButton');
+                    setTimeInputButton('dateAndTimeInputButton');
+                }} onChange={e => {
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
-                <div className={'dateInputDiv'}>
-                <Input id={'dateID'}
-                       className={'dateInput'}
-                       type={'date'}
-                       min={nowTime}
-                       top={'Дата проведения*'}
-                       novalidate
-                       name={'date'}
-                       readOnly={true}
-                       value={date}
-                       status={queueDateStatus}
-                       onChange={e => {
-                           today = new Date(nowIOSTime);
-                           pickedDate = new Date(e.target.value);
-                           let dataCheck = document.getElementById('dateID');
 
-                           if (dataCheck.validity.rangeUnderflow) {
-                               setQueueDateStatus('error');
-                               setFormStatusVisibility(true);
-                               global.queue.dataCheck = false;
-                               if (formStatusHeader === 'Введите название очереди!') {
-                                   setFormStatusHeader('Неверная дата и название!');
-                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               } else {
-                                   setFormStatusHeader('Неверная дата!');
-                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               }
-                           } else {
-                               setFormStatusVisibility(false);
-                               setQueueDateStatus('valid');
-                               global.queue.dataCheck = true;
-                           }
-                           if (queueDateStatus === 'error') {
-                               setFormStatusVisibility(true);
-                               setFormStatusHeader('Неверная дата!');
-                               setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               global.queue.dataCheck = false;
-                           } else {
-                               global.queue.dataCheck = true;
-                               setFormStatusVisibility(false);
-                           }
+                <FormLayoutGroup top="Дата проведения*">
+                    <Button className={dateInputButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setDateInput('dateInput');
+                        setDateInputButton('turnOff');
+                        setTimeInput('turnOff');
+                        setTimeInputButton('dateAndTimeInputButton');
 
-                           if (today.getTime() > pickedDate.getTime()) {
-                               IOSdateError = false;
-                               global.queue.dataCheck = false;
-                               setQueueDateStatus('error');
-                               setFormStatusVisibility(true);
-                               if (formStatusHeader === 'Введите название очереди!') {
-                                   setFormStatusHeader('Неверная дата и название!');
-                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               } else {
-                                   setFormStatusHeader('Неверная дата!');
-                                   setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                               }
-                           } else {
-                               global.queue.dataCheck = true;
-                               IOSdateError = true;
-                               setFormStatusVisibility(false);
-                           }
-                           setDate(e.target.value)
-                           global.queue.createDate = e.target.value;
-                       }}/>
-                       <Button mode={'secondary'} onClick={async ()=>{
-                            await document.getElementById('qName').blur();
-                            document.getElementById('dateID').readOnly = false;
-                            document.getElementById('dateID').focus();
-                            document.getElementById('dateID').onblur = function () {
-                            document.getElementById('dateID').readOnly = true;
+                    }}>Выбрать дату</Button>
+                    <div className={dateInput}>
+                        <Input id={'dateID'}
+                               className={dateInput}
+                               min={nowTime}
+                               top="Дата проведения*"
+                               novalidate
+                               name={'date'} type={'date'}
+                               value={date}
+                               status={queueDateStatus}
+                               onChange={e => {
+                                   today = new Date(nowIOSTime);
+                                   pickedDate = new Date(e.target.value);
+                                   let dataCheck = document.getElementById('dateID');
 
-                            }
-                       }}>Установить</Button>
-                </div>
-                <Input id={'timeInput'} top={'Время начала'} name={'time'} type={'time'} value={time} onChange={e => {
-                    setTime(e.target.value);
-                    global.queue.createTime = e.target.value;
-                }}/>
-                <File id={"MyButton"} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>}
-                      controlSize="xl"
+                                   if (dataCheck.validity.rangeUnderflow) {
+                                       setQueueDateStatus('error');
+                                       setFormStatusVisibility(true);
+                                       global.queue.dataCheck = false;
+                                       if (formStatusHeader === 'Введите название очереди!') {
+                                           setFormStatusHeader('Неверная дата и название!');
+                                           setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                                       } else {
+                                           setFormStatusHeader('Неверная дата!');
+                                           setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                                       }
+                                   } else {
+                                       setFormStatusVisibility(false);
+                                       setQueueDateStatus('valid');
+                                       global.queue.dataCheck = true;
+                                   }
+                                   if (queueDateStatus === 'error') {
+                                       setFormStatusVisibility(true);
+                                       setFormStatusHeader('Неверная дата!');
+                                       setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                                       global.queue.dataCheck = false;
+                                   } else {
+                                       global.queue.dataCheck = true;
+                                       setFormStatusVisibility(false);
+                                   }
+
+                                   if (today.getTime() > pickedDate.getTime()) {
+                                       IOSdateError = false;
+                                       global.queue.dataCheck = false;
+                                       setQueueDateStatus('error');
+                                       setFormStatusVisibility(true);
+                                       if (formStatusHeader === 'Введите название очереди!') {
+                                           setFormStatusHeader('Неверная дата и название!');
+                                           setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                                       } else {
+                                           setFormStatusHeader('Неверная дата!');
+                                           setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                                       }
+                                   } else {
+                                       global.queue.dataCheck = true;
+                                       IOSdateError = true;
+                                       setFormStatusVisibility(false);
+                                   }
+                                   setDate(e.target.value)
+                                   global.queue.createDate = e.target.value;
+                               }}/>
+                    </div>
+                </FormLayoutGroup>
+
+                <FormLayoutGroup top="Время проведения">
+                    <Button className={timeInputButton} before={<Icon28RecentOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setTimeInput('timeInput');
+                        setTimeInputButton('turnOff');
+                        setDateInput('turnOff');
+                        setDateInputButton('dateAndTimeInputButton');
+
+                    }}>Выбрать время</Button>
+
+                    <div className={timeInput}>
+                        <Input id={'timeID'} className={timeInput} top="Время начала" name={'time'} type={'time'} value={time} onChange={e => {
+                            setTime(e.target.value);
+                            global.queue.createTime = e.target.value;
+                        }}/>
+                    </div>
+                </FormLayoutGroup>
+
+                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
                           setDeleteImgButtonCSS('deleteImgButton');
@@ -273,16 +291,22 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                     <Text className={'uploadedImgName'}>{avatarName}<Button className={deleteImgButtonCSS}
                                                                             mode={'tertiary'}
                                                                             before={<Icon12Cancel/>}
-                                                                            onClick={() => {
+                                                                            onClick={()=>{
                                                                                 setAvatarName('');
                                                                                 global.queue.picURLNew = undefined;
                                                                                 global.queue.picURL = undefined;
                                                                                 setDeleteImgButtonCSS('turnOff');
                                                                                 setDelDivCSS('turnOff');
+                                                                                global.queue.avatarName = undefined;
                                                                             }}/></Text>
 
                 </div>
-                <Input top={'Краткое описание очереди'} maxlength="40" value={description} onChange={e => {
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="40" value={description} onClick={()=>{
+                    setDateInput('turnOff');
+                    setTimeInput('turnOff');
+                    setDateInputButton('dateAndTimeInputButton');
+                    setTimeInputButton('dateAndTimeInputButton');
+                }} onChange={e => {
                     setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
                 }}/>
@@ -290,27 +314,19 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
 
                     let dataCheck = document.getElementById('dateID');
 
-                    if (!global.queue.dataCheck) {
+                    if (!global.queue.dataCheck || !IOSdateError) {
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
                         if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateInput');
+                            setDateInputButton('turnOff');
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        }
-                    }
-
-                    if (!IOSdateError) {
-                        setQueueDateStatus('error');
-                        setFormStatusVisibility(true);
-                        if (formStatusHeader === 'Введите название очереди!') {
-                            setFormStatusHeader('Неверная дата и название!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                        } else {
-                            setFormStatusHeader('Неверная дата!');
-                            setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
+                            setDateInput('dateInput');
+                            setDateInputButton('turnOff');
                         }
                     }
 
@@ -342,8 +358,7 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                                         Лимит в создании 5 очередей в день исчерпан!
                                     </Snackbar>)
                                     setPopout(null);
-                                    setFloodError(true);
-                                } else {
+                                }else {
                                     if (global.queue.picURL !== undefined) {
                                         console.log(global.queue.picURL);
                                         try {
@@ -401,18 +416,30 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                                         global.queue.createTime = '';
                                         global.queue.createDate = '';
                                         global.queue.createName = '';
+                                        global.queue.avatarName = undefined;
+                                        setNameQueue('');
+                                        setDate('');
+                                        setDescription('');
+                                        setTime('');
+                                        setAvatarName('');
+                                        setPlace('');
+                                        setDeleteImgButtonCSS('turnOff');
+                                        setDelDivCSS('turnOff');
+                                        setQueueDateStatus('');
+                                        setQueueNameStatus('');
                                     }
                                     setCheckPhoto(false);
                                 }
-                                setFloodError(false);
                             });
-                    } else {
+                    }else {
                         if (date.trim() === '' && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название и дату!')
                             setPopout(null);
+                            setDateInput('dateInput');
+                            setDateInputButton('turnOff');
 
                         } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
@@ -420,6 +447,8 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название и корректную дату!')
                             setPopout(null);
+                            setDateInput('dateInput');
+                            setDateInputButton('turnOff');
 
                         } else if (nameQueue.trim() === '') {
                             setQueueNameStatus('error');
@@ -432,6 +461,8 @@ const CreateQueue = ({ snackbar, id, setCSSForCreateQueue, go, history, setActiv
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите дату!')
                             setPopout(null);
+                            setDateInput('dateInput');
+                            setDateInputButton('turnOff');
                         }
                     }
 
