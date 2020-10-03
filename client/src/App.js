@@ -539,10 +539,11 @@ const App = () =>{
 						if (osName !== IOS) {
 							history.pop() // удаляем последний элемент в массиве.
 						}
+						setPopout(null);
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
-						setCopyButtonTitle('Скопировать приглашение')
+						setCopyButtonTitle('Скопировать приглашение');
 					}}, {
 					title: 'Пригласить друзей',
 					mode: 'secondary',
