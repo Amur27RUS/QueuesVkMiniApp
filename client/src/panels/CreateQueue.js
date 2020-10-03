@@ -9,7 +9,7 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar, Div, FormLayoutGroup
+    Avatar, Snackbar, Div, FormLayoutGroup, IOS, platform
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
@@ -29,6 +29,7 @@ let IOSdateError = true;
 let today;
 let pickedDate;
 let imgERR = false;
+const osName = platform();
 
 const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, setQueueCODE, setPopout, setSnackbar}) => {
     const [nameQueue, setNameQueue] = useState(global.queue.createName);
@@ -95,13 +96,21 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                     } else {
                         setQueueCODE(data);
+
                         if(global.queue.picURLNew === undefined){
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
+                            if (osName !== IOS) {
+                                window.history.pushState({panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE"); // Создаём новую запись в истории браузера
+                                history.push("MODAL_CARD_CHAT_INVITE");
+                            }
                         }else{
                             setTimeout(() => setPopout(null), 3000);
                             setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
-
+                            if (osName !== IOS) {
+                                window.history.pushState({panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE"); // Создаём новую запись в истории браузера
+                                history.push("MODAL_CARD_CHAT_INVITE");
+                            }
                         }
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
@@ -111,6 +120,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         // history.push("MODAL_CARD_CHAT_INVITE");
                     }
                 }).catch((e) => {
+                console.log(e);
                 setPopout(null);
                 setSnackbar(<Snackbar
                     layout="vertical"

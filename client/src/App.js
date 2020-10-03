@@ -521,7 +521,6 @@ const App = () =>{
 					setCopyButtonTitle('Скопировать приглашение')
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
-						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
@@ -540,10 +539,11 @@ const App = () =>{
 						if (osName !== IOS) {
 							history.pop() // удаляем последний элемент в массиве.
 						}
+						setPopout(null);
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
-						setCopyButtonTitle('Скопировать приглашение')
+						setCopyButtonTitle('Скопировать приглашение');
 					}}, {
 					title: 'Пригласить друзей',
 					mode: 'secondary',
@@ -614,7 +614,7 @@ const App = () =>{
 
 
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
-				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 				{/*	<Settings id={'Settings'} go={go}/>*/}
