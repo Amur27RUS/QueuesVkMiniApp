@@ -436,7 +436,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите название и дату!')
+                            setFormStatusHeader('Введите название и дату!');
                             setPopout(null);
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
@@ -445,7 +445,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
                             setFormStatusVisibility(true);
-                            setFormStatusHeader('Введите название и корректную дату!')
+                            setFormStatusHeader('Введите название и корректную дату!');
                             setPopout(null);
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
@@ -454,6 +454,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setQueueNameStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите название!')
+                            setFormStatusDescription('');
                             setPopout(null);
 
                         } else if (date.trim() === '') {
