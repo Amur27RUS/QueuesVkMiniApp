@@ -15,6 +15,7 @@ import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
 import Icon28CalendarOutline from '@vkontakte/icons/dist/28/calendar_outline';
+import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -47,9 +48,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [delDivCSS, setDelDivCSS] = useState('turnOff');
     const [timeInput, setTimeInput] = useState('turnOff');
     const [dateInput, setDateInput] = useState('turnOff');
-    const [dateAndTimeButton, setDateAndTimeButton] = useState('dateAndTimeInputButton');
-    const [dateInputTop, setDateInputTop] = useState('Дата проведения*');
-    const [timeInputTop, setTimeInputTop] = useState('Время проведения')
+    const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
+    const [timeInputButton, setTimeInputButton] = useState('timeInputButton')
 
     useEffect(() => {
         setAvatarName(global.queue.avatarName);
@@ -160,9 +160,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                        onClick={()=>{
                            setDateInput('turnOff');
                            setTimeInput('turnOff');
-                           setTimeInputTop('Время проведения');
-                           setDateInputTop('Дата проведения*');
-                           setDateAndTimeButton('dateAndTimeInputButton');
+                           setTimeInputButton('dateAndTimeInputButton');
+                           setDateInputButton('dateAndTimeInputButton')
                        }}
                        onChange={e => {
                            if (e.target.value.trim() === '') {
@@ -180,26 +179,24 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <Input id={'qPlace'} top={'Место проведения'} maxlength="40" value={place} onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
-                    setTimeInputTop('Время проведения');
-                    setDateInputTop('Дата проведения*');
-                    setDateAndTimeButton('dateAndTimeInputButton');
+                    setDateInputButton('dateAndTimeInputButton');
+                    setTimeInputButton('dateAndTimeInputButton');
                 }} onChange={e => {
                     setPlace(e.target.value.substring(0, 40));
                     global.queue.createPlace = e.target.value;
                 }}/>
 
-                <FormLayoutGroup top="Дата* и время проведения:">
-                <Button className={dateAndTimeButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                <FormLayoutGroup top="Дата проведения*">
+                <Button className={dateInputButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
                     document.getElementById('qName').blur();
                     document.getElementById('qDesc').blur();
                     document.getElementById('qPlace').blur();
                     setDateInput('dateInput');
-                    setTimeInput('timeInput');
-                    setTimeInputTop('Время проведения');
-                    setDateInputTop('Дата проведения*');
-                    setDateAndTimeButton('turnOff');
+                    setDateInputButton('turnOff');
+                    setTimeInput('turnOff');
+                    setTimeInputButton('dateAndTimeInputButton');
 
-                }}>Выбрать дату и время</Button>
+                }}>Выбрать дату</Button>
                 <div className={dateInput}>
                 <Input id={'dateID'}
                        className={dateInput}
@@ -260,7 +257,22 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                            setDate(e.target.value)
                            global.queue.createDate = e.target.value;
                        }}/>
-                <br/>
+                </div>
+                </FormLayoutGroup>
+
+                <FormLayoutGroup top="Время проведения">
+                    <Button className={timeInputButton} before={<Icon28RecentOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                        document.getElementById('qName').blur();
+                        document.getElementById('qDesc').blur();
+                        document.getElementById('qPlace').blur();
+                        setTimeInput('timeInput');
+                        setTimeInputButton('turnOff');
+                        setDateInput('turnOff');
+                        setDateInputButton('dateAndTimeInputButton');
+
+                    }}>Выбрать время</Button>
+
+                <div className={timeInput}>
                 <Input id={'timeID'} className={timeInput} top="Время начала" name={'time'} type={'time'} value={time} onChange={e => {
                     setTime(e.target.value);
                     global.queue.createTime = e.target.value;
@@ -292,9 +304,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="40" value={description} onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
-                    setTimeInputTop('Время проведения');
-                    setDateInputTop('Дата проведения*');
-                    setDateAndTimeButton('dateAndTimeInputButton');
+                    setDateInputButton('dateAndTimeInputButton');
+                    setTimeInputButton('dateAndTimeInputButton');
                 }} onChange={e => {
                     setDescription(e.target.value.substring(0, 40))
                     global.queue.createDescription = e.target.value;
@@ -310,18 +321,12 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
-                            setTimeInput('timeInput');
-                            setTimeInputTop('Время проведения');
-                            setDateInputTop('Дата проведения*');
-                            setDateAndTimeButton('turnOff');
+                            setDateInputButton('turnOff');
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
-                            setTimeInput('timeInput');
-                            setTimeInputTop('Время проведения');
-                            setDateInputTop('Дата проведения*');
-                            setDateAndTimeButton('turnOff');
+                            setDateInputButton('turnOff');
                         }
                     }
 
@@ -434,10 +439,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusHeader('Введите название и дату!')
                                 setPopout(null);
                                 setDateInput('dateInput');
-                                setTimeInput('timeInput');
-                                setTimeInputTop('Время проведения');
-                                setDateInputTop('Дата проведения*');
-                                setDateAndTimeButton('turnOff');
+                                setDateInputButton('turnOff');
 
                             } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
                                 setQueueNameStatus('error');
@@ -446,10 +448,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusHeader('Введите название и корректную дату!')
                                 setPopout(null);
                                 setDateInput('dateInput');
-                                setTimeInput('timeInput');
-                                setTimeInputTop('Время проведения');
-                                setDateInputTop('Дата проведения*');
-                                setDateAndTimeButton('turnOff');
+                                setDateInputButton('turnOff');
 
                             } else if (nameQueue.trim() === '') {
                                 setQueueNameStatus('error');
@@ -463,10 +462,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 setFormStatusHeader('Введите дату!')
                                 setPopout(null);
                                 setDateInput('dateInput');
-                                setTimeInput('timeInput');
-                                setTimeInputTop('Время проведения');
-                                setDateInputTop('Дата проведения*');
-                                setDateAndTimeButton('turnOff');
+                                setDateInputButton('turnOff');
                             }
                         }
 
