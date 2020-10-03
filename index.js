@@ -525,7 +525,11 @@ app.post('/addNotFromVK', limiter, (req, res) => {
     const queueCode = req.body.queueCODE;
     const url = req.body.url;
 
-    addNotFromVK(newUser, queueCode, url, res);
+    if(newUser.length > 25 || newUser.trim() === ''){
+        res.status(403).send({errorCode: 'error'});
+    }else {
+        addNotFromVK(newUser, queueCode, url, res);
+    }
 });
 
 app.post('/checkSign', limiter, (req, res) => {
