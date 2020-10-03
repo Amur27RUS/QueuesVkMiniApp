@@ -101,9 +101,17 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         if(global.queue.picURLNew === undefined){
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
+                            if (osName !== IOS) {
+                                window.history.pushState({panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE"); // Создаём новую запись в истории браузера
+                                history.push("MODAL_CARD_CHAT_INVITE");
+                            }
                         }else{
                             setTimeout(() => setPopout(null), 3000);
                             setTimeout(() => setActiveModal(MODAL_CARD_CHAT_INVITE), 3000);
+                            if (osName !== IOS) {
+                                window.history.pushState({panel: "MODAL_CARD_CHAT_INVITE"}, "MODAL_CARD_CHAT_INVITE"); // Создаём новую запись в истории браузера
+                                history.push("MODAL_CARD_CHAT_INVITE");
+                            }
                         }
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
