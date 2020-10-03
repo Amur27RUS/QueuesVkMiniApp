@@ -66,6 +66,7 @@ class UsersList extends React.Component {
             cssSpinner: 'defaultSpinner',
             cssUsersList: 'turnOff',
             exitAlertText: '',
+            CSSMenuButton: 'turnOff',
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -87,9 +88,9 @@ class UsersList extends React.Component {
 
     async componentDidMount() {
         	console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
-            console.log(document.getElementById("menuButton").onClick)
-            document.getElementById("menuButton").disabled = true;
-            document.getElementById("menuButton").onClick = null;
+            this.setState({
+                CSSMenuButton: 'turnOff'
+            })
 
             // document.getElementById("menuButton").disabled = true;
             // document.getElementById("menuButton").onClick = null;
@@ -135,8 +136,9 @@ class UsersList extends React.Component {
                 if(global.queue.isUserAdmin) {
                     this.props.setCssEdit('editQueueButton');
                 }
-                document.getElementById("menuButton").disabled = false;
-                console.log(document.getElementById("menuButton").onClick)
+                this.setState({
+                    CSSMenuButton: '',
+                })
             })
         //todo Если что, то можно добавить .bind(this) перед .catch
 
@@ -902,7 +904,7 @@ class UsersList extends React.Component {
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
-                    <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
+                    <Button id={"menuButton"} className={this.state.CSSMenuButton} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
 
                 <div className={this.state.CSSMenuDropout}>
                     {global.queue.isUserAdmin === true &&
