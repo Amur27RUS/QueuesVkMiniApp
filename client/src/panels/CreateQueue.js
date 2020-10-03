@@ -9,7 +9,7 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar, Div, FormLayoutGroup
+    Avatar, Snackbar, Div, FormLayoutGroup, IOS, platform
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
@@ -50,6 +50,8 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     const [dateInput, setDateInput] = useState('turnOff');
     const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
     const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
+
+    const osName = platform();
 
     useEffect(() => {
         setAvatarName(global.queue.avatarName);
@@ -95,6 +97,10 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
 
                     } else {
                         setQueueCODE(data);
+                        if (osName !== IOS) {
+                            window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+                            history.push("MODAL_CARD_ABOUT");
+                        }
                         if(global.queue.picURLNew === undefined){
                             setPopout(null);
                             setActiveModal(MODAL_CARD_CHAT_INVITE);
