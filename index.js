@@ -386,8 +386,14 @@ async function firstToLast(queueCode, url, res) {
 
         if(userID !== 3) {
             const client = await pool.connect();
-            const lenghtQueue = await client.query('SELECT userplace FROM queuesandusers WHERE qcode = $1', [queueCode])
-            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = 1', [lenghtQueue.rows.length, queueCode])
+
+            const queueLength = await client.query('SELECT userplace FROM queuesandusers WHERE qcode = $1', [queueCode]);
+            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = 1', [queueLength.rows.length+1, queueCode]);
+
+            for(let i = 2; i < queueLength+1; i++){
+                await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = $3', [i-1, queueCode, i]);
+            }
+
             const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
             await res.send(data.rows);
 
