@@ -271,14 +271,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 </FormLayoutGroup>
 
                 <FormLayoutGroup top="Время проведения">
-                    <Button className={timeInputButton} before={<Icon28RecentOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
+                    <Button className={timeInputButton} before={<Icon28RecentOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={async (qualifiedName, value)=>{
                         document.getElementById('qName').blur();
                         document.getElementById('qDesc').blur();
                         document.getElementById('qPlace').blur();
                         setTimeInput('timeInput');
                         setTimeInputButton('turnOff');
                         setDateInput('turnOff');
-                        setDateInputButton('dateAndTimeInputButton');
+                        await setDateInputButton('dateAndTimeInputButton');
                         document.getElementById('timeID').focus();
 
                     }}>Выбрать время</Button>
