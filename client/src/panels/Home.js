@@ -152,7 +152,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						console.log(history)
 						setActiveModal(MODAL_CARD_ABOUT)
 						if (osName !== IOS) {
-							window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+							window.history.pushState({history: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 							history.push("MODAL_CARD_ABOUT");
 						}
 					}}>
@@ -171,7 +171,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						action={<Button size="l" mode="tertiary" onClick={() => {
 							setActiveModal(MODAL_CARD_ABOUT)
 							if (osName !== IOS) {
-								window.history.pushState({panel: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
+								window.history.pushState({history: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
 								history.push("MODAL_CARD_ABOUT");
 							}
 						}}>Войти в очередь с помощью кода</Button>}

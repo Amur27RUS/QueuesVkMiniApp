@@ -292,7 +292,7 @@ class UsersList extends React.Component {
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -385,7 +385,7 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -440,7 +440,7 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -479,13 +479,11 @@ class UsersList extends React.Component {
                             //     Ошибка соединения! Проверьте интернет!
                             // </Snackbar>);
                         });
-                        console.log(this.props.history)
                         this.props.setActivePanel('home');
                         this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
                         }
-                        console.log(this.props.history)
                     }
                 }, {
                     title: 'Отмена',
@@ -508,7 +506,7 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert

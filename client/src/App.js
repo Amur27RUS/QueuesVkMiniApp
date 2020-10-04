@@ -285,12 +285,13 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 				}
 			}
+			console.log('HistoryWindow ' + window.history)
 	}
 
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
-		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
+		window.history.pushState( {history: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
 		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 
 		global.queue.counterForCalendar = 0;
@@ -428,7 +429,6 @@ const App = () =>{
 					setActiveModal(null)
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
-						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
