@@ -87,7 +87,7 @@ const App = () =>{
 	const [queues, setQueues] = useState([]);
 	const [queueCODE, setQueueCODE] = useState('');
 	const [snackbar, setSnackbar] = useState(null);
-	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать приглашение');
+	const [copyButtonTitle, setCopyButtonTitle] = useState('Скопировать код');
 	const [joinQueueResponse, setJoinQueueResponse] = useState('');
 	const [joinQueueName, setJoinQueueName] = useState('');
 	const [joinQueueAvatar, setJoinQueueAvatar] = useState('');
@@ -524,7 +524,7 @@ const App = () =>{
 				id={MODAL_CARD_CHAT_INVITE}
 				onClose={() => {
 					setActiveModal(null)
-					setCopyButtonTitle('Скопировать приглашение')
+					setCopyButtonTitle('Скопировать код')
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
 					}
@@ -549,7 +549,7 @@ const App = () =>{
 						setActiveModal(null);
 						setActiveStory('main');
 						setActivePanel('home');
-						setCopyButtonTitle('Скопировать приглашение');
+						setCopyButtonTitle('Скопировать код');
 					}}, {
 					title: 'Пригласить друзей',
 					mode: 'secondary',
