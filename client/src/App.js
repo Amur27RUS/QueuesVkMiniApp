@@ -186,7 +186,8 @@ const App = () =>{
 							}
 						})
 				}
-				window.location.hash = '';
+				// window.location.hash = '';
+				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
