@@ -321,10 +321,10 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
-							if (osName !== IOS){
-								history.pop() // удаляем последний элемент в массиве.
-								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							}
+							// if (osName !== IOS){
+							// 	history.pop() // удаляем последний элемент в массиве.
+							// 	setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							// }
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
