@@ -448,7 +448,7 @@ class UsersList extends React.Component {
         //Проверка, чттобы был хотя бы один админ
         let adminsCounter = 0;
         for(let i = 0; i< this.state.users.length; i++){
-            if(this.state.users[i].isadmin){
+            if(this.state.users[i].isadmin && this.state.users[i].notvkname === null){
                 adminsCounter++;
             }
         }
