@@ -505,7 +505,7 @@ class UsersList extends React.Component {
 
     firstToLast = () => {
         if (osName !== IOS) {
-            this.props.history.push("alert");
+            // this.props.history.push("alert");
             window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(

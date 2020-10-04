@@ -153,7 +153,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 						setActiveModal(MODAL_CARD_ABOUT)
 						if (osName !== IOS) {
 							window.history.pushState({history: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
-							history.push("MODAL_CARD_ABOUT");
+							// history.push("MODAL_CARD_ABOUT");
 						}
 					}}>
 						Войти с помощью кода
@@ -172,7 +172,7 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 							setActiveModal(MODAL_CARD_ABOUT)
 							if (osName !== IOS) {
 								window.history.pushState({history: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
-								history.push("MODAL_CARD_ABOUT");
+								// history.push("MODAL_CARD_ABOUT");
 							}
 						}}>Войти в очередь с помощью кода</Button>}
 						stretched
