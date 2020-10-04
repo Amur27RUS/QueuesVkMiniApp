@@ -441,8 +441,9 @@ async function skipCommand(queueCode, url, res){
         if(userID !== 3) {
             const client = await pool.connect();
             const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
-            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userplace = $2 AND qcode = $3', [place.rows[0].value, place.rows[0].value++, queueCode])
-            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value++, userID, queueCode])
+            const nextUser = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE userplace = $1 AND qcode = $2', [place.rows[0].value, queueCode]);
+            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value, nextUser.rows[0].value, queueCode])
+            await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value+1, userID, queueCode])
             await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('});
