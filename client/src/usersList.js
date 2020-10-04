@@ -358,16 +358,7 @@ class UsersList extends React.Component {
         )
     }
 
-    skipCommand = async () => {
-        for(let i = 0; i < this.state.users.length; i++){
-                const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": this.state.users[i].userid});
-                if (global.queue.userID === user.id && this.state.users[i].userplace === 1 && this.state.users.length > 1) {
-                    global.queue.isFirstPlace = true;
-                }
-                else if (global.queue.userID === user.id && this.state.users[i].this.state.users !== 1) {
-                    global.queue.isFirstPlace = false;
-                }
-        }
+    skipCommand = () => {
 
         fetch('/skipPosition', {
             method: 'POST',
@@ -411,6 +402,7 @@ class UsersList extends React.Component {
                             this.props.history.pop()
                         }
                         let usersArr = this.state.users;
+                        global.queue.isFirstPlace = false;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
                                 if (i >= usersArr.length - 2 ) {
