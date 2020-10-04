@@ -178,8 +178,9 @@ const App = () =>{
 								setJoinQueueAvatar(data.avatar);
 								setJoinQueueName(data.name);
 								setActiveModal(MODAL_CARD_QUEUE_INVITE);
-								window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
+								window.history.pushState( {history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
 								history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								console.log('Запустился инвайт и добавилось ' + history)
 							}
 						})
 				}
