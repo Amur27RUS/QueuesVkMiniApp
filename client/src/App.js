@@ -268,6 +268,7 @@ const App = () =>{
 					}
 
 				}
+				setSnackbar(null);
 				bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
