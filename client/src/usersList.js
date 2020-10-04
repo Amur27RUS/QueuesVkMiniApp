@@ -303,9 +303,9 @@ class UsersList extends React.Component {
                     mode: 'destructive',
                     action: () => {
                         let newArr = this.shuffle(this.state.users);
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
@@ -343,9 +343,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -395,9 +395,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                         let usersArr = this.state.users;
                         for(let i =0; i<usersArr.length; i++){
                             if (usersArr[i].userid === this.props.fetchedUser.id){
@@ -424,9 +424,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -480,7 +480,7 @@ class UsersList extends React.Component {
                             // </Snackbar>);
                         });
                         this.props.setActivePanel('home');
-                        this.props.history.pop()
+                        // this.props.history.pop()
                         if (osName !== IOS) {
                             this.props.history.pop()
                         }
@@ -490,9 +490,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -516,9 +516,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
@@ -569,9 +569,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
