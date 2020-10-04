@@ -444,67 +444,106 @@ class UsersList extends React.Component {
             this.props.history.push("alert");
             window.history.pushState({panel: "alert"}, "alert");
         }
-        this.props.setPopout(
-            <Alert
-                actionsLayout="vertical"
-                actions={[{
-                    title: 'Покинуть очередь',
-                    autoclose: true,
-                    mode: 'destructive',
-                    action: () => {
-                        this.setState({
-                            openMenuButton: 'Открыть меню действий',
-                            CSSMenuDropout: 'turnOff',
-                        });
-                        menuCounter++;
-                        console.log('Отправлен запрос на выход из очереди...');
-                        fetch('/exitQueue', {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                "queueCODE": this.props.queueCode,
-                                "url": window.location.search.replace('?', '')
+
+        //Проверка, чттобы был хотя бы один админ
+        let adminsCounter = 0;
+        for(let i = 0; i< this.state.users.length; i++){
+            if(this.state.users[i].isadmin){
+                adminsCounter++;
+            }
+        }
+        if(adminsCounter === 1 && global.queue.isUserAdmin && this.state.users.length !== 1){
+            this.props.setPopout(
+                <Alert
+                    actionsLayout="vertical"
+                    actions={[{
+                        title: 'Передать права админа',
+                        autoclose: true,
+                        mode: 'default',
+                        action: () => {
+                            this.setState({
+                                openMenuButton: 'Открыть меню действий',
+                                CSSMenuDropout: 'turnOff',
+                            });
+                            menuCounter++;
+                            this.addAdminButton();
+
+                        }
+                    }, {
+                        title: 'Отмена',
+                        autoclose: true,
+                        mode: 'cancel'
+                    }]}
+                    onClose={this.closePopout}
+                >
+                    <h2>Невозможно покинуть очередь</h2>
+                    <p>Вы единственный админ! Назначьте кого-нибудь админом, чтобы покинуть очередь.</p>
+                </Alert>
+            )
+
+        }else {
+
+            this.props.setPopout(
+                <Alert
+                    actionsLayout="vertical"
+                    actions={[{
+                        title: 'Покинуть очередь',
+                        autoclose: true,
+                        mode: 'destructive',
+                        action: () => {
+                            this.setState({
+                                openMenuButton: 'Открыть меню действий',
+                                CSSMenuDropout: 'turnOff',
+                            });
+                            menuCounter++;
+                            console.log('Отправлен запрос на выход из очереди...');
+                            fetch('/exitQueue', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    "queueCODE": this.props.queueCode,
+                                    "url": window.location.search.replace('?', '')
+                                })
+                            }).then(function (response) {
+                                return response.json();
                             })
-                        }).then(function (response) {
-                            return response.json();
-                        })
-                            .then(function (data) {
-                            }).catch((e) => {
-                            // this.props.setSnackbar(<Snackbar
-                            //     layout="vertical"
-                            //     onClose={() => this.props.setSnackbar(null)}
-                            //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-                            // >
-                            //     Ошибка соединения! Проверьте интернет!
-                            // </Snackbar>);
-                        });
-                        console.log(this.props.history)
-                        this.props.setActivePanel('home');
-                        this.props.history.pop()
-                        if (osName !== IOS) {
+                                .then(function (data) {
+                                }).catch((e) => {
+                                // this.props.setSnackbar(<Snackbar
+                                //     layout="vertical"
+                                //     onClose={() => this.props.setSnackbar(null)}
+                                //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                // >
+                                //     Ошибка соединения! Проверьте интернет!
+                                // </Snackbar>);
+                            });
+                            console.log(this.props.history)
+                            this.props.setActivePanel('home');
                             this.props.history.pop()
+                            if (osName !== IOS) {
+                                this.props.history.pop()
+                            }
+                            console.log(this.props.history)
                         }
-                        console.log(this.props.history)
-                    }
-                }, {
-                    title: 'Отмена',
-                    autoclose: true,
-                    mode: 'cancel',
-                    action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
+                    }, {
+                        title: 'Отмена',
+                        autoclose: true,
+                        mode: 'cancel',
+                        action: () => {
+                            if (osName !== IOS) {
+                                this.props.history.pop()
+                            }
                         }
-                    }
-                }]}
-                onClose={this.closePopout}
-            >
-                <h2>Подтвердите действие</h2>
-                <p>{this.state.exitAlertText}</p>
-            </Alert>
-        )
+                    }]}
+                    onClose={this.closePopout}
+                >
+                    <h2>Подтвердите действие</h2>
+                    <p>{this.state.exitAlertText}</p>
+                </Alert>);
+        }
     }
 
     firstToLast = () => {
