@@ -279,7 +279,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         setTimeInputButton('turnOff');
                         setDateInput('turnOff');
                         await setDateInputButton('dateAndTimeInputButton');
-                        document.getElementById('timeID').focus();
+                        setTimeout(document.getElementById('timeID').focus, 1000);
 
                     }}>Выбрать время</Button>
 
