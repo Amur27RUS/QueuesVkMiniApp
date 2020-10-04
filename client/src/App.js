@@ -178,8 +178,10 @@ const App = () =>{
 								setJoinQueueAvatar(data.avatar);
 								setJoinQueueName(data.name);
 								setActiveModal(MODAL_CARD_QUEUE_INVITE);
-								window.history.pushState( {history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-								history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								if (osName !== IOS) {
+									window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+									history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								}
 								console.log('Запустился инвайт и добавилось ' + history)
 							}
 						})
@@ -248,8 +250,10 @@ const App = () =>{
 									setJoinQueueAvatar(data.avatar);
 									setJoinQueueName(data.name);
 									setActiveModal(MODAL_CARD_QUEUE_INVITE);
-									window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-									history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+									if (osName !== IOS) {
+										window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+										history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+									}
 								}
 							}).catch((e) => {
 							setSnackbar(<Snackbar
