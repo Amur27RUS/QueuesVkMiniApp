@@ -178,12 +178,16 @@ const App = () =>{
 								setJoinQueueAvatar(data.avatar);
 								setJoinQueueName(data.name);
 								setActiveModal(MODAL_CARD_QUEUE_INVITE);
-								// window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-								// history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								if (osName !== IOS) {
+									window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+									history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								}
+								console.log('Запустился инвайт и добавилось ' + history)
 							}
 						})
 				}
-				window.location.hash = '';
+				// window.location.hash = '';
+				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
@@ -247,8 +251,10 @@ const App = () =>{
 									setJoinQueueAvatar(data.avatar);
 									setJoinQueueName(data.name);
 									setActiveModal(MODAL_CARD_QUEUE_INVITE);
-									// window.history.pushState( {panel: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE" ); // Создаём новую запись в истории браузера
-									// history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+									if (osName !== IOS) {
+										window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+										history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+									}
 								}
 							}).catch((e) => {
 							setSnackbar(<Snackbar
@@ -278,19 +284,20 @@ const App = () =>{
 			setActiveModal(null);
 			setPopout(null);
 			if (history.length === 1) {  // Если в массиве одно значение:
-				// bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
+				bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
 			} else {
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
 				}
 			}
+			console.log('HistoryWindow ' + window.history)
 	}
 
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
-		window.history.pushState( {panel: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
+		window.history.pushState( {history: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
 		history.push(e.currentTarget.dataset.to); // Добавляем панель в историю
 
 		global.queue.counterForCalendar = 0;
@@ -320,10 +327,10 @@ const App = () =>{
 					})
 				}).then(async function (response) {
 							let res = await response.json();
-							if (osName !== IOS){
-								history.pop() // удаляем последний элемент в массиве.
-								setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							}
+							// if (osName !== IOS){
+							// 	history.pop() // удаляем последний элемент в массиве.
+							// 	setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							// }
 							if (res === 'noQueue') {
 								setActiveModal(null);
 								setCodeInput(undefined);
@@ -428,7 +435,6 @@ const App = () =>{
 					setActiveModal(null)
 					if (osName !== IOS) {
 						history.pop() // удаляем последний элемент в массиве.
-						setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель.
 					}
 					// history.pop() // удаляем последний элемент в массиве.
 					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
