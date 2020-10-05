@@ -283,7 +283,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
-		if (time === false) {
+		if (!time) {
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -294,10 +294,9 @@ const App = () =>{
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
 					setTime(true)
-					setTimeout(() => setTime(false), 1000)
+					setTimeout(() => {setTime(false)}, 400)
 				}
 			}
-			console.log('HistoryWindow ' + window.history)
 		}
 	}
 
