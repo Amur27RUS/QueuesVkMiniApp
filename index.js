@@ -297,14 +297,18 @@ async function deleteUser(queueCode, url, res) {
 
         if(userID !== 3) {
             const client = await pool.connect();
+                const allUsers = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
+                for(let i = checkPlace.rows[0].value; i< allUsers.rows.length; i++){
+                    await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = $3', [i, queueCode, i+1]);
+                }
+
                 const check = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
                 if (check.rows[0] === undefined) {
                     await client.query('DELETE FROM queues WHERE code = $1', [queueCode]);
                     await client.query('DELETE FROM queuesandusers WHERE notvkname IS NOT NULL AND qcode = $1', [queueCode]);
                 }
-
                 const peopleCheck = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notvkname IS NULL', [queueCode]);
                 // todo Доработать условия
                 if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length >= 1) {
