@@ -329,11 +329,13 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         }
                     }
 

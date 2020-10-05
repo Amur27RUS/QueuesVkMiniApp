@@ -274,7 +274,7 @@ const App = () =>{
 
 		});
 
-		window.addEventListener('popstate', () => goBack());
+		window.addEventListener('popstate', () => setTimeout(goBack, 400));
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
