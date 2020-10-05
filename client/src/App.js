@@ -304,7 +304,7 @@ const App = (tutorial) =>{
 
 		});
 
-		window.addEventListener('popstate', () => setTimeout(goBack, 400));
+		window.addEventListener('popstate', () => setTimeout(goBack, 1000));
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
