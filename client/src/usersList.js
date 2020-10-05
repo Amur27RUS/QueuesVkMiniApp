@@ -294,7 +294,7 @@ class UsersList extends React.Component {
     shuffleAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -305,9 +305,9 @@ class UsersList extends React.Component {
                     mode: 'destructive',
                     action: () => {
                         let newArr = this.shuffle(this.state.users);
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                         this.setState({
                             users: newArr,
                             openMenuButton: 'Открыть меню действий',
@@ -345,9 +345,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -359,7 +359,6 @@ class UsersList extends React.Component {
     }
 
     skipCommand = () => {
-
         fetch('/skipPosition', {
             method: 'POST',
             headers: {
@@ -388,7 +387,7 @@ class UsersList extends React.Component {
     skipAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -398,9 +397,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                         let usersArr = this.state.users;
                         global.queue.isFirstPlace = false;
                         for(let i =0; i<usersArr.length; i++){
@@ -428,9 +427,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -444,7 +443,7 @@ class UsersList extends React.Component {
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
 
         //Проверка, чттобы был хотя бы один админ
@@ -529,22 +528,20 @@ class UsersList extends React.Component {
                                 //     Ошибка соединения! Проверьте интернет!
                                 // </Snackbar>);
                             });
-                            console.log(this.props.history)
                             this.props.setActivePanel('home');
-                            this.props.history.pop()
+                            // this.props.history.pop()
                             if (osName !== IOS) {
                                 this.props.history.pop()
                             }
-                            console.log(this.props.history)
                         }
                     }, {
                         title: 'Отмена',
                         autoclose: true,
                         mode: 'cancel',
                         action: () => {
-                            if (osName !== IOS) {
-                                this.props.history.pop()
-                            }
+                            // if (osName !== IOS) {
+                            //     this.props.history.pop()
+                            // }
                         }
                     }]}
                     onClose={this.closePopout}
@@ -558,7 +555,7 @@ class UsersList extends React.Component {
     firstToLast = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
-            window.history.pushState({panel: "alert"}, "alert");
+            window.history.pushState({history: "alert"}, "alert");
         }
         this.props.setPopout(
             <Alert
@@ -568,9 +565,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'destructive',
                     action: () => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
@@ -621,9 +618,9 @@ class UsersList extends React.Component {
                     autoclose: true,
                     mode: 'cancel',
                     action:() => {
-                        if (osName !== IOS) {
-                            this.props.history.pop()
-                        }
+                        // if (osName !== IOS) {
+                        //     this.props.history.pop()
+                        // }
                     }
                 }]}
                 onClose={this.closePopout}
@@ -952,7 +949,7 @@ class UsersList extends React.Component {
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
-                    <Button id={"menuButton"} className={this.state.CSSMenuButton} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
+                    <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
 
                 <div className={this.state.CSSMenuDropout}>
                     {global.queue.isUserAdmin === true &&
