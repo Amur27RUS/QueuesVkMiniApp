@@ -439,7 +439,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 }
                             });
                     }else {
-                        window.scrollBy(0,-100);
                         if (date.trim() === '' && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
@@ -448,6 +447,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setPopout(null);
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            window.scrollBy(0,-100);
 
                         } else if ((!IOSdateError || !global.queue.dataCheck) && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
@@ -457,6 +457,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setPopout(null);
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            window.scrollBy(0,-100);
 
                         } else if (nameQueue.trim() === '') {
                             setQueueNameStatus('error');
@@ -464,6 +465,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setFormStatusHeader('Введите название!')
                             setFormStatusDescription('');
                             setPopout(null);
+                            window.scrollBy(0,-100);
 
                         } else if (date.trim() === '') {
                             setQueueDateStatus('error');
@@ -472,6 +474,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                             setPopout(null);
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            window.scrollBy(0,-100);
                         }
                     }
 
