@@ -95,6 +95,7 @@ const App = () =>{
 	const [joinInputStatus, setJoinInputStatus] = useState('');
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
+	const [time, setTime] = useState(false);
 
 
 	//ActiveStory - это View
@@ -274,7 +275,7 @@ const App = () =>{
 
 		});
 
-		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1000));
+		window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
@@ -282,6 +283,7 @@ const App = () =>{
 	}, []);
 
 	const goBack = () => {
+		if (time === false) {
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
@@ -291,9 +293,12 @@ const App = () =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
+					setTime(true)
+					setTimeout(() => setTime(false), 1000)
 				}
 			}
 			console.log('HistoryWindow ' + window.history)
+		}
 	}
 
 	const go = e => {
