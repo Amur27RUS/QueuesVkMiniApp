@@ -304,11 +304,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateAndTimeInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         }else{
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateAndTimeInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         }
                     }
 
@@ -376,11 +378,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusHeader('Введите имя и дату!')
                             setDateInputButton('turnOff');
                             setDateInput('dateAndTimeInput');
+                            window.scrollTo(0,0);
 
                         }else if(newNameQueue.trim() === '') {
                             setNewNameStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите имя!')
+                            window.scrollTo(0,0);
 
                         }else if(newDate.trim() === '') {
                             setNewDateStatus('error');
@@ -388,6 +392,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusHeader('Введите дату!')
                             setDateInputButton('turnOff');
                             setDateInput('dateAndTimeInput');
+                            window.scrollTo(0,0);
                         }
                     }
                 }}>Сохранить</Button>
