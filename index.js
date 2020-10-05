@@ -338,12 +338,11 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
             if(isAdmin.rows[0].value) {
-                const allUsers = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode])
+                const allUsers = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [allUsers.rows[deletedPlace].value, queueCode]);
                 for(let i = deletedPlace+1; i<allUsers.rows.length; i++){
-                    await client('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = $3', [i, queueCode, i+1])
+                    await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = $3', [i, queueCode, i+1]);
                 }
-
                 const data = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 await res.send(data.rows);
 
