@@ -321,6 +321,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     let dataCheck = document.getElementById('dateID');
 
                     if (!global.queue.dataCheck || !IOSdateError) {
+                        // window.scrollBy(0,0);
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
                         if (formStatusHeader === 'Введите название очереди!') {
@@ -438,6 +439,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                 }
                             });
                     }else {
+                        window.scrollBy(0,-100);
                         if (date.trim() === '' && nameQueue.trim() === '') {
                             setQueueNameStatus('error');
                             setQueueDateStatus('error');
