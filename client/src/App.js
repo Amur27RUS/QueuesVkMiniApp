@@ -304,7 +304,7 @@ const App = (tutorial) =>{
 
 		});
 
-		window.addEventListener('popstate', () => window.setTimeout(goBack, 2000));
+		window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
@@ -316,7 +316,7 @@ const App = (tutorial) =>{
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
-			setTimeout(1000)
+			setTimeout('', 1000)
 			if (history.length === 1) {  // Если в массиве одно значение:
 				await bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
 			} else {
