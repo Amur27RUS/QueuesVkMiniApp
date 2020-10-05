@@ -568,6 +568,12 @@ class UsersList extends React.Component {
                         // if (osName !== IOS) {
                         //     this.props.history.pop()
                         // }
+                        this.setState({
+                            openMenuButton: 'Открыть меню действий',
+                            CSSMenuDropout: 'turnOff',
+                        })
+                        menuCounter++;
+
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
