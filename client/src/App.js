@@ -293,8 +293,8 @@ const App = () =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
-					setTime(true)
-					setTimeout(() => {setTime(false)}, 400)
+					setTime(true);
+					setTimeout(() => {setTime(false)}, 4000)
 				}
 			}
 		}
