@@ -149,7 +149,6 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 				{queues.length !== 0 &&
 				<Div className={'EnterDiv'}>
 					<Button className={'joinBTN'} size="l" level="2" before={<ListAddOutline28/>} onClick={() => {
-						console.log(history)
 						setActiveModal(MODAL_CARD_ABOUT)
 						if (osName !== IOS) {
 							window.history.pushState({history: "MODAL_CARD_ABOUT"}, "MODAL_CARD_ABOUT"); // Создаём новую запись в истории браузера
