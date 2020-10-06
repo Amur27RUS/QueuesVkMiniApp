@@ -103,6 +103,11 @@ const App = () =>{
 	useEffect(() => {
 		console.log('Получение данных о пользователе через VK Bridge');
 
+		let meta = document.createElement('meta');
+		meta.name = "referrer";
+		meta.content = "no-referrer";
+		document.getElementsByTagName('head')[0].appendChild(meta);
+
 		async function fetchData() {
 
 			const user = await bridge.send('VKWebAppGetUserInfo');
