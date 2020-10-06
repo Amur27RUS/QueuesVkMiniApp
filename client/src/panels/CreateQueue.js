@@ -132,7 +132,14 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 </Snackbar>);
             })
         } catch (e) {
-            console.log('Ошибка при создании очереди...');
+            setPopout(null);
+            setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
         }
     };
 
