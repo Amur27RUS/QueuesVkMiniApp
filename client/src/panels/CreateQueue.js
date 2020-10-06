@@ -318,6 +318,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 }}/>
                 <Button size="xl" onClick={async () => {
 
+                    setTimeout('', 200);
                     let dataCheck = document.getElementById('dateID');
 
                     if (!global.queue.dataCheck || !IOSdateError) {
