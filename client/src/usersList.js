@@ -729,8 +729,7 @@ class UsersList extends React.Component {
     reqAdminUsers = () => {
         if (osName === IOS){
             styleForButtons = 'ButtonDivIOS';
-        }
-        else {
+        } else {
             styleForButtons = 'ButtonsDiv';
         }
         this.setState({
