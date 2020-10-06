@@ -218,6 +218,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                    today = new Date(nowIOSTime);
                                    pickedDate = new Date(e.target.value);
                                    let dataCheck = document.getElementById('dateID');
+                                   if (e.target.value === '') {
+                                       setQueueDateStatus('error');
+                                       setFormStatusVisibility(true);
+                                       setFormStatusHeader('Введите дату!')
+                                   }
 
                                    if (dataCheck.validity.rangeUnderflow) {
                                        setQueueDateStatus('error');
