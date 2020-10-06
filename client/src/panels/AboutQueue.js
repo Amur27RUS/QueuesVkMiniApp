@@ -34,6 +34,7 @@ const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, set
 			<PanelHeader
 				left={<PanelHeaderButton onClick={() =>
 				{
+					setSnackbar(null);
 					history.pop()
 					setActivePanel(history[history.length - 1])
 				}}>

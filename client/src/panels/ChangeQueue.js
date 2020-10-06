@@ -118,11 +118,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 return response.json();
             })
                 .then(async function (data) {
-                    if (global.queue.picURLNew !== undefined) {
-                        await setTimeout(() => setPopout(null), 3000);
-                    } else {
-                        setTimeout(() => setPopout(null), 3000);
-                    }
+                    await setTimeout(() => setPopout(null), 3000);
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
@@ -171,6 +167,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
             <PanelHeader left={<PanelHeaderButton onClick={() =>
             {
                 history.pop()
+                setSnackbar(null);
                 setActivePanel(history[history.length - 1])
             }} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}

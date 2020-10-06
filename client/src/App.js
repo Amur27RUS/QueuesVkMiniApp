@@ -298,7 +298,6 @@ const App = () =>{
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
 				}
 			}
-			console.log('HistoryWindow ' + window.history)
 	}
 
 	const go = e => {
