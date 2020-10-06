@@ -218,6 +218,11 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                    today = new Date(nowIOSTime);
                                    pickedDate = new Date(e.target.value);
                                    let dataCheck = document.getElementById('dateID');
+                                   if (e.target.value === '') {
+                                       setQueueDateStatus('error');
+                                       setFormStatusVisibility(true);
+                                       setFormStatusHeader('Введите дату!')
+                                   }
 
                                    if (dataCheck.validity.rangeUnderflow) {
                                        setQueueDateStatus('error');
@@ -318,6 +323,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 }}/>
                 <Button size="xl" onClick={async () => {
 
+                    setTimeout('', 200);
                     let dataCheck = document.getElementById('dateID');
 
                     if (!global.queue.dataCheck || !IOSdateError) {
@@ -341,7 +347,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         setPopout(<ScreenSpinner/>);
                         setFormStatusVisibility(false);
                         setCheckPhoto(false);
-
+                        try {
                         await fetch('/checkCreation', {
                             method: 'POST',
                             headers: {
@@ -437,7 +443,17 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                     }
                                     setCheckPhoto(false);
                                 }
-                            });
+                            });}
+                            catch (e) {
+                                setPopout(null);
+                                setSnackbar(<Snackbar
+                                    layout="vertical"
+                                    onClose={() => setSnackbar(null)}
+                                    before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                >
+                                    Ошибка соединения! Проверьте интернет!
+                                </Snackbar>);
+                            }
                     }else {
                         if (date.trim() === '' && nameQueue.trim() === '') {
                             setQueueNameStatus('error');

@@ -117,8 +117,12 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
             }).then(function (response) {
                 return response.json();
             })
-                .then(function (data) {
-                    setTimeout(() => setPopout(null), 3000);
+                .then(async function (data) {
+                    if (global.queue.picURLNew !== undefined) {
+                        await setTimeout(() => setPopout(null), 3000);
+                    } else {
+                        setTimeout(() => setPopout(null), 3000);
+                    }
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
