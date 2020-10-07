@@ -311,6 +311,7 @@ const App = () =>{
 	};
 
 	const onStoryChange = e => {
+		window.scrollTo(0,0);
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
 	};
