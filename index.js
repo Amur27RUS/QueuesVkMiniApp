@@ -114,10 +114,8 @@ async function addNewAdmins(usersArray, queueCode, url, res){
             if(isAdmin.rows[0].value) {
 
                 for (let i = 0; i < usersArray.length; i++) {
-                    // let isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', queueCode, usersArray[i].userid);
-                    // if(!isAdmin.rows[0].value) {
-                        await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
-                    // }
+                    await client.query('UPDATE queuesandusers SET isAdmin = $1 WHERE userid = $2 AND qcode = $3 AND isAdmin = false', [usersArray[i].isadmin, usersArray[i].userid, queueCode])
+
                 }
                 const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 res.send(result.rows);
