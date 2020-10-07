@@ -119,7 +119,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 return response.json();
             })
                 .then(async function (data) {
-                    await setTimeout(() => setPopout(null), 3000);
+                    await setTimeout(() => setPopout(null), 5000);
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
