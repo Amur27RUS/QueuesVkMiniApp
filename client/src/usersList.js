@@ -572,7 +572,6 @@ class UsersList extends React.Component {
                             openMenuButton: 'Открыть меню действий',
                             CSSMenuDropout: 'turnOff',
                         })
-                        menuCounter++;
 
         fetch('/firstToLast', {
             method: 'POST',
