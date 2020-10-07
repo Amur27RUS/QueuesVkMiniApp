@@ -714,8 +714,6 @@ class UsersList extends React.Component {
                     CSSMenuDropout: 'CSSMenuDropout',
                 })
 
-
-
             }
         }else{
             this.setState({
