@@ -370,6 +370,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         // >
                         //     Изменения сохранены!
                         // </Snackbar>)
+                        global.queue.picURLNew = undefined;
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                     }else{
