@@ -309,6 +309,7 @@ const App = () =>{
 
 		global.queue.counterForCalendar = 0;
 		global.queue.isFirstPlace = undefined;
+		window.scrollTo(0,0);
 	};
 
 	const onStoryChange = e => {
