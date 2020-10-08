@@ -136,17 +136,26 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
     };
 
     const onPhotoUpload = (e) => {
-        let tmpArr = e.target.files[0].name.split('.');
+        let type = e.target.files[0].type;
+        let tmp = type.split('/');
+        type = tmp[tmp.length-1];
+        let tst = e.target.files[0].name.split('.' + type);
+        if(tst.length !== 2 && type === 'jpeg'){
+            type = 'jpg';
+            tst = e.target.files[0].name.split('.' + type);
+        }
+
+        let tmpArr = e.target.files[0].name.split('.' + type);
         global.queue.pic = e.target.files[0];
         global.queue.picName = nameQueue.replace(/\s+/g, '-').replace('?', '')
                 .replace('!', '').replace('!', '')
             + '_' + (e.target.files[0].name).replace(/\s+/g, '')
             + getRandomInt(1000);
+
         global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         global.queue.avatarName = e.target.files[0].name;
         setAvatarName(e.target.files[0].name);
-
     }
 
     const getRandomInt = (max) => {

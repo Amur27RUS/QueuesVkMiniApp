@@ -147,6 +147,15 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
     };
 
     const onPhotoUpload = (e) => {
+        let type = e.target.files[0].type;
+        let tmp = type.split('/');
+        type = tmp[tmp.length-1];
+        let tst = e.target.files[0].name.split('.' + type);
+        if(tst.length !== 2 && type === 'jpeg'){
+            type = 'jpg';
+            tst = e.target.files[0].name.split('.' + type);
+        }
+
         let tmpArr = e.target.files[0].name.split('.');
         global.queue.pic = e.target.files[0];
         global.queue.picName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
