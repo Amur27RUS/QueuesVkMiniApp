@@ -296,6 +296,7 @@ const App = () =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
+					window.scrollTo(0,0);
 				}
 			}
 	}
