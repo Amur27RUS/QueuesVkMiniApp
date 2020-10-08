@@ -285,6 +285,7 @@ class UsersList extends React.Component {
     }
 
     closePopout = () => {
+        window.scrollTo(0,0);
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
@@ -529,7 +530,6 @@ class UsersList extends React.Component {
                                 // </Snackbar>);
                             });
                             this.props.setActivePanel('home');
-                            window.scrollTo(0,0);
                             // this.props.history.pop()
                             if (osName !== IOS) {
                                 this.props.history.pop()
