@@ -223,8 +223,6 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         document.getElementById('qPlace').blur();
                         setDateInput('dateInput');
                         setDateInputButton('turnOff');
-                        setTimeInput('turnOff');
-                        setTimeInputButton('dateAndTimeInputButton');
 
                     }}>Выбрать дату</Button>
                     <div className={dateInput}>
@@ -288,8 +286,6 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         document.getElementById('qPlace').blur();
                         setTimeInput('timeInput');
                         setTimeInputButton('turnOff');
-                        setDateInput('turnOff');
-                        setDateInputButton('dateAndTimeInputButton');
 
                     }}>Выбрать время</Button>
                     <div className={timeInput}>
