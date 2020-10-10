@@ -300,7 +300,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     </div>
                 </FormLayoutGroup>
 
-                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                <File id={'fileInputID'} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
                           setDeleteImgButtonCSS('deleteImgButton');
@@ -318,6 +318,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                                 setDeleteImgButtonCSS('turnOff');
                                                                                 setDelDivCSS('turnOff');
                                                                                 global.queue.avatarName = undefined;
+                                                                                document.getElementById('fileInputID').value = "";
                                                                             }}/></Text>
 
                 </div>
