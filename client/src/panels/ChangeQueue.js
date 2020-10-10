@@ -17,6 +17,7 @@ import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon28CalendarOutline from "@vkontakte/icons/dist/28/calendar_outline";
 import Icon28RecentOutline from "@vkontakte/icons/dist/28/recent_outline";
+import Icon12Cancel from "@vkontakte/icons/dist/12/cancel";
 
 
 let now = new Date().toLocaleDateString();
@@ -43,6 +44,8 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
     const [dateInput, setDateInput] = useState('turnOff');
     const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
     const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
+    const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
+    const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
     // let pic; //Картинка очереди
     // let picName;
@@ -119,7 +122,11 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 return response.json();
             })
                 .then(async function (data) {
-                    await setTimeout(() => setPopout(null), 5000);
+                    let timeOutTime = 0;
+                    if(global.queue.picURLNew !== undefined || global.queue.picURLNew !== ''){
+                        timeOutTime = 5000;
+                    }
+                    await setTimeout(() => setPopout(null), timeOutTime);
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
@@ -127,7 +134,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                                                                             height={14}/></Avatar>}
                     >
                         Изменения сохранены!
-                    </Snackbar>), 3000);
+                    </Snackbar>), timeOutTime);
                 })
                 .catch((e) => {
                     setPopout(null);
@@ -292,9 +299,27 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 <Input top={'Время начала'} className={timeInput} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
                     </div>
                 </FormLayoutGroup>
-                <File top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
-                      onChange={(e) => {onPhotoUpload(e)}}/>
-                <Text className={'uploadedImgName'}>{newAvatarName}</Text>
+                <File id={'fileInputID'} top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
+                      onChange={(e) => {
+                          setDeleteImgButtonCSS('deleteImgButton');
+                          setDelDivCSS('divForDel');
+                          onPhotoUpload(e);
+                      }}/>
+                <div className={delDivCSS}>
+                <Text className={'uploadedImgName'}>{newAvatarName}<Button className={deleteImgButtonCSS}
+                                                                           mode={'tertiary'}
+                                                                           before={<Icon12Cancel/>}
+                                                                           onClick={()=>{
+                                                                               setNewAvatarName('');
+                                                                               global.queue.picURLNew = undefined;
+                                                                               global.queue.picURL = undefined;
+                                                                               setDeleteImgButtonCSS('turnOff');
+                                                                               setDelDivCSS('turnOff');
+                                                                               global.queue.avatarName = undefined;
+                                                                               document.getElementById('fileInputID').value = "";
+                                                                           }}/></Text>
+
+                </div>
                 <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
@@ -339,19 +364,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             })
                                 .then(function (data) {
                                     console.log('Картинка успешно загружена!!!');
-                                })
-                                .then(function () {
-                                    setSnackbar(<Snackbar
-                                        layout="vertical"
-                                        onClose={() => setSnackbar(null)}
-                                        before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14}
-                                                                                                            height={14}/></Avatar>}
-                                    >
-                                        Изменения сохранены!
-                                    </Snackbar>)
-                                    setPopout(null);
-                                })
-                                .catch((e) => {
+                                }).catch((e) => {
                                 setPopout(null);
                                 setSnackbar(<Snackbar
                                     layout="vertical"
