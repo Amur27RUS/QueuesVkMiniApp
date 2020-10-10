@@ -144,6 +144,11 @@ class UsersList extends React.Component {
 
         menuCounter = 1;
 
+        document.onclick = function() {
+            document.getElementById('menuButton').style.display = 'none'
+            menuCounter++;
+        }
+
         async function getUsersData(data){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
@@ -288,7 +293,6 @@ class UsersList extends React.Component {
     }
 
     closePopout = () => {
-        window.scrollTo(0,0);
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
