@@ -280,7 +280,7 @@ const App = () =>{
 
 		});
 
-		history.pushState(null, null, window.location.href.split('#')[0]);
+		window.location.hash = '';
 
 		window.addEventListener('popstate', () => goBack());
 
