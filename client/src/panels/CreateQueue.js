@@ -237,6 +237,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                    console.log('CHANGE' + pickedDate)
                                    let dataCheck = document.getElementById('dateID');
                                    if (e.target.value === '' || pickedDate === 'Invalid Date') {
+                                       console.log('ZASHLO');
                                        setQueueDateStatus('error');
                                        setFormStatusVisibility(true);
                                        setFormStatusHeader('Введите дату!')
