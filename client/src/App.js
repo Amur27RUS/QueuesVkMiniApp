@@ -280,6 +280,8 @@ const App = () =>{
 
 		});
 
+		window.location.reload(true);
+
 		window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
