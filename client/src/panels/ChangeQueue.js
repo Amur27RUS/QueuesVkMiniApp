@@ -94,6 +94,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
         }
     }
 
+
     const changeQueueOnServer = () => {
         setPopout(<ScreenSpinner/>);
 
@@ -117,8 +118,8 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
             }).then(function (response) {
                 return response.json();
             })
-                .then(function (data) {
-                    setTimeout(() => setPopout(null), 3000);
+                .then(async function (data) {
+                    await setTimeout(() => setPopout(null), 5000);
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
@@ -146,6 +147,15 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
     };
 
     const onPhotoUpload = (e) => {
+        let type = e.target.files[0].type;
+        let tmp = type.split('/');
+        type = tmp[tmp.length-1];
+        let tst = e.target.files[0].name.split('.' + type);
+        if(tst.length !== 2 && type === 'jpeg'){
+            type = 'jpg';
+            tst = e.target.files[0].name.split('.' + type);
+        }
+
         let tmpArr = e.target.files[0].name.split('.');
         global.queue.pic = e.target.files[0];
         global.queue.picName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
@@ -167,6 +177,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
             <PanelHeader left={<PanelHeaderButton onClick={() =>
             {
                 history.pop()
+                setSnackbar(null);
                 setActivePanel(history[history.length - 1])
             }} data-to="aboutQueue">
                 {<Icon28ChevronBack/>}
@@ -304,11 +315,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateAndTimeInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         }else{
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateAndTimeInput');
                             setDateInputButton('turnOff');
+                            window.scrollTo(0,0);
                         }
                     }
 
@@ -366,6 +379,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         // >
                         //     Изменения сохранены!
                         // </Snackbar>)
+                        global.queue.picURLNew = undefined;
                         global.queue.picURL = undefined;
                         global.queue.pic = undefined;
                     }else{
@@ -376,11 +390,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusHeader('Введите имя и дату!')
                             setDateInputButton('turnOff');
                             setDateInput('dateAndTimeInput');
+                            window.scrollTo(0,0);
 
                         }else if(newNameQueue.trim() === '') {
                             setNewNameStatus('error');
                             setFormStatusVisibility(true);
                             setFormStatusHeader('Введите имя!')
+                            window.scrollTo(0,0);
 
                         }else if(newDate.trim() === '') {
                             setNewDateStatus('error');
@@ -388,6 +404,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                             setFormStatusHeader('Введите дату!')
                             setDateInputButton('turnOff');
                             setDateInput('dateAndTimeInput');
+                            window.scrollTo(0,0);
                         }
                     }
                 }}>Сохранить</Button>

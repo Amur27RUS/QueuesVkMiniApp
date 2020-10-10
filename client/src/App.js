@@ -104,6 +104,11 @@ const App = () =>{
 	useEffect(() => {
 		console.log('Получение данных о пользователе через VK Bridge');
 
+		let meta = document.createElement('meta');
+		meta.name = "referrer";
+		meta.content = "no-referrer";
+		document.getElementsByTagName('head')[0].appendChild(meta);
+
 		async function fetchData() {
 
 			const user = await bridge.send('VKWebAppGetUserInfo');
@@ -293,6 +298,7 @@ const App = () =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
+					window.scrollTo(0,0);
 					await setTime(true);
 					await setTimeout(() => {setTime(false)}, 4000);
 				}
@@ -308,9 +314,11 @@ const App = () =>{
 
 		global.queue.counterForCalendar = 0;
 		global.queue.isFirstPlace = undefined;
+		window.scrollTo(0,0);
 	};
 
 	const onStoryChange = e => {
+		window.scrollTo(0,0);
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
 	};

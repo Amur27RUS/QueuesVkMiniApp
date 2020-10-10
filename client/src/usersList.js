@@ -285,6 +285,7 @@ class UsersList extends React.Component {
     }
 
     closePopout = () => {
+        window.scrollTo(0,0);
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
@@ -568,6 +569,11 @@ class UsersList extends React.Component {
                         // if (osName !== IOS) {
                         //     this.props.history.pop()
                         // }
+                        this.setState({
+                            openMenuButton: 'Открыть меню действий',
+                            CSSMenuDropout: 'turnOff',
+                        })
+
         fetch('/firstToLast', {
             method: 'POST',
             headers: {
@@ -708,8 +714,6 @@ class UsersList extends React.Component {
                     CSSMenuDropout: 'CSSMenuDropout',
                 })
 
-
-
             }
         }else{
             this.setState({
@@ -723,8 +727,7 @@ class UsersList extends React.Component {
     reqAdminUsers = () => {
         if (osName === IOS){
             styleForButtons = 'ButtonDivIOS';
-        }
-        else {
+        } else {
             styleForButtons = 'ButtonsDiv';
         }
         this.setState({
