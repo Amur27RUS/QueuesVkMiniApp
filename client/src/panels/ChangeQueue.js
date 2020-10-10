@@ -122,6 +122,8 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 return response.json();
             })
                 .then(async function (data) {
+                    if(data !== 'Deleted queue'){
+
                     let timeOutTime = 0;
                     if(global.queue.picURLNew !== undefined || global.queue.picURLNew !== ''){
                         timeOutTime = 5000;
@@ -135,6 +137,19 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                     >
                         Изменения сохранены!
                     </Snackbar>), timeOutTime);
+                    }else{
+                        setPopout(null);
+                        setActivePanel('home');
+                        history.pop();
+                        history.pop();
+                        setSnackbar(<Snackbar
+                            layout="vertical"
+                            onClose={() => setSnackbar(null)}
+                            before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                        >
+                            Очередь была удалена!
+                        </Snackbar>)
+                    }
                 })
                 .catch((e) => {
                     setPopout(null);

@@ -78,8 +78,6 @@ class UsersList extends React.Component {
             this.setState({
                 CSSActionsButton: 'showActionsButton'
             });
-
-
         }
         menuCounter = 1;
         counter = 1;
