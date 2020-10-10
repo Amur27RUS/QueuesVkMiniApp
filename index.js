@@ -122,9 +122,11 @@ async function addNewAdmins(usersArray, queueCode, url, res){
             }
             await client.release();
         }else{
-            res.status(403).send({errorCode: 'sign rejected :('})
+            res.status(403).send({errorCode: 'sign rejected :('});
         }
+
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }
@@ -156,6 +158,7 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
             res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }
@@ -372,6 +375,7 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
             res.status(403).send({errorCode: 'sign rejected :('});
         }
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }
