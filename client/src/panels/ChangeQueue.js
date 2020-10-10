@@ -301,6 +301,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                setNewDateStatus('error');
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите дату!')
+                               global.queue.dataCheck = false;
                            }
                            setNewDate(e.target.value)
                        }}/>
