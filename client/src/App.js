@@ -103,6 +103,7 @@ const App = () =>{
 	const [joinInputStatus, setJoinInputStatus] = useState('');
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
+	const [time, setTime] = useState(false);
 
 
 	//ActiveStory - это View
@@ -294,19 +295,23 @@ const App = () =>{
 		}
 	}, []);
 
-	const goBack = () => {
+	const goBack = async () => {
+		if (!time) {
 			setSnackbar(null);
 			setActiveModal(null);
 			setPopout(null);
 			if (history.length === 1) {  // Если в массиве одно значение:
-				bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
+				await bridge.send("VKWebAppClose", {"status": "success"}); // Отправляем bridge на закрытие сервиса.
 			} else {
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
+					await setTimeout(() => setActivePanel(history[history.length - 1]), 400); // Изменяем массив с иторией и меняем активную панель
 					window.scrollTo(0,0);
+					await setTime(true);
+					await setTimeout(() => {setTime(false)}, 800);
 				}
 			}
+		}
 	}
 
 	const go = e => {
