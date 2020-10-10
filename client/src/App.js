@@ -215,7 +215,7 @@ const App = (tutorial) =>{
 							}
 						})
 				}
-				// window.location.hash = '';
+				window.location.hash = '';
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
