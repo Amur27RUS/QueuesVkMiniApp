@@ -86,11 +86,11 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 setDateInputButton('turnOff');
                 setDateInput('dateAndTimeInput');
             }
-
         }else{
             setFormStatusVisibility(false);
             global.queue.dataCheck = true;
         }
+
 
         if(today.getTime() > pickedDate.getTime()){
             IOSdateError = false;
@@ -320,6 +320,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                setNewDateStatus('valid');
                                setFormStatusVisibility(false);
                                global.queue.dataCheck = true
+                           }
+
+                           if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
+                               setNewDateStatus('error');
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Введите дату!')
+                               global.queue.dataCheck = true;
                            }
                            global.queue.changedDate = e.target.value;
                            setNewDate(e.target.value)

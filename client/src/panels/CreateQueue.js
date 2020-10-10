@@ -226,12 +226,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                onChange={e => {
                                    today = new Date(nowIOSTime);
                                    pickedDate = new Date(e.target.value);
-                                   let dataCheck = document.getElementById('dateID');
-                                   if (e.target.value === '') {
-                                       setQueueDateStatus('error');
-                                       setFormStatusVisibility(true);
-                                       setFormStatusHeader('Введите дату!')
-                                   }
+                                   let dataCheck = document.getElementById('dateID')
 
                                    if (dataCheck.validity.rangeUnderflow) {
                                        setQueueDateStatus('error');
@@ -275,6 +270,12 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                        global.queue.dataCheck = true;
                                        IOSdateError = true;
                                        setFormStatusVisibility(false);
+                                   }
+
+                                   if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
+                                       setQueueDateStatus('error');
+                                       setFormStatusVisibility(true);
+                                       setFormStatusHeader('Введите дату!')
                                    }
                                    setDate(e.target.value)
                                    global.queue.createDate = e.target.value;
