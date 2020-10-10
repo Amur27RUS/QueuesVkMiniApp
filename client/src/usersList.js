@@ -267,7 +267,6 @@ class UsersList extends React.Component {
     }
 
     closePopout = () => {
-        window.scrollTo(0,0);
         this.props.setPopout(null);
         if (osName !== IOS) {
             this.props.history.pop()
