@@ -194,7 +194,6 @@ const App = () =>{
 							}
 						})
 				}
-				window.location.hash = '';
 
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
