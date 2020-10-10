@@ -236,7 +236,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                    pickedDate = new Date(e.target.value);
                                    console.log('CHANGE' + pickedDate)
                                    let dataCheck = document.getElementById('dateID');
-                                   if (e.target.value === '') {
+                                   if (e.target.value === '' || pickedDate === 'Invalid Date') {
                                        setQueueDateStatus('error');
                                        setFormStatusVisibility(true);
                                        setFormStatusHeader('Введите дату!')
