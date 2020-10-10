@@ -296,10 +296,10 @@ const App = () =>{
 			} else {
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
-					setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
+					await setActivePanel(history[history.length - 1]) // Изменяем массив с иторией и меняем активную панель
 					window.scrollTo(0,0);
 					await setTime(true);
-					await setTimeout(() => {setTime(false)}, 4000);
+					await setTimeout(() => {setTime(false)}, 400);
 				}
 			}
 		}
