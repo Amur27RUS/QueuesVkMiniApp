@@ -231,8 +231,10 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                value={date}
                                status={queueDateStatus}
                                onChange={e => {
+                                   console.log('CHANGE ' + e.target.value)
                                    today = new Date(nowIOSTime);
                                    pickedDate = new Date(e.target.value);
+                                   console.log('CHANGE' + pickedDate)
                                    let dataCheck = document.getElementById('dateID');
                                    if (e.target.value === '') {
                                        setQueueDateStatus('error');
