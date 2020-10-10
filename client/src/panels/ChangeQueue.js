@@ -296,6 +296,12 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                setFormStatusVisibility(false);
                                global.queue.dataCheck = true
                            }
+
+                           if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
+                               setNewDateStatus('error');
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Введите дату!')
+                           }
                            setNewDate(e.target.value)
                        }}/>
                     </div>
