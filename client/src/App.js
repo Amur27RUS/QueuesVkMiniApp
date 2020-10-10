@@ -280,7 +280,7 @@ const App = () =>{
 
 		});
 
-		window.location.reload(true);
+		window.location.hash = '';
 
 		window.addEventListener('popstate', () => goBack());
 
