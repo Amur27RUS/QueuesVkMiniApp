@@ -76,6 +76,8 @@ const osName = platform();
 
 const App = () =>{
 
+	this.state = {a: 2}
+
 	const [activePanel, setActivePanel] = useState('home');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
@@ -192,7 +194,8 @@ const App = () =>{
 							}
 						})
 				}
-				// window.location.hash = '';
+				window.location.hash = '';
+
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
@@ -279,9 +282,6 @@ const App = () =>{
 			}
 
 		});
-
-
-		window.location.hash = '';
 
 		window.addEventListener('popstate', () => goBack());
 
