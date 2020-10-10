@@ -127,6 +127,11 @@ class UsersList extends React.Component {
 
         menuCounter = 1;
 
+        document.onclick = function() {
+            document.getElementById('menuButton').style.display = 'none'
+            menuCounter++;
+        }
+
         async function getUsersData(data){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
