@@ -84,6 +84,14 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 			setQueues(queuesArray);
 		}
 
+		bridge.send("VKWebAppGetAds", {}).then(data => {
+			console.log('bannerdata');
+			console.log(data);
+			setBanner(<PromoBanner
+					onClose={()=>{this.setState({Banner:false})}}
+					bannerData={data}/>)
+		}).catch(data => console.log(data));
+
 	}, []);
 
 	const blueBackground = {
