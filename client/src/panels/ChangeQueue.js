@@ -350,7 +350,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 }}/>
                     </div>
                 </FormLayoutGroup>
-                <File id={'fileInputID'} top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
+                <File id={'fileInputID'} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
                       onChange={(e) => {
                           setDeleteImgButtonCSS('deleteImgButton');
                           setDelDivCSS('divForDel');
