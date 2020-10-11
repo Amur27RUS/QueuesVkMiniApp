@@ -56,7 +56,7 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 }));
 
 //todo БОТ====================================================================
-//     const VkBot = require('node-vk-bot-api');
+    const VkBot = require('node-vk-bot-api');
 
     const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
 
@@ -503,6 +503,7 @@ function generateCode() {
 
 const qs = require('querystring');
 const crypto = require('crypto');
+const VkBot = require("node-vk-bot-api");
 async function checkSign(url){
     const urlParams = qs.parse(url);
     const ordered = {};
