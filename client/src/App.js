@@ -282,8 +282,6 @@ const App = () =>{
 			});
 
 		fetchData();
-		restoreView();
-
 
 
 		window.addEventListener('popstate', () => goBack());
