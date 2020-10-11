@@ -339,20 +339,21 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     let dataCheck = document.getElementById('dateID');
 
                     if (!global.queue.dataCheck || !IOSdateError) {
-                        // window.scrollBy(0,0);
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
                         if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                            setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            setDateInput('dateInput');
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                            setDateInput('dateInput');
                             setDateInputButton('turnOff');
+                            setDateInput('dateInput');
                         }
+                        window.scrollTo(0,0);
+
                     }
 
                     if (nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
