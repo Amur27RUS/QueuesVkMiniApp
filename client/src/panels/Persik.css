@@ -135,6 +135,10 @@
   margin-bottom: 10px;
 }
 
+.refreshButton{
+  margin-bottom: 10px;
+}
+
 .emoji {
   font-size: 100px;
 }
@@ -342,4 +346,5 @@ img {
 
 .defaultSpinner {
   display: flex;
+  margin-bottom: 10px;
 }

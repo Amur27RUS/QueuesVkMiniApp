@@ -62,9 +62,18 @@ global.queue = {
 	createPlace: '',
 	counterForCalendar: 0,
 
+	changedName: undefined,
+	changedDesc: undefined,
+	changedDate: undefined,
+	changedTime: undefined,
+	changedPlace: undefined,
+	changedPic: undefined,
+	changedPicName: undefined,
+	changedPicURL: undefined,
+	changedPicURLNew: undefined,
+	changedAvatarName: undefined,
 
 	goBackIOS: false,
-
 
 	dataCheck: false,
 }
@@ -320,7 +329,18 @@ const App = () =>{
 
 		global.queue.counterForCalendar = 0;
 		global.queue.isFirstPlace = undefined;
-		window.scrollTo(0,0);
+		global.queue.changedName = undefined;
+		global.queue.changedDesc = undefined;
+		global.queue.changedDate = undefined;
+		global.queue.changedTime = undefined;
+		global.queue.changedPlace = undefined;
+		global.queue.changedPic = undefined;
+		global.queue.changedPicName = undefined;
+		global.queue.changedPicURL = undefined;
+		global.queue.changedPioURLNew = undefined;
+		global.queue.changedAvatarName = undefined;
+
+			window.scrollTo(0,0);
 	};
 
 	const onStoryChange = e => {
