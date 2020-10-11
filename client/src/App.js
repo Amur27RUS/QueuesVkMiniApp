@@ -306,8 +306,6 @@ const App = (tutorial) =>{
 		}
 
 		fetchData();
-		restoreView();
-
 
 
 		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1000));
