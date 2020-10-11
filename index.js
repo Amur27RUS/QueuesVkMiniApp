@@ -503,7 +503,6 @@ function generateCode() {
 
 const qs = require('querystring');
 const crypto = require('crypto');
-const VkBot = require("node-vk-bot-api");
 async function checkSign(url){
     const urlParams = qs.parse(url);
     const ordered = {};
