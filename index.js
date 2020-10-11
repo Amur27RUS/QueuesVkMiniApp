@@ -14,9 +14,6 @@ const limiter = rateLimit({
     message: "Too many  created from this IP",
 });
 
-//  apply to all requests
-// app.use(limiter);
-
 // const bot = new VkBot({
 //     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
 //     confirmation: '7268987f'
@@ -61,14 +58,14 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 //todo БОТ====================================================================
     const VkBot = require('node-vk-bot-api');
 
-    // const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
+    const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
 
-    // bot.on((ctx) => {
-    //     ctx.reply('Привет! К сожалению, меня не научили понимать ваш язык! Зато я могу отправлять тебе уведомления, когда твоя очередь будет подходить :)');
-    // });
-    // console.log('Бот работает!')
-    //
-    // bot.startPolling();
+    bot.on((ctx) => {
+        ctx.reply('Привет! К сожалению, меня не научили понимать ваш язык! Зато я могу отправлять тебе уведомления, когда твоя очередь будет подходить :)');
+    });
+    console.log('Бот работает!')
+
+    bot.startPolling();
 
 
 //Запуск - nodemon app.js
@@ -140,6 +137,8 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
             if(isAdmin.rows[0].value) {
+                let user1 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 1');
+                let user2 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 2');
                 for (let i = 0; i < usersArr.length; i++) {
                     await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [i + 1, usersArr[i].userid, queueCode]);
                 }
@@ -147,10 +146,16 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
                 const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 res.send(result.rows);
                 //БОТ:
-                const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
-                const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                // bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                if(usersArr[0].userid !== user1) {
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                }else if(usersArr[1].userid !== user2){
+                    const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+                    const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                }
             }
 
             await client.release();
@@ -324,12 +329,12 @@ async function deleteUser(queueCode, url, res) {
                 if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length >= 1) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    // bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                    // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
                 } else if (checkPlace.rows[0].value === 2) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
                 }
 
             await client.release();
@@ -367,12 +372,12 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
                     if (deletedPlace === 0) {
                         const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                         const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                        // bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                        // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
                     } else if (deletedPlace === 1) {
                         const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                         const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                        // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
                     }
                 }
             }
@@ -422,8 +427,8 @@ async function firstToLast(queueCode, url, res) {
 
             const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
             const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            // bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-            // bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
+            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
 
             await client.release();
         }else{
