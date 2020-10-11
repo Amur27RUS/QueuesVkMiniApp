@@ -21,7 +21,7 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
 
 
-let now = new Date().toLocaleDateString();
+let now = new Date().toLocaleDateString('en-GB');
 let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');

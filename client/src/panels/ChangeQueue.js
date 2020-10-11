@@ -20,8 +20,8 @@ import Icon28RecentOutline from "@vkontakte/icons/dist/28/recent_outline";
 import Icon12Cancel from "@vkontakte/icons/dist/12/cancel";
 
 
-let now = new Date().toLocaleDateString();
-let nowTime = now.split('.').reverse().join('-')
+let now = new Date().toLocaleDateString('en-GB');
+let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError;
