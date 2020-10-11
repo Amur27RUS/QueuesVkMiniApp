@@ -201,6 +201,7 @@ const App = () =>{
 							}
 						})
 				}
+				// window.location.hash = '';
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
@@ -225,7 +226,6 @@ const App = () =>{
 				global.scheme.scheme = schemeAttribute.value;
 			}else if(type === 'VKWebAppViewRestore'){
 				if(window.location.hash !== ''){
-					bridge.send("VKWebAppSetLocation", {"location": ""});
 					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
 					if(global.queue.joinQueueCode.length === 6) {
 						fetch('/getQueueToJoin', {
@@ -241,59 +241,53 @@ const App = () =>{
 						}).then(function (response) {
 							return response.json();
 
-							})
-								.then(function (data) {
-									if (data === 'alreadyThere') {
-										setSnackbar(<Snackbar
-											layout="vertical"
-											onClose={() => setSnackbar(null)}
-											before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff"
-																										 width={14}
-																										 height={14}/></Avatar>}
-										>
-											Вы уже находитесь в этой очереди!
-										</Snackbar>);
-									} else if (data === 'noQueue') {
-										setSnackbar(<Snackbar
-											layout="vertical"
-											onClose={() => setSnackbar(null)}
-											before={<Avatar size={24}><Icon16Clear fill="red" width={14}
-																				   height={14}/></Avatar>}
-										>
-											Очереди с введённым кодом приглашения не существует!
-										</Snackbar>)
-									} else {
-										global.queue.name = data.name;
-										global.queue.avatar = data.avatar;
-										setJoinQueueAvatar(data.avatar);
-										setJoinQueueName(data.name);
-										setActiveModal(MODAL_CARD_QUEUE_INVITE);
-										if (osName !== IOS) {
-											window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
-											history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
-										}
+						})
+							.then(function (data) {
+								if (data === 'alreadyThere') {
+									setSnackbar(<Snackbar
+										layout="vertical"
+										onClose={() => setSnackbar(null)}
+										before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14}
+																									 height={14}/></Avatar>}
+									>
+										Вы уже находитесь в этой очереди!
+									</Snackbar>);
+								} else if (data === 'noQueue') {
+									setSnackbar(<Snackbar
+										layout="vertical"
+										onClose={() => setSnackbar(null)}
+										before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+									>
+										Очереди с введённым кодом приглашения не существует!
+									</Snackbar>)
+								} else {
+									global.queue.name = data.name;
+									global.queue.avatar = data.avatar;
+									setJoinQueueAvatar(data.avatar);
+									setJoinQueueName(data.name);
+									setActiveModal(MODAL_CARD_QUEUE_INVITE);
+									if (osName !== IOS) {
+										window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+										history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
 									}
-								}).catch((e) => {
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-								>
-									Ошибка соединения! Проверьте интернет!
-								</Snackbar>);
-							})
-						}
+								}
+							}).catch((e) => {
+							setSnackbar(<Snackbar
+								layout="vertical"
+								onClose={() => setSnackbar(null)}
+								before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+							>
+								Ошибка соединения! Проверьте интернет!
+							</Snackbar>);
+						})
+					}
 
 				}
 				setSnackbar(null);
+				bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
-			});
-
-		fetchData();
-		restoreView();
-
-
+		});
 
 		window.addEventListener('popstate', () => goBack());
 
@@ -340,7 +334,7 @@ const App = () =>{
 		global.queue.changedPioURLNew = undefined;
 		global.queue.changedAvatarName = undefined;
 
-			window.scrollTo(0,0);
+		window.scrollTo(0,0);
 	};
 
 	const onStoryChange = e => {
@@ -355,81 +349,81 @@ const App = () =>{
 			setJoinInputStatusText('');
 			console.log('Отправлен запрос на вход в очередь...');
 
-				fetch('/joinQueue', {
+			fetch('/joinQueue', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					"serverCode": data,
+					"url": window.location.search.replace('?', '')
+				})
+			}).then(async function (response) {
+				let res = await response.json();
+				if (osName !== IOS){
+					history.pop() // удаляем последний элемент в массиве.
+					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+				}
+				if (res === 'noQueue') {
+					setActiveModal(null);
+					setCodeInput(undefined);
+					setSnackbar(<Snackbar
+						layout="vertical"
+						onClose={() => setSnackbar(null)}
+						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+					>
+						Очереди с введённым кодом не существует!
+					</Snackbar>)
+				} else if (res === 'alreadyThere') {
+					setActiveModal(null);
+					setCodeInput(undefined);
+					setSnackbar(<Snackbar
+						layout="vertical"
+						onClose={() => setSnackbar(null)}
+						before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14} height={14}/></Avatar>}
+					>
+						Вы уже находитесь в этой очереди!
+					</Snackbar>)
+				} else if (res === 'success') {
+					setActiveModal(null);
+					setCodeInput(undefined);
+					setSnackbar(<Snackbar
+						layout="vertical"
+						onClose={() => setSnackbar(null)}
+						before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+					>
+						Вы успешно присоединились к очереди!
+					</Snackbar>)
+				}
+			}).then(async function (res) {
+				fetch('/getQueues', {
 					method: 'POST',
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						"serverCode": data,
 						"url": window.location.search.replace('?', '')
 					})
-				}).then(async function (response) {
-							let res = await response.json();
-							if (osName !== IOS){
-								history.pop() // удаляем последний элемент в массиве.
-								// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-							}
-							if (res === 'noQueue') {
-								setActiveModal(null);
-								setCodeInput(undefined);
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-								>
-									Очереди с введённым кодом не существует!
-								</Snackbar>)
-							} else if (res === 'alreadyThere') {
-								setActiveModal(null);
-								setCodeInput(undefined);
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14} height={14}/></Avatar>}
-								>
-									Вы уже находитесь в этой очереди!
-								</Snackbar>)
-							} else if (res === 'success') {
-								setActiveModal(null);
-								setCodeInput(undefined);
-								setSnackbar(<Snackbar
-									layout="vertical"
-									onClose={() => setSnackbar(null)}
-									before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
-								>
-									Вы успешно присоединились к очереди!
-								</Snackbar>)
-							}
-				}).then(async function (res) {
-					fetch('/getQueues', {
-						method: 'POST',
-						headers: {
-							'Accept': 'application/json',
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							"url": window.location.search.replace('?', '')
-						})
-					}).then(function (response) {
-						return response.json();
+				}).then(function (response) {
+					return response.json();
 
-					})
-						.then(function (data) {
-							setQueues(data);
-						})
-				}).catch((e) => {
-					setSnackbar(<Snackbar
-						layout="vertical"
-						onClose={() => setSnackbar(null)}
-						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-					>
-						Ошибка соединения! Проверьте интернет!
-					</Snackbar>);
 				})
+					.then(function (data) {
+						setQueues(data);
+					})
+			}).catch((e) => {
+				setSnackbar(<Snackbar
+					layout="vertical"
+					onClose={() => setSnackbar(null)}
+					before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+				>
+					Ошибка соединения! Проверьте интернет!
+				</Snackbar>);
+			})
 
-			}else{
+		}else{
 			setJoinInputStatus('error');
 			setJoinInputStatusText('Должно быть 6 символов!')
 		}
@@ -541,20 +535,20 @@ const App = () =>{
 				]}
 			>
 				<FormLayout className={'inputJoin'}>
-						<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
-							   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
+					<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
+						   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
 
-							   	setCodeInput(e.target.value.substring(0, 6))
-								if(e.target.value.length === 6){
-									setJoinInputStatusText('');
-									setJoinInputStatus('valid');
-									// history.pop() // удаляем последний элемент в массиве.
-									// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-								}else{
-									setJoinInputStatusText('Должно быть 6 символов!');
-									setJoinInputStatus('error');
-								}
-						}}/>
+						setCodeInput(e.target.value.substring(0, 6))
+						if(e.target.value.length === 6){
+							setJoinInputStatusText('');
+							setJoinInputStatus('valid');
+							// history.pop() // удаляем последний элемент в массиве.
+							// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+						}else{
+							setJoinInputStatusText('Должно быть 6 символов!');
+							setJoinInputStatus('error');
+						}
+					}}/>
 				</FormLayout>
 			</ModalCard>
 
@@ -602,7 +596,7 @@ const App = () =>{
 						await bridge.send("VKWebAppCopyText", {"text": queueCODE});
 						setCopyButtonTitle('Скопировано!')
 					}
-					}]}
+				}]}
 				actionsLayout="vertical"
 			>
 			</ModalCard>
@@ -622,54 +616,53 @@ const App = () =>{
 
 	return (
 		<ConfigProvider>
-		<Epic activeStory={activeStory} tabbar={
-			<Tabbar className={'createQueuePanel'}>
-				<TabbarItem
-					onClick={onStoryChange}
-					selected={activeStory === 'main'}
-					data-story="main"
-					data-to='home'
-					text="Очереди"
-				><ListOutline28/></TabbarItem>
-				<TabbarItem
-					onClick={onStoryChange}
-					selected={activeStory === 'createQueue'}
-					data-story="createQueue"
-					data-to="createQueuePanel"
-					text="Создать очередь"
-				><AddSquareOutline28/></TabbarItem>
-				{/*<TabbarItem*/}
-				{/*	onClick={onStoryChange}*/}
-				{/*	selected={activeStory === 'settings'}*/}
-				{/*	data-story="settings"*/}
-				{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
-				{/*	text="Настройки"*/}
-				{/*><Icon28SettingsOutline/></TabbarItem>*/}
-			</Tabbar>
-		}>
+			<Epic activeStory={activeStory} tabbar={
+				<Tabbar className={'createQueuePanel'}>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'main'}
+						data-story="main"
+						data-to='home'
+						text="Очереди"
+					><ListOutline28/></TabbarItem>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'createQueue'}
+						data-story="createQueue"
+						data-to="createQueuePanel"
+						text="Создать очередь"
+					><AddSquareOutline28/></TabbarItem>
+					{/*<TabbarItem*/}
+					{/*	onClick={onStoryChange}*/}
+					{/*	selected={activeStory === 'settings'}*/}
+					{/*	data-story="settings"*/}
+					{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
+					{/*	text="Настройки"*/}
+					{/*><Icon28SettingsOutline/></TabbarItem>*/}
+				</Tabbar>
+			}>
 
 
-			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
-				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
-			</View>
+				<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
+					<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+					<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+					<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+				</View>
 
 
 
-			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
-				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
-			</View>
-			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
+				<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
+					<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				</View>
+				{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
 				{/*	<Settings id={'Settings'} go={go}/>*/}
-			{/*</View>*/}
-		</Epic>
+				{/*</View>*/}
+			</Epic>
 		</ConfigProvider>
 	);
 }
 
 export default App;
-
 
 
 
