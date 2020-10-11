@@ -56,7 +56,7 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 }));
 
 //todo БОТ====================================================================
-    const VkBot = require('node-vk-bot-api');
+//     const VkBot = require('node-vk-bot-api');
 
     const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
 
@@ -137,8 +137,8 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
             const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
             if(isAdmin.rows[0].value) {
-                let user1 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 1');
-                let user2 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 2');
+                let user1 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 1', [queueCode]);
+                let user2 = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND userplace = 2', [queueCode]);
                 for (let i = 0; i < usersArr.length; i++) {
                     await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [i + 1, usersArr[i].userid, queueCode]);
                 }
