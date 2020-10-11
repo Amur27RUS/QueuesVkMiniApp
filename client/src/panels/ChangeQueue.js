@@ -17,10 +17,11 @@ import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon28CalendarOutline from "@vkontakte/icons/dist/28/calendar_outline";
 import Icon28RecentOutline from "@vkontakte/icons/dist/28/recent_outline";
+import Icon12Cancel from "@vkontakte/icons/dist/12/cancel";
 
 
-let now = new Date().toLocaleDateString();
-let nowTime = now.split('.').reverse().join('-')
+let now = new Date().toLocaleDateString('en-GB');
+let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError;
@@ -43,12 +44,35 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
     const [dateInput, setDateInput] = useState('turnOff');
     const [dateInputButton, setDateInputButton] = useState('dateAndTimeInputButton');
     const [timeInputButton, setTimeInputButton] = useState('timeInputButton');
+    const [deleteImgButtonCSS, setDeleteImgButtonCSS] = useState('turnOff');
+    const [delDivCSS, setDelDivCSS] = useState('turnOff');
 
     // let pic; //Картинка очереди
     // let picName;
     // let picURL = '';
 
     useEffect(() => {
+        if(global.queue.changedName !== undefined){
+            setNewNameQueue(global.queue.changedName);
+        }
+        if(global.queue.changedDesc !== undefined){
+            setNewDescription(global.queue.changedDesc);
+        }
+        if(global.queue.changedDate !== undefined){
+            setNewDate(global.queue.changedDate);
+        }
+        if(global.queue.changedTime !== undefined){
+            setNewTime(global.queue.changedTime);
+        }
+        if(global.queue.changedPlace !== undefined){
+            setNewPlace(global.queue.changedPlace);
+        }
+        if(global.queue.changedAvatarName !== undefined){
+            setDeleteImgButtonCSS('deleteImgButton');
+            setDelDivCSS('divForDel');
+            setNewAvatarName(global.queue.changedAvatarName);
+        }
+
         global.queue.counterForCalendar++;
         today = new Date(nowIOSTime);
 
@@ -89,15 +113,15 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
         global.queue.timeQueue = newTime
         global.queue.descriptionQueue = newDescription
         global.queue.placeQueue = newPlace
-        if(global.queue.picURLNew !== undefined){
-            global.queue.avatarQueue = global.queue.picURLNew
+        if(global.queue.changedPicURLNew !== undefined){
+            global.queue.avatarQueue = global.queue.changedPicURLNew
         }
     }
 
 
     const changeQueueOnServer = () => {
         setPopout(<ScreenSpinner/>);
-
+        console.log(global.queue.changedPicURLNew);
         try {
             fetch('/changeQueue', {
                 method: 'POST',
@@ -110,7 +134,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                     "queuePlace": newPlace,
                     "queueTime": newTime,
                     "queueDate": newDate,
-                    "queueAvatarURL": global.queue.picURLNew,
+                    "queueAvatarURL": global.queue.changedPicURLNew,
                     "queueDescription": newDescription,
                     "queueCode": global.queue.codeQueue,
                     "url": window.location.search.replace('?', '')
@@ -119,7 +143,13 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                 return response.json();
             })
                 .then(async function (data) {
-                    await setTimeout(() => setPopout(null), 5000);
+                    if(data !== 'Deleted queue'){
+
+                    let timeOutTime = 0;
+                    if(global.queue.changedPicURLNew !== undefined || global.queue.changedPicURLNew !== ''){
+                        timeOutTime = 5000;
+                    }
+                    await setTimeout(() => setPopout(null), timeOutTime);
                     setTimeout(() => setSnackbar(<Snackbar
                         layout="vertical"
                         onClose={() => setSnackbar(null)}
@@ -127,7 +157,20 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                                                                             height={14}/></Avatar>}
                     >
                         Изменения сохранены!
-                    </Snackbar>), 3000);
+                    </Snackbar>), timeOutTime);
+                    }else{
+                        setPopout(null);
+                        setActivePanel('home');
+                        history.pop();
+                        history.pop();
+                        setSnackbar(<Snackbar
+                            layout="vertical"
+                            onClose={() => setSnackbar(null)}
+                            before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                        >
+                            Очередь была удалена!
+                        </Snackbar>)
+                    }
                 })
                 .catch((e) => {
                     setPopout(null);
@@ -157,11 +200,12 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
         }
 
         let tmpArr = e.target.files[0].name.split('.');
-        global.queue.pic = e.target.files[0];
-        global.queue.picName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
-        global.queue.picURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
-        global.queue.picURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.picName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+        global.queue.changedPic = e.target.files[0];
+        global.queue.changedPicName = newNameQueue.replace(/\s+/g,'-') + '_' + (e.target.files[0].name).replace(/\s+/g,'') + getRandomInt(1000);
+        global.queue.changedPicURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.changedPicName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
+        global.queue.changedPicURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.changedPicName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
 
+        global.queue.changedAvatarName = e.target.files[0].name;
         setNewAvatarName(e.target.files[0].name);
     }
 
@@ -200,6 +244,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                            setDateInputButton('dateAndTimeInputButton')
                        }}
                        onChange={e => {
+                           global.queue.changedName = e.target.value.trim();
                            if(e.target.value.trim() === ''){
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!');
@@ -214,7 +259,10 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                     setTimeInput('turnOff');
                     setTimeInputButton('dateAndTimeInputButton');
                     setDateInputButton('dateAndTimeInputButton')
-                }} maxlength = "40" value={newPlace} onChange={e =>setNewPlace(e.target.value.substring(0, 40))}/>
+                }} maxlength = "40" value={newPlace} onChange={e =>{
+                    setNewPlace(e.target.value.substring(0, 40));
+                    global.queue.changedPlace = e.target.value.trim();
+                }}/>
 
                 <FormLayoutGroup top="Дата проведения*">
                     <Button className={dateInputButton} before={<Icon28CalendarOutline/>} stretched={true} size={'xl'} mode={'secondary'} onClick={(qualifiedName, value)=>{
@@ -223,8 +271,6 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         document.getElementById('qPlace').blur();
                         setDateInput('dateInput');
                         setDateInputButton('turnOff');
-                        setTimeInput('turnOff');
-                        setTimeInputButton('dateAndTimeInputButton');
 
                     }}>Выбрать дату</Button>
                     <div className={dateInput}>
@@ -276,6 +322,14 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                setFormStatusVisibility(false);
                                global.queue.dataCheck = true
                            }
+
+                           if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
+                               setNewDateStatus('error');
+                               setFormStatusVisibility(true);
+                               setFormStatusHeader('Введите дату!')
+                               global.queue.dataCheck = true;
+                           }
+                           global.queue.changedDate = e.target.value;
                            setNewDate(e.target.value)
                        }}/>
                     </div>
@@ -288,23 +342,46 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         document.getElementById('qPlace').blur();
                         setTimeInput('timeInput');
                         setTimeInputButton('turnOff');
-                        setDateInput('turnOff');
-                        setDateInputButton('dateAndTimeInputButton');
 
                     }}>Выбрать время</Button>
                     <div className={timeInput}>
-                <Input top={'Время начала'} className={timeInput} name={'time'} type={'time'} value={newTime} onChange={e => setNewTime(e.target.value)}/>
+                <Input top={'Время начала'} className={timeInput} name={'time'} type={'time'} value={newTime} onChange={e => {
+                    setNewTime(e.target.value);
+                    global.queue.changedTime = e.target.value;
+                }}/>
                     </div>
                 </FormLayoutGroup>
-                <File top="Аватарка очереди" type={"image/*"} accept=".jp2, .gif, .jfif, .tif, .jpg, .png, .bmp, .raw, .psd, .tiff." before={<Icon28Attachments />} controlSize="xl" mode="secondary"
-                      onChange={(e) => {onPhotoUpload(e)}}/>
-                <Text className={'uploadedImgName'}>{newAvatarName}</Text>
+                <File id={'fileInputID'} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments />} controlSize="xl" mode="secondary"
+                      onChange={(e) => {
+                          setDeleteImgButtonCSS('deleteImgButton');
+                          setDelDivCSS('divForDel');
+                          onPhotoUpload(e);
+                      }}/>
+                <div className={delDivCSS}>
+                <Text className={'uploadedImgName'}>{newAvatarName}<Button className={deleteImgButtonCSS}
+                                                                           mode={'tertiary'}
+                                                                           before={<Icon12Cancel/>}
+                                                                           onClick={()=>{
+                                                                               setNewAvatarName('');
+                                                                               global.queue.changedPicURLNew = undefined;
+                                                                               global.queue.changedPicURL = undefined;
+                                                                               global.queue.changedAvatarName = undefined;
+                                                                               setDeleteImgButtonCSS('turnOff');
+                                                                               setDelDivCSS('turnOff');
+                                                                               global.queue.changedPicName = undefined;
+                                                                               document.getElementById('fileInputID').value = "";
+                                                                           }}/></Text>
+
+                </div>
                 <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
                     setTimeInputButton('dateAndTimeInputButton');
                     setDateInputButton('dateAndTimeInputButton');
-                }} onChange={e => setNewDescription(e.target.value.substring(0, 40))}/>
+                }} onChange={e => {
+                    setNewDescription(e.target.value.substring(0, 40));
+                    global.queue.changedDesc = e.target.value.substring(0, 40);
+                }}/>
                 <Button size="xl" onClick={() => {
 
                     if(!global.queue.dataCheck || !IOSdateError){
@@ -329,33 +406,21 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                     if(newNameQueue.trim() !== '' && newDate.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {
                         changeQueueOnServer();
                         changedQueue();
-                        if(global.queue.picURL !== undefined) {
+                        if(global.queue.changedPicURL !== undefined) {
                             try {
-                            fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.picName, {
+                            fetch('https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o?uploadType=media&name=' + global.queue.changedPicName, {
                                 method: 'POST',
                                 headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'image/png',
                                 },
-                                body: global.queue.pic
+                                body: global.queue.changedPic
                             }).then(function (response) {
                                 return response.json();
                             })
                                 .then(function (data) {
                                     console.log('Картинка успешно загружена!!!');
-                                })
-                                .then(function () {
-                                    setSnackbar(<Snackbar
-                                        layout="vertical"
-                                        onClose={() => setSnackbar(null)}
-                                        before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14}
-                                                                                                            height={14}/></Avatar>}
-                                    >
-                                        Изменения сохранены!
-                                    </Snackbar>)
-                                    setPopout(null);
-                                })
-                                .catch((e) => {
+                                }).catch((e) => {
                                 setPopout(null);
                                 setSnackbar(<Snackbar
                                     layout="vertical"
@@ -379,9 +444,18 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         // >
                         //     Изменения сохранены!
                         // </Snackbar>)
-                        global.queue.picURLNew = undefined;
-                        global.queue.picURL = undefined;
-                        global.queue.pic = undefined;
+                        global.queue.changedPicURLNew = undefined;
+                        global.queue.changedPicURL = undefined;
+                        global.queue.changedPic = undefined;
+
+                        global.queue.changedName = undefined;
+                        global.queue.changedDesc = undefined;
+                        global.queue.changedDate = undefined;
+                        global.queue.changedTime = undefined;
+                        global.queue.changedPlace = undefined;
+                        global.queue.changedAvatarName = undefined;
+                        setDeleteImgButtonCSS('turnOff');
+                        setDelDivCSS('turnOff');
                     }else{
                         if(newDate.trim() === '' && newNameQueue.trim() === ''){
                             setNewNameStatus('error');

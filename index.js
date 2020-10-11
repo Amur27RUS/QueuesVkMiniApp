@@ -122,9 +122,11 @@ async function addNewAdmins(usersArray, queueCode, url, res){
             }
             await client.release();
         }else{
-            res.status(403).send({errorCode: 'sign rejected :('})
+            res.status(403).send({errorCode: 'sign rejected :('});
         }
+
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }
@@ -156,6 +158,7 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
             res.status(403).send({errorCode: 'sign rejected :('})
         }
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }
@@ -271,19 +274,25 @@ async function changeQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
 
         if(userID !== 3) {
             const client = await pool.connect();
-            const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [code, userID]);
+            const isQueueExist = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [code]);
 
-            if(isAdmin.rows[0].value) {
-                if (queueAvatarURL === undefined) {
-                    await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
-                        [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
-                } else {
-                    await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
-                        [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+            if(isQueueExist.rows[0] !== undefined) {
+                const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [code, userID]);
+
+                if (isAdmin.rows[0].value) {
+                    if (queueAvatarURL === undefined) {
+                        await client.query('UPDATE queues SET place = $1, description = $2, name = $3, time = $4, date = $5 WHERE code = $6;',
+                            [queuePlace, queueDescription, queueName, queueTime, queueDate, code]);
+                    } else {
+                        await client.query('UPDATE queues SET place = $1, description = $2, avatar = $3, name = $4, time = $5, date = $6 WHERE code = $7;',
+                            [queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code]);
+                    }
+                    await res.send(JSON.stringify(code));
                 }
-                await res.send(JSON.stringify(code));
+                await client.release();
+            }else{
+                res.send(JSON.stringify('Deleted queue'));
             }
-            await client.release();
         }else{
             res.status(403).send({errorCode: 'sign rejected :('})
         }
@@ -372,6 +381,7 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
             res.status(403).send({errorCode: 'sign rejected :('});
         }
     }catch(e){
+        res.status(403).send({errorCode: 'error :('});
         console.log(e);
     }
 }

@@ -21,12 +21,13 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
 
 
-let now = new Date().toLocaleDateString();
+let now = new Date().toLocaleDateString('en-GB');
 let nowTime = now.split('.').reverse().join('-');
 
 let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError = true;
 let today;
+let todayForMin = new Date(nowIOSTime);
 let pickedDate;
 let imgERR = false;
 const osName = platform();
@@ -131,14 +132,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                 </Snackbar>);
             })
         } catch (e) {
-            setPopout(null);
-            setSnackbar(<Snackbar
-                layout="vertical"
-                onClose={() => setSnackbar(null)}
-                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-            >
-                Ошибка соединения! Проверьте интернет!
-            </Snackbar>);
+            console.log('Ошибка при создании очереди...');
         }
     };
 
@@ -224,18 +218,16 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     <div className={dateInput}>
                         <Input id={'dateID'}
                                className={dateInput}
-                               min={nowTime}
+                               min={todayForMin}
                                top="Дата проведения*"
                                novalidate
                                name={'date'} type={'date'}
                                value={date}
                                status={queueDateStatus}
                                onChange={e => {
-                                   console.log('CHANGE ' + e.target.value)
                                    today = new Date(nowIOSTime);
                                    pickedDate = new Date(e.target.value);
-                                   console.log('CHANGE' + pickedDate)
-                                   let dataCheck = document.getElementById('dateID');
+                                   let dataCheck = document.getElementById('dateID')
 
                                    if (dataCheck.validity.rangeUnderflow) {
                                        setQueueDateStatus('error');
@@ -281,7 +273,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                        setFormStatusVisibility(false);
                                    }
                                    if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
-                                       console.log('ZASHLO');
                                        setQueueDateStatus('error');
                                        setFormStatusVisibility(true);
                                        setFormStatusHeader('Введите дату!')
@@ -310,7 +301,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     </div>
                 </FormLayoutGroup>
 
-                <File top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
+                <File id={'fileInputID'} top="Аватарка очереди" accept="image/*" before={<Icon28Attachments/>} controlSize="xl"
                       mode="secondary"
                       onChange={(e) => {
                           setDeleteImgButtonCSS('deleteImgButton');
@@ -328,6 +319,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                                 setDeleteImgButtonCSS('turnOff');
                                                                                 setDelDivCSS('turnOff');
                                                                                 global.queue.avatarName = undefined;
+                                                                                document.getElementById('fileInputID').value = "";
                                                                             }}/></Text>
 
                 </div>
@@ -349,19 +341,20 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                         // window.scrollBy(0,0);
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
+
                         if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
-                            window.scrollTo(0,0);
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
                             setDateInput('dateInput');
                             setDateInputButton('turnOff');
-                            window.scrollTo(0,0);
                         }
+                        window.scrollTo(0,0);
+
                     }
 
                     if (nameQueue.trim() !== '' && date.trim() !== '' && IOSdateError && global.queue.dataCheck && !dataCheck.validity.rangeUnderflow) {

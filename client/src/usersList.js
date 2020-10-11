@@ -67,6 +67,7 @@ class UsersList extends React.Component {
             cssUsersList: 'turnOff',
             exitAlertText: '',
             CSSMenuButton: 'turnOff',
+            refreshButton: 'refreshButton',
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -77,8 +78,6 @@ class UsersList extends React.Component {
             this.setState({
                 CSSActionsButton: 'showActionsButton'
             });
-
-
         }
         menuCounter = 1;
         counter = 1;
@@ -91,25 +90,6 @@ class UsersList extends React.Component {
             this.setState({
                 CSSMenuButton: 'turnOff'
             })
-
-            // document.getElementById("menuButton").disabled = true;
-            // document.getElementById("menuButton").onClick = null;
-            // /*ИМИТАЦИЯ ПОЛУЧЕНИЯ ДАННЫХ*/
-            // let usersArr = [
-            //     {id: 1, name: 'Павел Сергеевич', avatar: cowboy, isAdmin: true},
-            //     {id: 2, name: 'Андрей', avatar: cowboy, isAdmin: true},
-            //     {id: 3, name: 'Моннар бэкендер', avatar: cowboy, isAdmin: false},
-            //     {id: 4, name: 'Ус', avatar: cowboy, isAdmin: false},
-            //     {id: 5, name: 'Человек', isAdmin: false},
-            //     {id: 6, name: 'Тута Хамон', avatar: cowboy, isAdmin: false},
-            //     {id: 7, name: 'Тамерлан', avatar: cowboy, isAdmin: false},
-            //     {id: 8, name: 'Ислам', avatar: cowboy, isAdmin: false},
-            //     {id: 9, name: 'Сергей Павлович', avatar: cowboy, isAdmin: false},
-            //     {id: 10, name: 'Динозавр Рус', isAdmin: true},
-            // ];
-            // this.setState({users: usersArr});
-            //
-            // /*ИМИТАЦИЯ ПОЛУЧЕНИЯ ДАННЫХ*/
 
             fetch('/getPeople', {
         		method: 'POST',
@@ -947,6 +927,72 @@ class UsersList extends React.Component {
         })
     }
 
+    refresh = async () =>{
+        console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
+        this.setState({
+            openMenuButton: 'Открыть меню действий',
+            CSSMenuDropout: 'turnOff',
+            cssSpinner: 'defaultSpinner',
+        });
+        menuCounter++;
+        fetch('/getPeople', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "queueCODE": this.props.queueCode,
+                "url": window.location.search.replace('?', '')
+            })
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(async function (data) {
+                let usersArr = await getUsersData(data);
+                return usersArr;
+
+            }).then((usersArr) =>{
+            this.setState({
+                users: usersArr,
+                cssSpinner: 'turnOff'
+            })
+            if(global.queue.isUserAdmin) {
+                this.props.setCssEdit('editQueueButton');
+            }
+            this.setState({
+                CSSMenuButton: '',
+            })
+        })
+
+        async function getUsersData(data){
+            console.log('Получение данных о пользователях через VK Bridge')
+            let tmpUsersArr = data;
+            for(let i = 0; i < tmpUsersArr.length; i++){
+                if(tmpUsersArr[i].notvkname === null) {
+                    const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
+                    if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+                        global.queue.isFirstPlace = true;
+                    } else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        global.queue.isFirstPlace = false;
+                    }
+
+                    if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                        global.queue.isUserAdmin = true;
+
+                    }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                        global.queue.isUserAdmin = false;
+                    }
+                    tmpUsersArr[i].name = user.last_name + " " + user.first_name;
+                    tmpUsersArr[i].avatar = user.photo_100;
+                }else{
+                    tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
+                }
+            }
+            return tmpUsersArr;
+        }
+    }
+
     render() {
         return (
             <div>
@@ -962,6 +1008,7 @@ class UsersList extends React.Component {
                         <Tabs>
                             <TabsItem onClick={() => {
                                 this.setState({
+                                    refreshButton: 'refreshButton',
                                     activeTab: 'user',
                                     cssSkipButton: 'OnlySkipButton',
                                     cssAdminButton: 'turnOff',
@@ -988,6 +1035,7 @@ class UsersList extends React.Component {
 
                             <TabsItem onClick={() => {
                                 this.setState({
+                                    refreshButton: 'turnOff',
                                     activeTab: 'admin',
                                     cssSkipButton: 'turnOff',
                                     cssAdminButton: 'OnlySkipButton',
@@ -1004,6 +1052,7 @@ class UsersList extends React.Component {
                     }
 
                     <Div>
+                    <Button className={this.state.refreshButton} size={'xl'} onClick={this.refresh} mode={'secondary'} stretched={true}>Обновить список</Button>
                     <Button className={this.state.cssSkipButton} size={'xl'} onClick={() => this.skipAlert()} mode={'secondary'} stretched={true}>Опуститься на позицию ниже</Button>
                     <Button className={this.state.cssAdminButton} size={'xl'} onClick={this.adminButton} mode={'secondary'} stretched={true}>{this.state.buttonText}</Button>
                     <Button className={this.state.cssAddAdminButton} size={'xl'} onClick={this.addAdminButton} mode={'secondary'} stretched={true}>{this.state.nameAdminButton}</Button>
