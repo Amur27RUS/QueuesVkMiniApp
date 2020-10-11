@@ -27,6 +27,7 @@ let nowTime = now.split('.').reverse().join('-');
 let nowIOSTime = now.split('/').reverse().join('-');
 let IOSdateError = true;
 let today;
+let todayForMin = new Date(nowIOSTime);
 let pickedDate;
 let imgERR = false;
 const osName = platform();
@@ -217,7 +218,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     <div className={dateInput}>
                         <Input id={'dateID'}
                                className={dateInput}
-                               min={nowTime}
+                               min={todayForMin}
                                top="Дата проведения*"
                                novalidate
                                name={'date'} type={'date'}
