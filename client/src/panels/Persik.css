@@ -346,4 +346,5 @@ img {
 
 .defaultSpinner {
   display: flex;
+  margin-bottom: 10px;
 }

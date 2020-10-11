@@ -67,10 +67,10 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
         if(global.queue.changedPlace !== undefined){
             setNewPlace(global.queue.changedPlace);
         }
-        if(global.queue.changedPicName !== undefined){
+        if(global.queue.changedAvatarName !== undefined){
             setDeleteImgButtonCSS('deleteImgButton');
             setDelDivCSS('divForDel');
-            setNewAvatarName(global.queue.changedPicName);
+            setNewAvatarName(global.queue.changedAvatarName);
         }
 
         global.queue.counterForCalendar++;
@@ -205,6 +205,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
         global.queue.changedPicURL = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.changedPicName + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
         global.queue.changedPicURLNew = 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/' + global.queue.changedPicName.replace(tmpArr[0], tmpArr[0] + '_200x200') + '?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b';
 
+        global.queue.changedAvatarName = e.target.files[0].name;
         setNewAvatarName(e.target.files[0].name);
     }
 
@@ -364,6 +365,7 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                                                                setNewAvatarName('');
                                                                                global.queue.changedPicURLNew = undefined;
                                                                                global.queue.changedPicURL = undefined;
+                                                                               global.queue.changedAvatarName = undefined;
                                                                                setDeleteImgButtonCSS('turnOff');
                                                                                setDelDivCSS('turnOff');
                                                                                global.queue.changedPicName = undefined;
@@ -451,6 +453,9 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                         global.queue.changedDate = undefined;
                         global.queue.changedTime = undefined;
                         global.queue.changedPlace = undefined;
+                        global.queue.changedAvatarName = undefined;
+                        setDeleteImgButtonCSS('turnOff');
+                        setDelDivCSS('turnOff');
                     }else{
                         if(newDate.trim() === '' && newNameQueue.trim() === ''){
                             setNewNameStatus('error');

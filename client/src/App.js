@@ -71,6 +71,7 @@ global.queue = {
 	changedPicName: undefined,
 	changedPicURL: undefined,
 	changedPicURLNew: undefined,
+	changedAvatarName: undefined,
 
 	goBackIOS: false,
 
@@ -331,6 +332,7 @@ const App = () =>{
 		global.queue.changedPicName = undefined;
 		global.queue.changedPicURL = undefined;
 		global.queue.changedPioURLNew = undefined;
+		global.queue.changedAvatarName = undefined;
 
 			window.scrollTo(0,0);
 	};
