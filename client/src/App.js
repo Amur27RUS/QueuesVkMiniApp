@@ -206,16 +206,15 @@ const App = () =>{
 			// queuesSet(queuesArray);
 		}
 
-		fetchData();
-
-		bridge.subscribe(({ detail: { type, data }}) => {
-			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-				global.scheme.scheme = schemeAttribute.value;
-			}else if(type === 'VKWebAppViewRestore') {
-				if (window.location.hash !== '') {
+		async function restoreView(){
+			bridge.subscribe(({ detail: { type, data }}) => {
+				if (type === 'VKWebAppUpdateConfig') {
+					const schemeAttribute = document.createAttribute('scheme');
+					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+					document.body.attributes.setNamedItem(schemeAttribute);
+					global.scheme.scheme = schemeAttribute.value;
+				}else if(type === 'VKWebAppViewRestore') {
+					if (window.location.hash !== '') {
 						global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
 						if (global.queue.joinQueueCode.length === 6) {
 							fetch('/getQueueToJoin', {
@@ -228,8 +227,7 @@ const App = () =>{
 									"queueCODE": global.queue.joinQueueCode,
 									"url": window.location.search.replace('?', '')
 								})
-							}).then(async function (response) {
-								await bridge.send("VKWebAppSetLocation", {"location": ""});
+							}).then(function (response) {
 								return response.json();
 
 							})
@@ -279,7 +277,14 @@ const App = () =>{
 					setSnackbar(null);
 				}
 
-		});
+			});
+			await bridge.send("VKWebAppSetLocation", {"location": ""});
+		}
+
+		fetchData();
+		restoreView();
+
+
 
 		window.addEventListener('popstate', () => goBack());
 
