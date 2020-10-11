@@ -341,16 +341,17 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     if (!global.queue.dataCheck || !IOSdateError) {
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
+
                         if (formStatusHeader === 'Введите название очереди!') {
                             setFormStatusHeader('Неверная дата и название!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                            setDateInputButton('turnOff');
                             setDateInput('dateInput');
+                            setDateInputButton('turnOff');
                         } else {
                             setFormStatusHeader('Неверная дата!');
                             setFormStatusDescription('Пожалуйста, проверьте, что дата актуальна.');
-                            setDateInputButton('turnOff');
                             setDateInput('dateInput');
+                            setDateInputButton('turnOff');
                         }
                         window.scrollTo(0,0);
 
