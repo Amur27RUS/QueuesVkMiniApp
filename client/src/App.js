@@ -216,6 +216,7 @@ const App = () =>{
 				global.scheme.scheme = schemeAttribute.value;
 			}else if(type === 'VKWebAppViewRestore'){
 				if(window.location.hash !== ''){
+					bridge.send("VKWebAppSetLocation", {"location": ""});
 					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
 					if(global.queue.joinQueueCode.length === 6) {
 						fetch('/getQueueToJoin', {
@@ -274,7 +275,6 @@ const App = () =>{
 
 				}
 				setSnackbar(null);
-				bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 		});
