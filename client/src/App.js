@@ -285,7 +285,7 @@ const App = () =>{
 				}
 				setSnackbar(null);
 				bridge.send("VKWebAppSetLocation", {"location": ""});
-				location.hash = '';
+				window.location.hash = '';
 			}
 
 		});
