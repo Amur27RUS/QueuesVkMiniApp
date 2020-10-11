@@ -206,29 +206,31 @@ const App = () =>{
 			// queuesSet(queuesArray);
 		}
 
-		async function restoreView(){
-			bridge.subscribe(({ detail: { type, data }}) => {
-				if (type === 'VKWebAppUpdateConfig') {
-					const schemeAttribute = document.createAttribute('scheme');
-					schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-					document.body.attributes.setNamedItem(schemeAttribute);
-					global.scheme.scheme = schemeAttribute.value;
-				}else if(type === 'VKWebAppViewRestore') {
-					if (window.location.hash !== '') {
-						global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
-						if (global.queue.joinQueueCode.length === 6) {
-							fetch('/getQueueToJoin', {
-								method: 'POST',
-								headers: {
-									'Accept': 'application/json',
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify({
-									"queueCODE": global.queue.joinQueueCode,
-									"url": window.location.search.replace('?', '')
-								})
-							}).then(function (response) {
-								return response.json();
+		fetchData();
+
+		bridge.subscribe(({ detail: { type, data }}) => {
+			if (type === 'VKWebAppUpdateConfig') {
+				const schemeAttribute = document.createAttribute('scheme');
+				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				document.body.attributes.setNamedItem(schemeAttribute);
+				global.scheme.scheme = schemeAttribute.value;
+			}else if(type === 'VKWebAppViewRestore'){
+				if(window.location.hash !== ''){
+					bridge.send("VKWebAppSetLocation", {"location": ""});
+					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
+					if(global.queue.joinQueueCode.length === 6) {
+						fetch('/getQueueToJoin', {
+							method: 'POST',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								"queueCODE": global.queue.joinQueueCode,
+								"url": window.location.search.replace('?', '')
+							})
+						}).then(function (response) {
+							return response.json();
 
 							})
 								.then(function (data) {
@@ -273,13 +275,11 @@ const App = () =>{
 							})
 						}
 
-					}
-					setSnackbar(null);
 				}
+				setSnackbar(null);
+			}
 
 			});
-			await bridge.send("VKWebAppSetLocation", {"location": ""});
-		}
 
 		fetchData();
 		restoreView();
