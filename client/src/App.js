@@ -240,7 +240,6 @@ const App = (tutorial) =>{
 				global.scheme.scheme = schemeAttribute.value;
 			}else if(type === 'VKWebAppViewRestore') {
 				if (window.location.hash !== '') {
-					if (window.location.hash.replace('#', '').toUpperCase() !== global.queue.joinQueueCode) {
 						global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
 						if (global.queue.joinQueueCode.length === 6) {
 							fetch('/getQueueToJoin', {
@@ -253,7 +252,8 @@ const App = (tutorial) =>{
 									"queueCODE": global.queue.joinQueueCode,
 									"url": window.location.search.replace('?', '')
 								})
-							}).then(function (response) {
+							}).then(async function (response) {
+								await bridge.send("VKWebAppSetLocation", {"location": ""});
 								return response.json();
 
 							})
@@ -301,9 +301,7 @@ const App = (tutorial) =>{
 
 					}
 					setSnackbar(null);
-					bridge.send("VKWebAppSetLocation", {"location": ""});
 				}
-			}
 
 		});
 
