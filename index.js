@@ -147,15 +147,15 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
                 const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 res.send(result.rows);
                 //БОТ:
-                if(usersArr[0].userid !== user1) {
+                if(usersArr[0].userid !== user1.rows[0].value) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`);
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
-                }else if(usersArr[1].userid !== user2){
+                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                }else if(usersArr[1].userid !== user2.rows[0].value){
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`);
+                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
                 }
             }
 
