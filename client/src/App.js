@@ -238,67 +238,71 @@ const App = (tutorial) =>{
 				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 				global.scheme.scheme = schemeAttribute.value;
-			}else if(type === 'VKWebAppViewRestore'){
-				if(window.location.hash !== ''){
-					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
-					if(global.queue.joinQueueCode.length === 6) {
-						fetch('/getQueueToJoin', {
-							method: 'POST',
-							headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify({
-								"queueCODE": global.queue.joinQueueCode,
-								"url": window.location.search.replace('?', '')
+			}else if(type === 'VKWebAppViewRestore') {
+				if (window.location.hash !== '') {
+					if (window.location.hash.replace('#', '').toUpperCase() !== global.queue.joinQueueCode) {
+						global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
+						if (global.queue.joinQueueCode.length === 6) {
+							fetch('/getQueueToJoin', {
+								method: 'POST',
+								headers: {
+									'Accept': 'application/json',
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({
+									"queueCODE": global.queue.joinQueueCode,
+									"url": window.location.search.replace('?', '')
+								})
+							}).then(function (response) {
+								return response.json();
+
 							})
-						}).then(function (response) {
-							return response.json();
-
-						})
-							.then(function (data) {
-								if (data === 'alreadyThere') {
-									setSnackbar(<Snackbar
-										layout="vertical"
-										onClose={() => setSnackbar(null)}
-										before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14}
-																									 height={14}/></Avatar>}
-									>
-										Вы уже находитесь в этой очереди!
-									</Snackbar>);
-								} else if (data === 'noQueue') {
-									setSnackbar(<Snackbar
-										layout="vertical"
-										onClose={() => setSnackbar(null)}
-										before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-									>
-										Очереди с введённым кодом приглашения не существует!
-									</Snackbar>)
-								} else {
-									global.queue.name = data.name;
-									global.queue.avatar = data.avatar;
-									setJoinQueueAvatar(data.avatar);
-									setJoinQueueName(data.name);
-									setActiveModal(MODAL_CARD_QUEUE_INVITE);
-									if (osName !== IOS) {
-										window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
-										history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+								.then(function (data) {
+									if (data === 'alreadyThere') {
+										setSnackbar(<Snackbar
+											layout="vertical"
+											onClose={() => setSnackbar(null)}
+											before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff"
+																										 width={14}
+																										 height={14}/></Avatar>}
+										>
+											Вы уже находитесь в этой очереди!
+										</Snackbar>);
+									} else if (data === 'noQueue') {
+										setSnackbar(<Snackbar
+											layout="vertical"
+											onClose={() => setSnackbar(null)}
+											before={<Avatar size={24}><Icon16Clear fill="red" width={14}
+																				   height={14}/></Avatar>}
+										>
+											Очереди с введённым кодом приглашения не существует!
+										</Snackbar>)
+									} else {
+										global.queue.name = data.name;
+										global.queue.avatar = data.avatar;
+										setJoinQueueAvatar(data.avatar);
+										setJoinQueueName(data.name);
+										setActiveModal(MODAL_CARD_QUEUE_INVITE);
+										if (osName !== IOS) {
+											window.history.pushState({history: "MODAL_CARD_QUEUE_INVITE"}, "MODAL_CARD_QUEUE_INVITE"); // Создаём новую запись в истории браузера
+											history.push("MODAL_CARD_QUEUE_INVITE"); // Добавляем панель в историю
+										}
 									}
-								}
-							}).catch((e) => {
-							setSnackbar(<Snackbar
-								layout="vertical"
-								onClose={() => setSnackbar(null)}
-								before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-							>
-								Ошибка соединения! Проверьте интернет!
-							</Snackbar>);
-						})
-					}
+								}).catch((e) => {
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+								>
+									Ошибка соединения! Проверьте интернет!
+								</Snackbar>);
+							})
+						}
 
+					}
+					setSnackbar(null);
+					bridge.send("VKWebAppSetLocation", {"location": ""});
 				}
-				setSnackbar(null);
-				bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 		});
