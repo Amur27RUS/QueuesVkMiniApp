@@ -16,6 +16,7 @@ const Settings = ({ id, go, fetchedUser}) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "https://api.vk.com"
             },
 
         }).then(function (response) {
