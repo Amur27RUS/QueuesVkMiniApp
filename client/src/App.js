@@ -656,7 +656,7 @@ const App = () =>{
 					<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 				</View>
 				<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
-					<Settings id={'Settings'} go={go}/>
+					<Settings id={'Settings'} go={go} fetchedUser={fetchedUser}/>
 				</View>
 			</Epic>
 		</ConfigProvider>

@@ -5,34 +5,39 @@ import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 
-const Settings = ({ id, go}) => {
+const Settings = ({ id, go, fetchedUser}) => {
     const [Klyuev, setKlyuev] = useState(undefined);
     const [Sobolev, setSobolev] = useState(undefined);
     const [VKgroup, setVKGroup] = useState(undefined);
 
     useEffect(  () => {
-        async function getAuthorsInfo(){
-            let KlyuevA
-            await fetch('https://api.vk.com/method/users.get?user_ids=199833891&access_token=8f0c19f28f0c19f28f0c19f2338f7f204f88f0c8f0c19f2d0135c6c55c6583321721266&v=5.124', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+        fetch('https://api.vk.com/method/isMessagesFromGroupAllowed?group_id=198211683&user_id='+ fetchedUser.id +'&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+
+        }).then(function (response) {
+            return response.json();
+
+        })
+            .then(function (data) {
+                if(data.is_allowed){
+                    console.log('Сообщения разрешены!')
+                }else{
+                    console.log('Сообщения запрещены!')
                 }
-            }).then(function (response) {
-                return response.json();
+            }).catch((e) => {
+            console.log('Ошибка при проверки подписки на сообщения сообщества!')
+        })
 
-            })
-                .then(function (data) {
-                KlyuevA = data;
-                setKlyuev(KlyuevA);
-                }).catch((e) => {
-
-            })
-            // const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
+        async function getAuthorsInfo(){
+            const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
             const SobolevP = await bridge.send('VKWebAppGetUserInfo', {"user_id": 143336543});
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
+            await setKlyuev(KlyuevA);
             await setSobolev(SobolevP);
             await setVKGroup(VKgroupP);
         }
