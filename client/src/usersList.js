@@ -68,6 +68,7 @@ class UsersList extends React.Component {
             exitAlertText: '',
             CSSMenuButton: 'turnOff',
             refreshButton: 'refreshButton',
+            addAdminForLast: false,
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -216,6 +217,9 @@ class UsersList extends React.Component {
     }
 
     addAdminButton = () => {
+        if (this.state.addAdminForLast && counter % 2 === 0) {
+            counter++;
+        }
         if (counter % 2 === 0){
             if (osName === IOS){
                 styleForButtons = 'ButtonDivIOS';
@@ -230,6 +234,7 @@ class UsersList extends React.Component {
                 cssButtonGiveAdmin: 'turnOff',
                 CSSButtonDiv: styleForButtons,
             });
+            counter++;
         }else {
             if (this.state.buttonText === 'Откл. перемещение/удаление') {counter2++}
             if (osName === IOS){
@@ -252,16 +257,18 @@ class UsersList extends React.Component {
                 buttonText: 'Вкл. перемещение/удаление',
             });
             menuCounter++;
-
+            counter++;
         }
-        counter++;
-        if (this.state.CSSAddNewUserInput !== 'turnOff') {
+        if (this.state.CSSAddNewUserInput !== 'turnOff' && !this.state.addAdminForLast) {
             this.setState({
                 CSSAddNewUserInput: 'turnOff',
                 CSSAddNewUserButton: 'turnOff',
-                });
+            });
             ADDcounter++;
         }
+        this.setState({
+            addAdminForLast: false,
+        })
     }
 
     closePopout = () => {
@@ -451,6 +458,7 @@ class UsersList extends React.Component {
                         mode: 'default',
                         action: () => {
                             this.setState({
+                                addAdminForLast: true,
                                 openMenuButton: 'Открыть меню действий',
                                 CSSMenuDropout: 'turnOff',
                             });
