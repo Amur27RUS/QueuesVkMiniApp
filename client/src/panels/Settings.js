@@ -24,6 +24,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "https://api.vk.com"
             },
             body: JSON.stringify({
                 "url": window.location.search.replace('?', ''),
