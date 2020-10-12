@@ -220,6 +220,9 @@ class UsersList extends React.Component {
     }
 
     addAdminButton = () => {
+        if (!this.state.addAdminForLast && counter % 2 === 0) {
+            counter++;
+        }
         if (counter % 2 === 0){
             if (osName === IOS){
                 styleForButtons = 'ButtonDivIOS';
@@ -245,11 +248,7 @@ class UsersList extends React.Component {
                 styleForButtons = 'ButtonsDiv2';
                 styleForButtonAddAdmin = 'giveAdmin'
             }
-            if (!this.state.addAdminForLast) {
-                counter++;
-            }
             this.setState({
-                addAdminForLast: false,
                 CSSButtonDiv: styleForButtons,
                 cssPlusAdminButton: '123',
                 nameAdminButton: 'Скрыть выдачу прав админа',
@@ -261,6 +260,7 @@ class UsersList extends React.Component {
                 buttonText: 'Вкл. перемещение/удаление',
             });
             menuCounter++;
+            counter++;
         }
         if (this.state.CSSAddNewUserInput !== 'turnOff' && !this.state.addAdminForLast) {
             this.setState({
@@ -269,6 +269,9 @@ class UsersList extends React.Component {
                 });
             ADDcounter++;
         }
+        this.setState({
+            addAdminForLast: false,
+        })
     }
 
     closePopout = () => {
