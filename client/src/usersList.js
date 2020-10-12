@@ -220,7 +220,7 @@ class UsersList extends React.Component {
     }
 
     addAdminButton = () => {
-        if (!this.state.addAdminForLast && counter % 2 === 0) {
+        if (this.state.addAdminForLast && counter % 2 === 0) {
             counter++;
         }
         if (counter % 2 === 0){
