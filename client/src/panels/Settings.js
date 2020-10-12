@@ -30,6 +30,7 @@ const Settings = ({ id, go, fetchedUser}) => {
                 }
             }).catch((e) => {
             console.log('Ошибка при проверки подписки на сообщения сообщества!')
+            console.log(e);
         })
 
         async function getAuthorsInfo(){
