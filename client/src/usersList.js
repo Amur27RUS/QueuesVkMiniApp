@@ -245,7 +245,11 @@ class UsersList extends React.Component {
                 styleForButtons = 'ButtonsDiv2';
                 styleForButtonAddAdmin = 'giveAdmin'
             }
+            if (!this.state.addAdminForLast) {
+                counter++;
+            }
             this.setState({
+                addAdminForLast: false,
                 CSSButtonDiv: styleForButtons,
                 cssPlusAdminButton: '123',
                 nameAdminButton: 'Скрыть выдачу прав админа',
@@ -257,9 +261,6 @@ class UsersList extends React.Component {
                 buttonText: 'Вкл. перемещение/удаление',
             });
             menuCounter++;
-            if (!this.state.addAdminForLast) {
-                counter++;
-            }
         }
         if (this.state.CSSAddNewUserInput !== 'turnOff' && !this.state.addAdminForLast) {
             this.setState({
