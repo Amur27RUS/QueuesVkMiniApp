@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {PanelHeader, Panel, Div, Group, Header, Cell, Switch, Avatar, Text, Separator} from "@vkontakte/vkui";
+import {PanelHeader, Panel, Div, Group, Header, Cell, Switch, Avatar, Text, Separator, Snackbar} from "@vkontakte/vkui";
 import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import bridge from "@vkontakte/vk-bridge";
+import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 
 const Settings = ({ id, go}) => {
     const [Klyuev, setKlyuev] = useState(undefined);
@@ -11,11 +12,27 @@ const Settings = ({ id, go}) => {
 
     useEffect(  () => {
         async function getAuthorsInfo(){
-            const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
+            let KlyuevA
+            await fetch('https://api.vk.com/method/users.get?user_ids=199833891&access_token=8f0c19f28f0c19f28f0c19f2338f7f204f88f0c8f0c19f2d0135c6c55c6583321721266&v=5.124', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }).then(function (response) {
+                return response.json();
+
+            })
+                .then(function (data) {
+                KlyuevA = data;
+                setKlyuev(KlyuevA);
+                }).catch((e) => {
+
+            })
+            // const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
             const SobolevP = await bridge.send('VKWebAppGetUserInfo', {"user_id": 143336543});
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
-            await setKlyuev(KlyuevA);
             await setSobolev(SobolevP);
             await setVKGroup(VKgroupP);
         }

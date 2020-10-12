@@ -632,13 +632,13 @@ const App = () =>{
 						data-to="createQueuePanel"
 						text="Создать очередь"
 					><AddSquareOutline28/></TabbarItem>
-					{/*<TabbarItem*/}
-					{/*	onClick={onStoryChange}*/}
-					{/*	selected={activeStory === 'settings'}*/}
-					{/*	data-story="settings"*/}
-					{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
-					{/*	text="Настройки"*/}
-					{/*><Icon28SettingsOutline/></TabbarItem>*/}
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'settings'}
+						data-story="settings"
+						// label="12" - Сколько уведомлений. Может быть потом пригодится
+						text="Настройки"
+					><Icon28SettingsOutline/></TabbarItem>
 				</Tabbar>
 			}>
 
@@ -654,9 +654,9 @@ const App = () =>{
 				<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
 					<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 				</View>
-				{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
-				{/*	<Settings id={'Settings'} go={go}/>*/}
-				{/*</View>*/}
+				<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
+					<Settings id={'Settings'} go={go}/>
+				</View>
 			</Epic>
 		</ConfigProvider>
 	);
