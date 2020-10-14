@@ -127,12 +127,30 @@ class UsersList extends React.Component {
         async function getUsersData(data){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
+            let user = undefined;
+
+            //todo запрос на получение инфы о людях
+            await fetch('/getUsersInfo', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "url": window.location.search.replace('?', ''),
+                    "usersArr": data,
+                })
+            }).then(function (response) {
+                return response.json();
+            }).then(function (result){
+                user = result.response;
+            })
             for(let i = 0; i < tmpUsersArr.length; i++){
                 if(tmpUsersArr[i].notvkname === null) {
-                    const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                    if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                    if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                         global.queue.isFirstPlace = true;
-                    } else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                    } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                         global.queue.isFirstPlace = false;
                     }
 
@@ -142,8 +160,8 @@ class UsersList extends React.Component {
                     }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
                     }
-                    tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                    tmpUsersArr[i].avatar = user.photo_100;
+                    tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                    tmpUsersArr[i].avatar = user[i].photo_100;
                 }else{
                     tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                 }
@@ -568,17 +586,41 @@ class UsersList extends React.Component {
         })
             .then(async function (data) {
                 let tmpUsersArr = data;
+                let user = undefined;
+
+                //todo запрос на получение инфы о людях
+                await fetch('/getUsersInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": window.location.search.replace('?', ''),
+                        "usersArr": data,
+                    })
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (result){
+                    user = result.response;
+                })
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
-                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                             global.queue.isFirstPlace = true;
-                        }
-                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                        tmpUsersArr[i].avatar = user.photo_100;
+
+                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = true;
+
+                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = false;
+                        }
+                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                        tmpUsersArr[i].avatar = user[i].photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
@@ -635,17 +677,41 @@ class UsersList extends React.Component {
         })
             .then(async function (data) {
                 let tmpUsersArr = data;
+                let user = undefined;
+
+                //todo запрос на получение инфы о людях
+                await fetch('/getUsersInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": window.location.search.replace('?', ''),
+                        "usersArr": data,
+                    })
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (result){
+                    user = result.response;
+                })
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
-                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                             global.queue.isFirstPlace = true;
-                        }
-                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                        tmpUsersArr[i].avatar = user.photo_100;
+
+                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = true;
+
+                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = false;
+                        }
+                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                        tmpUsersArr[i].avatar = user[i].photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
@@ -740,17 +806,41 @@ class UsersList extends React.Component {
         })
             .then(async function (data) {
                 let tmpUsersArr = data;
+                let user = undefined;
+
+                //todo запрос на получение инфы о людях
+                await fetch('/getUsersInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": window.location.search.replace('?', ''),
+                        "usersArr": data,
+                    })
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (result){
+                    user = result.response;
+                })
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
-                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                             global.queue.isFirstPlace = true;
-                        }
-                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                        tmpUsersArr[i].avatar = user.photo_100;
+
+                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = true;
+
+                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = false;
+                        }
+                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                        tmpUsersArr[i].avatar = user[i].photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
@@ -825,17 +915,41 @@ class UsersList extends React.Component {
         })
             .then(async function (data) {
                 let tmpUsersArr = data;
+                let user = undefined;
+
+                //todo запрос на получение инфы о людях
+                await fetch('/getUsersInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": window.location.search.replace('?', ''),
+                        "usersArr": data,
+                    })
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (result){
+                    user = result.response;
+                })
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
-                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                             global.queue.isFirstPlace = true;
-                        }
-                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                        tmpUsersArr[i].avatar = user.photo_100;
+
+                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = true;
+
+                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = false;
+                        }
+                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                        tmpUsersArr[i].avatar = user[i].photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
@@ -893,17 +1007,41 @@ class UsersList extends React.Component {
         })
             .then(async function (data) {
                 let tmpUsersArr = data;
+                let user = undefined;
+
+                //todo запрос на получение инфы о людях
+                await fetch('/getUsersInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": window.location.search.replace('?', ''),
+                        "usersArr": data,
+                    })
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (result){
+                    user = result.response;
+                })
                 for(let i = 0; i < tmpUsersArr.length; i++){
                     if(tmpUsersArr[i].notvkname === null) {
-                        const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                        if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                             global.queue.isFirstPlace = true;
-                        }
-                        else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                             global.queue.isFirstPlace = false;
                         }
-                        tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                        tmpUsersArr[i].avatar = user.photo_100;
+
+                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = true;
+
+                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                            global.queue.isUserAdmin = false;
+                        }
+                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                        tmpUsersArr[i].avatar = user[i].photo_100;
                     }else{
                         tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                     }
@@ -965,12 +1103,30 @@ class UsersList extends React.Component {
         async function getUsersData(data){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
+            let user = undefined;
+
+            //todo запрос на получение инфы о людях
+            await fetch('/getUsersInfo', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "url": window.location.search.replace('?', ''),
+                    "usersArr": data,
+                })
+            }).then(function (response) {
+                return response.json();
+            }).then(function (result){
+                user = result.response;
+            })
             for(let i = 0; i < tmpUsersArr.length; i++){
                 if(tmpUsersArr[i].notvkname === null) {
-                    const user = await bridge.send('VKWebAppGetUserInfo', {"user_id": tmpUsersArr[i].userid});
-                    if (global.queue.userID === user.id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+
+                    if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
                         global.queue.isFirstPlace = true;
-                    } else if (global.queue.userID === user.id && tmpUsersArr[i].userplace !== 1) {
+                    } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
                         global.queue.isFirstPlace = false;
                     }
 
@@ -980,8 +1136,8 @@ class UsersList extends React.Component {
                     }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
                         global.queue.isUserAdmin = false;
                     }
-                    tmpUsersArr[i].name = user.last_name + " " + user.first_name;
-                    tmpUsersArr[i].avatar = user.photo_100;
+                    tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                    tmpUsersArr[i].avatar = user[i].photo_100;
                 }else{
                     tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
                 }

@@ -1,17 +1,48 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {PanelHeader, Panel, Div, Group, Header, Cell, Switch, Avatar, Text, Separator} from "@vkontakte/vkui";
+import {PanelHeader, Panel, Div, Group, Header, Cell, Switch, Avatar, Text, Separator, Snackbar} from "@vkontakte/vkui";
 import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import bridge from "@vkontakte/vk-bridge";
+import Icon16Clear from "@vkontakte/icons/dist/16/clear";
+import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
 
-const Settings = ({ id, go}) => {
+const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     const [Klyuev, setKlyuev] = useState(undefined);
     const [Sobolev, setSobolev] = useState(undefined);
     const [VKgroup, setVKGroup] = useState(undefined);
+    const [switchCheck, setSwitchCheck] = useState(undefined);
+    const [switchDisabled, setSwitchDisabled] = useState(true)
+
+    const blueBackground = {
+        backgroundColor: 'var(--accent)'
+    };
 
     useEffect(  () => {
+        bridge.send("VKWebAppCallAPIMethod", {"method": "messages.isMessagesFromGroupAllowed", "request_id": "32test", "params": {"group_id": 198211683, "user_id": fetchedUser.id, "access_token":"", "v":"5.124"}})
+            .then(function (data) {
+                console.log(data)
+                if(data.response.is_allowed === 1){
+                    console.log('Сообщения разрешены!')
+                    setSwitchCheck(true);
+                    setSwitchDisabled(false);
+                }else{
+                    console.log('Сообщения запрещены!')
+                    setSwitchCheck(false);
+                    setSwitchDisabled(false);
+                }
+            }).catch((e) => {
+            console.log('Ошибка при проверки подписки на сообщения сообщества!');
+            setSnackbar(<Snackbar
+                layout="vertical"
+                onClose={() => setSnackbar(null)}
+                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+            >
+                Ошибка соединения! Проверьте интернет!
+            </Snackbar>);
+        });
+
         async function getAuthorsInfo(){
-            const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
+            const KlyuevA =await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
             const SobolevP = await bridge.send('VKWebAppGetUserInfo', {"user_id": 143336543});
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
@@ -28,7 +59,58 @@ const Settings = ({ id, go}) => {
             <PanelHeader> Настройки </PanelHeader>
             <Group>
                 <Div className={'EnterDiv'}>
-                    <Cell className={'cell'} before={<Icon28Notifications/>} asideContent={<Switch />}>
+                    <Cell className={'cell'} before={<Icon28Notifications/>} asideContent={ <Switch disabled={switchDisabled} checked={switchCheck} onChange={async ()=>{
+                        if(!switchCheck){
+                            await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
+                            setSwitchCheck(true);
+                            setSnackbar(<Snackbar
+                                layout="vertical"
+                                onClose={() => setSnackbar(null)}
+                                before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+                            >
+                                Вы успешно подключили уведомления от бота!
+                            </Snackbar>)
+                        }else{
+                            let accessToken = null;
+                            await bridge.send("VKWebAppGetAuthToken", {"app_id": 7551421, "scope": "messages"})
+                                .then(function (response){
+                                    accessToken = response.access_token;
+                            });
+                            // await bridge.send("VKWebAppDenyMessagesFromGroup", {"group_id": 198211683});
+                            await bridge.send("VKWebAppCallAPIMethod", {"method": "messages.denyMessagesFromGroup", "request_id": "32test", "params": {"group_id": 198211683, "v":"5.124", "access_token":accessToken}})
+                                .then(function (data) {
+                                    console.log(data)
+                                    if(data.response.response === 1) {
+                                        setSnackbar(<Snackbar
+                                            layout="vertical"
+                                            onClose={() => setSnackbar(null)}
+                                            before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+                                        >
+                                            Вы отписались от уведомлений бота!
+                                        </Snackbar>)
+                                    }else{
+                                        setSnackbar(<Snackbar
+                                            layout="vertical"
+                                            onClose={() => setSnackbar(null)}
+                                            before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                        >
+                                            Произошла ошибка при отписке от бота
+                                        </Snackbar>);
+                                    }
+
+                                }).catch((e) => {
+                                console.log('Ошибка при отписки от сообщений сообщества!')
+                                    setSnackbar(<Snackbar
+                                        layout="vertical"
+                                        onClose={() => setSnackbar(null)}
+                                        before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                                    >
+                                        Ошибка соединения! Проверьте интернет!
+                                    </Snackbar>);
+                            });
+                            setSwitchCheck(false);
+                        }
+                    }} />}>
                         Уведомления от бота
                     </Cell>
                 </Div>
@@ -63,6 +145,7 @@ const Settings = ({ id, go}) => {
                         </Cell>
                 </Div>
             </Group>
+            {snackbar}
         </Panel>
     );
 }

@@ -4,6 +4,7 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 const path = require("path");
 const cors = require('cors');
+const fetch = require("node-fetch");
 
 const rateLimit = require("express-rate-limit");
 app.set('trust proxy', 1);
@@ -71,6 +72,39 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
 //Запуск - nodemon app.js
 // let connection = await client.connect()
+
+async function getUsersInfo(usersArr, url, res){
+    let userIdsString = '';
+    let userID = parseInt(await checkSign(url), 10);
+    if(userID !== 3) {
+        if(usersArr.length === 1){
+            userIdsString = usersArr[0].userid;
+        }else{
+            for(let i = 0; i<usersArr.length; i++) {
+                if (i !== usersArr.length - 1) {
+                    userIdsString += usersArr[i].userid + ', ';
+                } else {
+                    userIdsString += usersArr[i].userid;
+
+                }
+            }
+        }
+
+        let result = await fetch('https://api.vk.com/method/users.get?user_ids=' +userIdsString + '&fields=photo_100&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124' , {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(function (response){
+            return response.json();
+        });
+
+        await res.send(JSON.stringify(result));
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('})
+    }
+}
 
 async function addNotFromVK(newUser, queueCode, url, res){
     try {
@@ -568,6 +602,17 @@ app.post('/addNotFromVK', limiter, (req, res) => {
         addNotFromVK(newUser, queueCode, url, res);
     }
 });
+
+app.post('/getUsersInfo', limiter, (req, res) =>{
+    const url = req.body.url;
+    const usersArr = req.body.usersArr;
+
+    if(usersArr.length === 0){
+        res.status(403).send({errorCode: 'error'});
+    }else{
+        getUsersInfo(usersArr, url, res);
+    }
+})
 
 app.post('/checkSign', limiter, (req, res) => {
     const url = req.body.url;
