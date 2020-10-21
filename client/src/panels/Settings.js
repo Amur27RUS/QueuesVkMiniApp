@@ -8,7 +8,7 @@ import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
-    const [VKgroup, setVKGroup] = useState(undefined);
+    const [VKgroup, setVKGroup] = useState([]);
     const [switchCheck, setSwitchCheck] = useState(false);
     const [switchDisabled, setSwitchDisabled] = useState(true)
 
