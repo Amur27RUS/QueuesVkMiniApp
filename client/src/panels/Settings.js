@@ -27,6 +27,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                 "url": window.location.search.replace('?', ''),
             })
         })
+
             .then(function (data) {
                 return data.json();
             }).then(function (result){
