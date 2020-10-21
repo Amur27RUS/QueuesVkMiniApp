@@ -6,7 +6,7 @@ import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
-
+import queuesLogo from '../img/QueuesLogoNEW150x150.jpg';
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     const [VKgroup, setVKGroup] = useState(undefined);
     const [switchCheck, setSwitchCheck] = useState(false);
@@ -160,7 +160,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                     <Cell
                         className={'cell'}
                         before={VKgroup === undefined ? '' :
-                            <Avatar className={'avatar'} size={45} src={VKgroup.photo_200}/>}
+                            <Avatar className={'avatar'} size={45} src={queuesLogo}/>}
                         onClick={() => window.open("https://vk.com/queuesminiapp")}
                         description="По всем вопросам"
                     >
