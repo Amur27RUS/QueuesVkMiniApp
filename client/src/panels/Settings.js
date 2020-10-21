@@ -165,7 +165,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                         description="По всем вопросам"
                     >
                         <text
-                            className={'nameUser'}>{VKgroup === undefined ? '' : VKgroup.name.replace('&#33;', '!')}</text>
+                            className={'nameUser'}>{'Очереди!'}</text>
                     </Cell>
                 </Div>
             </Group>
