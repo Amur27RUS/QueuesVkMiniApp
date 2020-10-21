@@ -103,9 +103,7 @@ const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, set
 			</Group>
 			</Div>
 
-			<UsersList go={go} history={history} setHistory={setHistory} snackbar={snackbar} setSnackbar={setSnackbar}
-					   setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel}
-					   setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
+			<UsersList go={go} history={history} setHistory={setHistory} snackbar={snackbar} setSnackbar={setSnackbar} setQueues={setQueues} setCssEdit={setCssEdit} setActiveStory={setActiveStory} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} queueCode={global.queue.codeQueue} fetchedUser={fetchedUser}/>
 
 		</Panel>
 	)
