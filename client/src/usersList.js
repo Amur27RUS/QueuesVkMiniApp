@@ -19,6 +19,8 @@ import {
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import Icon28SyncOutline from '@vkontakte/icons/dist/28/sync_outline';
+import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -1161,7 +1163,7 @@ class UsersList extends React.Component {
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
-                    <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
+                    <Button className={"menuButton"} id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
 
                 <div className={this.state.CSSMenuDropout}>
                     {global.queue.isUserAdmin === true &&
@@ -1228,16 +1230,19 @@ class UsersList extends React.Component {
                 </div>
 
                 </div>
+
                 </Div>
 
                 <Group header={
-                <Header className={'headerUsers'}>Участники</Header> }>
+                    <Header className={'headerUsers'}>Участники</Header> }>
+                    {/*<Button className={'refreshButtonCSS'} mode={'secondary'}><Icon28SyncOutline/></Button>*/}
                     {global.queue.isFirstPlace && this.state.users.length > 1 &&
                     <Div>
                         <Button className={'buttonForFirst'} onClick={() => this.firstToLast()} mode={'secondary'}>Спуститься
                                 на последнее место</Button>
                     </Div>
                     }
+
                 <Div>
                     <div className={'AddNewUserDiv'}>
                     <Input id={'inputNotVKPerson'} maxlength = "25" type="text" top={'Введите имя человека:'} className={this.state.CSSAddNewUserInput} onChange={e => global.queue.newUser = e.target.value}/>

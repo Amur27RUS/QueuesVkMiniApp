@@ -37,6 +37,12 @@
   border-radius: 30px;
 }
 
+.refreshButtonCSS{
+  margin-left: 5px;
+  width: 43px;
+  height: 43px;
+}
+
 .avatar {
   margin-left: 30px;
 }
@@ -200,6 +206,10 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1);
   border-radius: 0px 0px 10px 10px;
   transition-duration: 1000ms;
+}
+
+.menuButton {
+  min-height: 43px;
 }
 
 .CSSMenuDropoutDark {

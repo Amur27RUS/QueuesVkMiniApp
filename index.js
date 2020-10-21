@@ -61,9 +61,6 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 
     const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
 
-    bot.on((ctx) => {
-        ctx.reply('Привет! К сожалению, меня не научили понимать ваш язык! Зато я могу отправлять тебе уведомления, когда твоя очередь будет подходить :)');
-    });
     console.log('Бот работает!')
 
     bot.startPolling();
@@ -118,8 +115,8 @@ async function addNotFromVK(newUser, queueCode, url, res){
                 const id = await client.query('SELECT id AS VALUE FROM queuesandusers ORDER BY id');
                 const place = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE qcode =$1 ORDER BY userplace', [queueCode]);
 
-                await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname) VALUES ($1, $2, $3, $4, $5, $6)',
-                    [id.rows[id.rows.length - 1].value + 1, queueCode, id.rows[id.rows.length - 1].value + 1, place.rows[place.rows.length - 1].value + 1, false, newUser]);
+                await client.query('INSERT INTO queuesAndUsers (id, qcode, userid, userplace, isadmin, notvkname, notifications) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                    [id.rows[id.rows.length - 1].value + 1, queueCode, id.rows[id.rows.length - 1].value + 1, place.rows[place.rows.length - 1].value + 1, false, newUser, false]);
 
                 const result = await client.query('SELECT userid, userplace, isadmin, notvkname FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 res.send(result.rows);
@@ -184,12 +181,28 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
                 if(usersArr[0].userid !== user1.rows[0].value) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                    const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
+                    const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+                    if(canSend1.rows[0].value !== false) {
+                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
+                    if (canSend2.rows[0].value !== false) {
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
                 }else if(usersArr[1].userid !== user2.rows[0].value){
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                    const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+
+                    if(canSend2.rows[0].value !== false) {
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
                 }
             }
 
@@ -350,7 +363,7 @@ async function deleteUser(queueCode, url, res) {
                 const allUsers = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
                 const checkPlace = await client.query('SELECT userplace AS VALUE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
                 await client.query('DELETE FROM queuesandusers WHERE userid = $1 AND qcode = $2', [userID, queueCode]);
-                for(let i = checkPlace.rows[0].value; i< allUsers.rows.length; i++){
+                for(let i = checkPlace.rows[0].value; i < allUsers.rows.length; i++){
                     await client.query('UPDATE queuesandusers SET userplace = $1 WHERE qcode = $2 AND userplace = $3', [i, queueCode, i+1]);
                 }
 
@@ -364,12 +377,27 @@ async function deleteUser(queueCode, url, res) {
                 if (checkPlace.rows[0].value === 1 && peopleCheck.rows.length >= 1) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                    const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
+                    const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+                    if(canSend1.rows[0].value !== false) {
+                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
+                    if(canSend2.rows[0].value !== false) {
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
                 } else if (checkPlace.rows[0].value === 2) {
                     const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                     const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                    bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                    const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+                    if(canSend2 !== false) {
+                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                            console.log(e)
+                        });
+                    }
                 }
 
             await client.release();
@@ -407,12 +435,27 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
                     if (deletedPlace === 0) {
                         const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                         const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
-                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                        const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
+                        const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+                        if(canSend1.rows[0].value !== false) {
+                            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                                console.log(e)
+                            });
+                        }
+                        if(canSend2.rows[0].value !== false) {
+                            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                                console.log(e)
+                            });
+                        }
                     } else if (deletedPlace === 1) {
                         const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
                         const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-                        bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+                        const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+                        if(canSend2 !== false) {
+                            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                                console.log(e)
+                            });
+                        }
                     }
                 }
             }
@@ -462,8 +505,18 @@ async function firstToLast(queueCode, url, res) {
 
             const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
             const resultForBot = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 ORDER BY userplace', [queueCode]);
-            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
-            bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e)=>{console.log(e)});
+            const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
+            const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
+            if(canSend1.rows[0].value !== false) {
+                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                    console.log(e)
+                });
+            }
+            if(canSend2.rows[0].value !== false) {
+                bot.sendMessage(resultForBot.rows[1].value, `[${queueName.rows[0].value}] Приготовьтесь! Ваша позиция: 2/${resultForBot.rows.length}`).catch((e) => {
+                    console.log(e)
+                });
+            }
 
             await client.release();
         }else{
@@ -585,6 +638,82 @@ async function checkCreation(url, res){
     }
 }
 
+async function notificationsCheck(url, res){
+
+    let userID = parseInt(await checkSign(url), 10);
+
+    if(userID !== 3){
+        let result = await fetch('https://api.vk.com/method/messages.isMessagesFromGroupAllowed?user_id='+ userID +'&group_id=198211683&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124' , {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(function (response){
+            return response.json();
+        });
+        await res.send(result);
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('});
+    }
+}
+
+async function turnNotificationsOn(url, res){
+    let userID = parseInt(await checkSign(url), 10);
+
+    if(userID !== 3){
+        const client = await pool.connect();
+
+        let queues = await client.query('SELECT qcode AS VALUE FROM queuesandusers WHERE userid = $1', [userID]);
+        if(queues.rows !== undefined) {
+            client.query('UPDATE queuesandusers SET notifications = true WHERE userid = $1', [userID]);
+        }
+        await res.send(JSON.stringify('Done!'));
+        await client.release();
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('});
+    }
+}
+
+async function turnNotificationsOff(url, res){
+    let userID = parseInt(await checkSign(url), 10);
+
+    if(userID !== 3){
+        const client = await pool.connect();
+
+        let queues = await client.query('SELECT qcode AS VALUE FROM queuesandusers WHERE userid = $1', [userID]);
+        if(queues.rows !== undefined) {
+            client.query('UPDATE queuesandusers SET notifications = false WHERE userid = $1', [userID]);
+        }
+        await res.send(JSON.stringify('Done!'));
+        await client.release();
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('});
+    }
+}
+
+async function checkNotificationsInDatabase(url, res){
+    let userID = parseInt(await checkSign(url), 10);
+    if(userID !== 3){
+        const client = await pool.connect();
+        let queues = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [userID]);
+        if(queues.rows !== undefined){
+            if(queues.rows[0].value === true) {
+                await res.send(JSON.stringify('On'));
+            }else if (queues.rows[0].value === false){
+                await res.send(JSON.stringify('Off'));
+            }else if(queues.rows[0].value === null){
+                await res.send(JSON.stringify('Null'));
+            }
+        }else{
+            await res.send(JSON.stringify('no data'));
+        }
+        await client.release();
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('});
+    }
+}
+
 
 
 /*---------------------------------------------------------------------*/
@@ -603,6 +732,24 @@ app.post('/addNotFromVK', limiter, (req, res) => {
     }
 });
 
+app.post('/checkNotificationsInDatabase', limiter, (req, res) =>{
+    const url = req.body.url;
+
+    checkNotificationsInDatabase(url, res);
+})
+
+app.post('/turnNotificationsOff', limiter, (req, res) =>{
+    const url = req.body.url;
+
+    turnNotificationsOff(url, res);
+})
+
+app.post('/turnNotificationsOn',limiter, (req, res) =>{
+    const url = req.body.url;
+
+    turnNotificationsOn(url, res);
+});
+
 app.post('/getUsersInfo', limiter, (req, res) =>{
     const url = req.body.url;
     const usersArr = req.body.usersArr;
@@ -612,6 +759,12 @@ app.post('/getUsersInfo', limiter, (req, res) =>{
     }else{
         getUsersInfo(usersArr, url, res);
     }
+})
+
+app.post('/notificationsCheck', limiter, (req, res) =>{
+    const url = req.body.url;
+
+    notificationsCheck(url, res);
 })
 
 app.post('/checkSign', limiter, (req, res) => {

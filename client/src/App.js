@@ -106,7 +106,6 @@ const App = () =>{
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
 
-
 	//ActiveStory - это View
 	//ActivePanel - это Panel
 
@@ -489,19 +488,6 @@ const App = () =>{
 				}]}
 				actionsLayout="vertical"
 			>
-				{/*<UsersStack*/}
-				{/*	photos={[*/}
-				{/*		getAvatarUrl('user_mm'),*/}
-				{/*		getAvatarUrl('user_ilyagrshn'),*/}
-				{/*		getAvatarUrl('user_lihachyov'),*/}
-				{/*		getAvatarUrl('user_wayshev'),*/}
-				{/*		getAvatarUrl('user_arthurstam'),*/}
-				{/*		getAvatarUrl('user_xyz'),*/}
-				{/*	]}*/}
-				{/*	size="m"*/}
-				{/*	count={3}*/}
-				{/*	layout="vertical"*/}
-				{/*>Алексей, Илья, Михаил<br />и ещё 3 человека</UsersStack>*/}
 			</ModalCard>
 
 
@@ -600,19 +586,8 @@ const App = () =>{
 				actionsLayout="vertical"
 			>
 			</ModalCard>
-
 		</ModalRoot>
 	);
-
-	function copyToClipboard(text) {
-		let dummy = document.createElement("textarea");
-		document.body.appendChild(dummy);
-		dummy.value = text;
-		dummy.select();
-		document.execCommand("copy");
-		document.body.removeChild(dummy);
-	}
-
 
 	return (
 		<ConfigProvider>
@@ -632,16 +607,16 @@ const App = () =>{
 					data-to="createQueuePanel"
 					text="Создать очередь"
 				><AddSquareOutline28/></TabbarItem>
-				{/*<TabbarItem*/}
-				{/*	onClick={onStoryChange}*/}
-				{/*	selected={activeStory === 'settings'}*/}
-				{/*	data-story="settings"*/}
-				{/*	// label="12" - Сколько уведомлений. Может быть потом пригодится*/}
-				{/*	text="Настройки"*/}
-				{/*><Icon28SettingsOutline/></TabbarItem>*/}
+				<TabbarItem
+					onClick={onStoryChange}
+					selected={activeStory === 'settings'}
+					data-story="settings"
+					// label="12" - Сколько уведомлений. Может быть потом пригодится
+					text="Настройки"
+				><Icon28SettingsOutline/></TabbarItem>
+
 			</Tabbar>
 		}>
-
 
 			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
 				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
@@ -649,24 +624,16 @@ const App = () =>{
 				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
 			</View>
 
-
-
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
 				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
-			{/*<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>*/}
-			{/*	<Settings id={'Settings'} go={go} fetchedUser={fetchedUser} setSnackbar={setSnackbar} snackbar={snackbar}/>*/}
-			{/*</View>*/}
+
+			<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
+				<Settings id={'Settings'} go={go} fetchedUser={fetchedUser} setSnackbar={setSnackbar} snackbar={snackbar}/>
+			</View>
 		</Epic>
 		</ConfigProvider>
 	);
 }
 
 export default App;
-
-
-
-
-
-
-
