@@ -35,7 +35,6 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             }).then(function (result){
                 if(result.response.is_allowed === 1){
 
-
                     fetch('/checkNotificationsInDatabase', {
                         method: 'POST',
                         headers: {
@@ -78,6 +77,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
             await setVKGroup(VKgroupP);
+            console.log(VKgroup)
         }
     }, []);
 
@@ -154,7 +154,6 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             {/*    </Div>*/}
             {/*</Group>*/}
 
-            {VKgroup !== undefined &&
 
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                 <Div>
@@ -170,7 +169,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                     </Cell>
                 </Div>
             </Group>
-            }
+
             {snackbar}
         </Panel>
     );
