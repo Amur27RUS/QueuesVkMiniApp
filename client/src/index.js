@@ -27,4 +27,7 @@ bridge.subscribe(({ detail: { type, data }}) => {
         global.scheme.scheme = schemeAttribute.value;
     }
 });
+
+import("./eruda").then(({ default: eruda }) => {}); //runtime download
+
 ReactDOM.render(<App />, document.getElementById("root"));
