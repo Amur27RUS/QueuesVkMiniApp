@@ -9,7 +9,7 @@ import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     const [VKgroup, setVKGroup] = useState(undefined);
-    const [switchCheck, setSwitchCheck] = useState(undefined);
+    const [switchCheck, setSwitchCheck] = useState(false);
     const [switchDisabled, setSwitchDisabled] = useState(true)
 
     const blueBackground = {
@@ -17,6 +17,8 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     };
 
     useEffect(  () => {
+        getAuthorsInfo();
+
         fetch('/notificationsCheck', {
             method: 'POST',
             headers: {
@@ -77,7 +79,6 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
 
             await setVKGroup(VKgroupP);
         }
-        getAuthorsInfo();
     }, []);
 
 
