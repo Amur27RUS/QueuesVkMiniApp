@@ -4,76 +4,43 @@ import {PanelHeader, Panel, Div, Group, Header, Cell, Switch, Avatar, Text, Sepa
 import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
-import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
-import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 
-const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
+const Settings = ({ id, go, fetchedUser}) => {
+    const [Klyuev, setKlyuev] = useState(undefined);
+    const [Sobolev, setSobolev] = useState(undefined);
     const [VKgroup, setVKGroup] = useState(undefined);
-    const [switchCheck, setSwitchCheck] = useState(undefined);
-    const [switchDisabled, setSwitchDisabled] = useState(true)
-
-    const blueBackground = {
-        backgroundColor: 'var(--accent)'
-    };
 
     useEffect(  () => {
-        fetch('/notificationsCheck', {
+        fetch('https://api.vk.com/method/isMessagesFromGroupAllowed?group_id=198211683&user_id='+ fetchedUser.id +'&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "https://api.vk.com"
             },
-            body: JSON.stringify({
-                "url": window.location.search.replace('?', ''),
-            })
+
+        }).then(function (response) {
+            return response.json();
+
         })
             .then(function (data) {
-                return data.json();
-            }).then(function (result){
-                if(result.response.is_allowed === 1){
-
-
-                    fetch('/checkNotificationsInDatabase', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "url": window.location.search.replace('?', ''),
-                        })
-                    })
-                        .then(function (data) {
-                            return data.json();
-                        }).then(function (finalResult) {
-                            console.log(finalResult);
-                            if(finalResult === 'On' || finalResult === 'Null'){
-                                setSwitchCheck(true);
-                                setSwitchDisabled(false);
-                            }else{
-                                setSwitchCheck(false);
-                                setSwitchDisabled(false);
-                            }
-                    });
+                if(data.is_allowed){
+                    console.log('Сообщения разрешены!')
                 }else{
-                    setSwitchCheck(false);
-                    setSwitchDisabled(false);
+                    console.log('Сообщения запрещены!')
                 }
             }).catch((e) => {
-                console.log(e);
-            console.log('Ошибка при проверки подписки на сообщения сообщества!');
-            setSnackbar(<Snackbar
-                layout="vertical"
-                onClose={() => setSnackbar(null)}
-                before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-            >
-                Ошибка соединения! Проверьте интернет!
-            </Snackbar>);
-        });
+            console.log('Ошибка при проверки подписки на сообщения сообщества!')
+            console.log(e);
+        })
 
         async function getAuthorsInfo(){
+            const KlyuevA = await bridge.send('VKWebAppGetUserInfo', {"user_id": 199833891});
+            const SobolevP = await bridge.send('VKWebAppGetUserInfo', {"user_id": 143336543});
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
+            await setKlyuev(KlyuevA);
+            await setSobolev(SobolevP);
             await setVKGroup(VKgroupP);
         }
         getAuthorsInfo();
@@ -83,88 +50,43 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     return (
         <Panel id={id}>
             <PanelHeader> Настройки </PanelHeader>
-            <Group description="Наш бот будет присылать вам уведомления только тогда, когда вы будете на первом и втором местах в очереди. Попробуйте, это удобно!" header={<Header mode="secondary">Подключите уведомления:</Header>}>
-                <Div className={'EnterDivv'}>
-                    <Cell className={'cell'} before={<Icon28Notifications/>} asideContent={ <Switch disabled={switchDisabled} checked={switchCheck} onChange={async ()=>{
-                        if(!switchCheck){
-                            await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
-                            await fetch('/turnNotificationsOn', {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    "url": window.location.search.replace('?', ''),
-                                })
-                            }).then(function (data) {
-                                return data.json();
-                            }).then(function (finalResult) {
-
-                            });
-                            setSwitchCheck(true);
-                            setSnackbar(<Snackbar
-                                layout="vertical"
-                                onClose={() => setSnackbar(null)}
-                                before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
-                            >
-                                Вы успешно подключили уведомления от бота!
-                            </Snackbar>);
-                        }else{
-                            await fetch('/turnNotificationsOff', {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    "url": window.location.search.replace('?', ''),
-                                })
-                            }).then(function (data) {
-                                return data.json();
-                            }).then(function (finalResult) {
-                                setSwitchCheck(false);
-                                setSnackbar(<Snackbar
-                                    layout="vertical"
-                                    onClose={() => setSnackbar(null)}
-                                    before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
-                                >
-                                    Уведомления от бота отключены!
-                                </Snackbar>);
-                            });
-
-                        }
-                    }} />}>
+            <Group>
+                <Div className={'EnterDiv'}>
+                    <Cell className={'cell'} before={<Icon28Notifications/>} asideContent={<Switch />}>
                         Уведомления от бота
                     </Cell>
                 </Div>
             </Group>
-
-            {/*<Group description={'После добавления приложения в избранное, его можно будет легче найти среди других приложений'}*/}
-            {/*       header={<Header mode="secondary">Добавь приложение в избранное:</Header>}>*/}
-            {/*    <Div>*/}
-            {/*    <Cell className={'cell'} before={<Icon24Favorite/>} onClick={async ()=>{*/}
-            {/*        await bridge.send("VKWebAppAddToFavorites").then(function (data){*/}
-            {/*            console.log(data);*/}
-            {/*        })*/}
-
-            {/*    }}>Добавить в избранное</Cell>*/}
-            {/*    </Div>*/}
-            {/*</Group>*/}
-
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                     <Div>
                         <Cell
                             className={'cell'}
                             before={VKgroup === undefined ? <Avatar className={'avatar'} size={45}/> : <Avatar className={'avatar'} size={45} src={VKgroup.photo_200}/>}
                             onClick={() => window.open("https://vk.com/queuesminiapp")}
-                            description="По всем вопросам"
                         >
                             <text className={'nameUser'}>{VKgroup === undefined ? '' : VKgroup.name.replace('&#33;', '!')}</text>
                         </Cell>
                     </Div>
             </Group>
-            {snackbar}
+            <Group header={<Header mode="secondary">Разработчики:</Header>}>
+                <Div>
+                        <Cell
+                            onClick={() => window.open("http://vk.com/id199833891")}
+                            className={'cell'}
+                            before={Klyuev === undefined ? <Avatar className={'avatar'} size={45}/> : <Avatar className={'avatar'} size={45} src={Klyuev.photo_200}/>}
+                        >
+                            <text className={'nameUser'}>{Klyuev === undefined ? '' : Klyuev.last_name + " " + Klyuev.first_name}</text>
+                        </Cell>
+
+                        <Cell
+                        onClick={() => window.open("http://vk.com/id143336543")}
+                        className={'cell'}
+                        before={Sobolev === undefined ? <Avatar className={'avatar'} size={45}/> : <Avatar className={'avatar'} size={45} src={Sobolev.photo_200}/>}
+                        >
+                            <text className={'nameUser'}> {Sobolev === undefined ? '' : Sobolev.last_name + " " + Sobolev.first_name}</text>
+                        </Cell>
+                </Div>
+            </Group>
         </Panel>
     );
 }
