@@ -152,7 +152,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             {/*    </Div>*/}
             {/*</Group>*/}
 
-            <Group description={'Напишите нам, чего вам не хватает в приложении и следите за нашими новостями!'} header={<Header mode="secondary">Наша группа в VK:</Header>}>
+            <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                     <Div>
                         <Cell
                             className={'cell'}
