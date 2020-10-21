@@ -6,10 +6,10 @@ import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
-
+import queuesLogo from '../img/QueuesLogoNEW150x150.jpg';
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     const [VKgroup, setVKGroup] = useState(undefined);
-    const [switchCheck, setSwitchCheck] = useState(undefined);
+    const [switchCheck, setSwitchCheck] = useState(false);
     const [switchDisabled, setSwitchDisabled] = useState(true)
 
     const blueBackground = {
@@ -17,6 +17,8 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     };
 
     useEffect(  () => {
+        getAuthorsInfo();
+
         fetch('/notificationsCheck', {
             method: 'POST',
             headers: {
@@ -27,11 +29,11 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                 "url": window.location.search.replace('?', ''),
             })
         })
+
             .then(function (data) {
                 return data.json();
             }).then(function (result){
                 if(result.response.is_allowed === 1){
-
 
                     fetch('/checkNotificationsInDatabase', {
                         method: 'POST',
@@ -75,8 +77,8 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             const VKgroupP = await bridge.send('VKWebAppGetGroupInfo', {"group_id": 198211683});
 
             await setVKGroup(VKgroupP);
+            console.log(VKgroup)
         }
-        getAuthorsInfo();
     }, []);
 
 
@@ -152,18 +154,20 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             {/*    </Div>*/}
             {/*</Group>*/}
 
+
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
-                    <Div>
-                        <Cell
-                            className={'cell'}
-                            before={VKgroup === undefined ? <Avatar className={'avatar'} size={45}/> : <Avatar className={'avatar'} size={45} src={VKgroup.photo_200}/>}
-                            onClick={() => window.open("https://vk.com/queuesminiapp")}
-                            description="По всем вопросам"
-                        >
-                            <text className={'nameUser'}>{VKgroup === undefined ? '' : VKgroup.name.replace('&#33;', '!')}</text>
-                        </Cell>
-                    </Div>
+                <Div>
+                    <Cell
+                        className={'cell'}
+                        before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
+                        onClick={() => window.open("https://vk.com/queuesminiapp")}
+                        description="По всем вопросам">
+                        <text
+                            className={'nameUser'}>{'Очереди!'}</text>
+                    </Cell>
+                </Div>
             </Group>
+
             {snackbar}
         </Panel>
     );
