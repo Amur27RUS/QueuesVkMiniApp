@@ -142,25 +142,24 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                 </Div>
             </Group>
 
-            {/*<Group description={'После добавления приложения в избранное, его можно будет легче найти среди других приложений'}*/}
-            {/*       header={<Header mode="secondary">Добавь приложение в избранное:</Header>}>*/}
-            {/*    <Div>*/}
-            {/*    <Cell className={'cell'} before={<Icon24Favorite/>} onClick={async ()=>{*/}
-            {/*        await bridge.send("VKWebAppAddToFavorites").then(function (data){*/}
-            {/*            console.log(data);*/}
-            {/*        })*/}
+            <Group description={'После добавления приложения в избранное, его можно будет легче найти среди других приложений'}
+                   header={<Header mode="secondary">Добавь приложение в избранное:</Header>}>
+                <Div>
+                <Cell className={'cell'} before={<Icon24Favorite/>} onClick={async ()=>{
+                    await bridge.send("VKWebAppAddToFavorites").then(function (data){
+                        console.log(data);
+                    })
 
-            {/*    }}>Добавить в избранное</Cell>*/}
-            {/*    </Div>*/}
-            {/*</Group>*/}
+                }}>Добавить в избранное</Cell>
+                </Div>
+            </Group>
 
 
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                 <Div>
                     <Cell
                         className={'cell'}
-                        before={VKgroup === undefined ? '' :
-                            <Avatar className={'avatar'} size={45} src={queuesLogo}/>}
+                        before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
                         onClick={() => window.open("https://vk.com/queuesminiapp")}
                         description="По всем вопросам"
                     >
