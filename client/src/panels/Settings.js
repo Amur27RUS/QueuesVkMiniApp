@@ -160,7 +160,10 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                     <Cell
                         className={'cell'}
                         before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
-                        onClick={() => window.open("https://vk.com/queuesminiapp")}
+                        onClick={() =>{
+                            console.log('Открытие группы...')
+                            window.open("https://vk.com/queuesminiapp");
+                        }}
                         description="По всем вопросам">
                         <text
                             className={'nameUser'}>{'Очереди!'}</text>
