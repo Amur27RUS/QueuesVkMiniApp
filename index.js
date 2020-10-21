@@ -132,6 +132,7 @@ async function addNotFromVK(newUser, queueCode, url, res){
     }
 }
 
+
 async function addNewAdmins(usersArray, queueCode, url, res){
     try {
         let userID = parseInt(await checkSign(url), 10);
