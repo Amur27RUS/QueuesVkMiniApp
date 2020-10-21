@@ -154,18 +154,23 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             {/*    </Div>*/}
             {/*</Group>*/}
 
-            {/*<Group header={<Header mode="secondary">Наша группа в VK:</Header>}>*/}
-            {/*        <Div>*/}
-            {/*            <Cell*/}
-            {/*                className={'cell'}*/}
-            {/*                before={VKgroup === undefined ? <Avatar className={'avatar'} size={45}/> : <Avatar className={'avatar'} size={45} src={VKgroup.photo_200}/>}*/}
-            {/*                onClick={() => window.open("https://vk.com/queuesminiapp")}*/}
-            {/*                description="По всем вопросам"*/}
-            {/*            >*/}
-            {/*                <text className={'nameUser'}>{VKgroup === undefined ? '' : VKgroup.name.replace('&#33;', '!')}</text>*/}
-            {/*            </Cell>*/}
-            {/*        </Div>*/}
-            {/*</Group>*/}
+            {VKgroup !== undefined &&
+
+            <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
+                <Div>
+                    <Cell
+                        className={'cell'}
+                        before={VKgroup === undefined ? '' :
+                            <Avatar className={'avatar'} size={45} src={VKgroup.photo_200}/>}
+                        onClick={() => window.open("https://vk.com/queuesminiapp")}
+                        description="По всем вопросам"
+                    >
+                        <text
+                            className={'nameUser'}>{VKgroup === undefined ? '' : VKgroup.name.replace('&#33;', '!')}</text>
+                    </Cell>
+                </Div>
+            </Group>
+            }
             {snackbar}
         </Panel>
     );
