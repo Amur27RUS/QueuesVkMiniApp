@@ -30,6 +30,10 @@
   word-break: break-all;
 }
 
+.linkToGroup{
+  text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+
 .img {
   width: 30px;
   height: 30px;
