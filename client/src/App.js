@@ -83,7 +83,7 @@ global.queue = {
 
 	dataCheck: false,
 
-	beginning: false,
+	beginning: '',
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -113,7 +113,7 @@ const App = () =>{
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
-	const [beginning, setBeginning] = useState(false);
+	const [beginning, setBeginning] = useState();
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -130,11 +130,11 @@ const App = () =>{
 			const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
 			// const instr2 = await bridge.send("VKWebAppStorageGet", {"keys": ["firstInstruction2"]});
 			if (instr) {
-				console.log('ZASHLO')
 				global.queue.beginning = true
 				setActivePanel('home')
 			}
 			else {
+				global.queue.beginning = false
 				setActivePanel('instruction')
 			}
 		}
