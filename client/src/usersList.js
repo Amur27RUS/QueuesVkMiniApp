@@ -14,7 +14,7 @@ import {
     platform,
     Separator, Snackbar, Spinner,
     Tabs,
-    TabsItem
+    TabsItem,
 } from "@vkontakte/vkui";
 import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
 import bridge from "@vkontakte/vk-bridge";
@@ -1008,8 +1008,7 @@ class UsersList extends React.Component {
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
-                    <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
-
+                        <Button id={"menuButton"} size={'xl'} onClick={this.openMenu}>{this.state.openMenuButton}</Button>
                 <div className={this.state.CSSMenuDropout}>
                     {global.queue.isUserAdmin === true &&
                         <div>

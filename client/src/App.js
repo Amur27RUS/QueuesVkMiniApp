@@ -22,6 +22,12 @@ import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import ChangeQueue from "./panels/ChangeQueue"
 import Settings from "./panels/Settings";
+import Instruction from "./panels/Instruction";
+import Instruction2 from "./panels/Instruction2";
+import Instruction3 from "./panels/Instruction3";
+import Instruction4 from "./panels/Instruction4";
+import Instruction5 from "./panels/Instruction5";
+import Instruction6 from "./panels/Instruction6";
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
@@ -76,6 +82,8 @@ global.queue = {
 	goBackIOS: false,
 
 	dataCheck: false,
+
+	beginning: false,
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -85,9 +93,8 @@ const osName = platform();
 
 const App = () =>{
 
-	const [activePanel, setActivePanel] = useState('home');
+	const [activePanel, setActivePanel] = useState('');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
-	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -105,7 +112,7 @@ const App = () =>{
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
-
+	const [beginning, setBeginning] = useState(false);
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -117,6 +124,21 @@ const App = () =>{
 		meta.name = "referrer";
 		meta.content = "no-referrer";
 		document.getElementsByTagName('head')[0].appendChild(meta);
+
+		async function firstInstr() {
+			const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
+			// const instr2 = await bridge.send("VKWebAppStorageGet", {"keys": ["firstInstruction2"]});
+			if (instr) {
+				console.log('ZASHLO')
+				global.queue.beginning = true
+				setActivePanel('home')
+			}
+			else {
+				setActivePanel('instruction')
+			}
+		}
+
+		firstInstr();
 
 		async function fetchData() {
 
@@ -617,6 +639,7 @@ const App = () =>{
 
 	return (
 		<ConfigProvider>
+			{global.queue.beginning &&
 			<Epic activeStory={activeStory} tabbar={
 				<Tabbar className={'createQueuePanel'}>
 					<TabbarItem
@@ -659,6 +682,17 @@ const App = () =>{
 					<Settings id={'Settings'} go={go} fetchedUser={fetchedUser}/>
 				</View>
 			</Epic>
+			}
+			{!global.queue.beginning &&
+				<View activePanel={activePanel}>
+					<Instruction id={'instruction'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+					<Instruction2 id={'instruction2'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+					<Instruction3 id={'instruction3'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+					<Instruction4 id={'instruction4'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+					<Instruction5 id={'instruction5'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+					<Instruction6 id={'instruction6'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
+				</View>
+			}
 		</ConfigProvider>
 	);
 }
