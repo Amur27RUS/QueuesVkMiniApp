@@ -568,6 +568,7 @@ async function skipCommand(queueCode, url, res){
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value, nextUser.rows[0].value, queueCode])
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value+1, userID, queueCode])
             await client.release();
+            await res.send(JSON.stringify('Done!'));
         }else{
             res.status(403).send({errorCode: 'sign rejected :('});
         }
