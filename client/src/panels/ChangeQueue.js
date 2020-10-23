@@ -244,15 +244,15 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                            setDateInputButton('dateAndTimeInputButton')
                        }}
                        onChange={e => {
-                           global.queue.changedName = e.target.value.trim();
+                           global.queue.changedName = e.target.value;
                            if(e.target.value.trim() === ''){
                                setFormStatusVisibility(true);
                                setFormStatusHeader('Введите название очереди!');
                            }else{
                                setFormStatusVisibility(false);
                            }
-                           e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error')
-                           setNewNameQueue(e.target.value.substring(0, 32))
+                           e.target.value.trim() ? setNewNameStatus('valid') : setNewNameStatus('error');
+                           setNewNameQueue(e.target.value.substring(0, 32));
                        }}/>
                 <Input id={'qPlace'} top={'Место проведения'} onClick={()=>{
                     setDateInput('turnOff');

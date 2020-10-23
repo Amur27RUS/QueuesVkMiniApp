@@ -74,17 +74,15 @@ const Home = ({ id, cssSpinner, history, setCssSpinner, snackbar, setSnackbar, s
 		//
 		// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
 
+		bridge.send("VKWebAppGetAds", {}).then(data => {
+			setBanner(<PromoBanner
+				onClose={()=>{setBanner(undefined)}}
+				bannerData={data}/>)
+		}).catch(data => console.log(data));
+
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
-
-		bridge.send("VKWebAppGetAds", {}).then(data => {
-			console.log('bannerdata');
-			console.log(data);
-			setBanner(<PromoBanner
-					onClose={()=>{this.setState({Banner:false})}}
-					bannerData={data}/>)
-		}).catch(data => console.log(data));
 
 	}, []);
 

@@ -95,6 +95,7 @@ const App = () =>{
 
 	const [activePanel, setActivePanel] = useState('');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
+	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -224,7 +225,7 @@ const App = () =>{
 						})
 				}
 				// window.location.hash = '';
-				// await bridge.send("VKWebAppSetLocation", {"location": ""});
+				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
@@ -248,8 +249,6 @@ const App = () =>{
 				global.scheme.scheme = schemeAttribute.value;
 			}else if(type === 'VKWebAppViewRestore'){
 				if(window.location.hash !== ''){
-					bridge.send("VKWebAppSetLocation", {"location": ""});
-					window.location.hash = '';
 					global.queue.joinQueueCode = window.location.hash.replace('#', '').toUpperCase();
 					if(global.queue.joinQueueCode.length === 6) {
 						fetch('/getQueueToJoin', {
@@ -308,6 +307,7 @@ const App = () =>{
 
 				}
 				setSnackbar(null);
+				bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
 		});
@@ -512,19 +512,6 @@ const App = () =>{
 				}]}
 				actionsLayout="vertical"
 			>
-				{/*<UsersStack*/}
-				{/*	photos={[*/}
-				{/*		getAvatarUrl('user_mm'),*/}
-				{/*		getAvatarUrl('user_ilyagrshn'),*/}
-				{/*		getAvatarUrl('user_lihachyov'),*/}
-				{/*		getAvatarUrl('user_wayshev'),*/}
-				{/*		getAvatarUrl('user_arthurstam'),*/}
-				{/*		getAvatarUrl('user_xyz'),*/}
-				{/*	]}*/}
-				{/*	size="m"*/}
-				{/*	count={3}*/}
-				{/*	layout="vertical"*/}
-				{/*>Алексей, Илья, Михаил<br />и ещё 3 человека</UsersStack>*/}
 			</ModalCard>
 
 
@@ -626,16 +613,6 @@ const App = () =>{
 
 		</ModalRoot>
 	);
-
-	function copyToClipboard(text) {
-		let dummy = document.createElement("textarea");
-		document.body.appendChild(dummy);
-		dummy.value = text;
-		dummy.select();
-		document.execCommand("copy");
-		document.body.removeChild(dummy);
-	}
-
 
 	return (
 		<ConfigProvider>

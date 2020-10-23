@@ -272,6 +272,7 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                        IOSdateError = true;
                                        setFormStatusVisibility(false);
                                    }
+
                                    if (e.target.value === '' || pickedDate.toString() === 'Invalid Date') {
                                        setQueueDateStatus('error');
                                        setFormStatusVisibility(true);
@@ -338,7 +339,6 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                     let dataCheck = document.getElementById('dateID');
 
                     if (!global.queue.dataCheck || !IOSdateError) {
-                        // window.scrollBy(0,0);
                         setQueueDateStatus('error');
                         setFormStatusVisibility(true);
 
