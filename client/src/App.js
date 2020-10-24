@@ -82,18 +82,17 @@ global.queue = {
 	goBackIOS: false,
 
 	dataCheck: false,
-
-	beginning: '',
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 const osName = platform();
+// const str = global.scheme.beginning ? 'home' : 'instruction';
 
 const App = () =>{
 
-	const [activePanel, setActivePanel] = useState('');
+	const [activePanel, setActivePanel] = useState();
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
@@ -119,6 +118,7 @@ const App = () =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+
 		console.log('Получение данных о пользователе через VK Bridge');
 
 		let meta = document.createElement('meta');
@@ -126,20 +126,21 @@ const App = () =>{
 		meta.content = "no-referrer";
 		document.getElementsByTagName('head')[0].appendChild(meta);
 
-		async function firstInstr() {
-			const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
-			// const instr2 = await bridge.send("VKWebAppStorageGet", {"keys": ["firstInstruction2"]});
-			if (instr) {
-				global.queue.beginning = true
-				setActivePanel('home')
-			}
-			else {
-				global.queue.beginning = false
-				setActivePanel('instruction')
-			}
-		}
-
-		firstInstr();
+		// async function firstInstr() {
+		// 	const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
+		// 	if (instr.keys[0] === 'firstInstruction') {
+		// 		global.queue.beginning = true
+		// 		setActivePanel('home')
+		// 	}
+		// 	else {
+		// 		setActivePanel('instruction')
+		// 	}
+		// }
+		//
+		// firstInstr();
+		// console.log(global.scheme.beginning)
+		// console.log(global.scheme.instr)
+		// console.log('str ' + str)
 
 		async function fetchData() {
 
@@ -616,7 +617,7 @@ const App = () =>{
 
 	return (
 		<ConfigProvider>
-			{global.queue.beginning &&
+			{global.scheme.beginning &&
 			<Epic activeStory={activeStory} tabbar={
 				<Tabbar className={'createQueuePanel'}>
 					<TabbarItem
@@ -660,7 +661,7 @@ const App = () =>{
 				</View>
 			</Epic>
 			}
-			{!global.queue.beginning &&
+			{!global.scheme.beginning &&
 				<View activePanel={activePanel}>
 					<Instruction id={'instruction'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
 					<Instruction2 id={'instruction2'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>

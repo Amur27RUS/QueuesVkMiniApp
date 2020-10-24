@@ -1,15 +1,29 @@
 import "core-js/features/map";
 import "core-js/features/set";
-import React from "react";
+import React, { useState } from 'react';
 import ReactDOM from "react-dom";
 import bridge from "@vkontakte/vk-bridge";
 import App from "./App";
 
 global.scheme = {
     scheme: undefined,
+    beginning: false,
 }
 // Проверка подписи
+const [activePanel, setActivePanel] = useState();
 
+async function firstInstr() {
+    const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
+    if (instr.keys[0] === 'firstInstruction') {
+        global.scheme.beginning = true
+        await setActivePanel('home')
+    }
+    else {
+        await setActivePanel('instruction')
+    }
+}
+
+firstInstr();
 
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
