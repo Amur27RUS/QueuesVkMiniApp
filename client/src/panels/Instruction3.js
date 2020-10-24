@@ -5,17 +5,10 @@ import {Button, Div, Panel, PanelHeader, PanelHeaderButton, Text, Title} from "@
 import phone from "../img/phone3.png";
 
 
-const Instruction3 = ({id, beginning, setBeginning, setActivePanel}) => {
+const Instruction3 = ({id, setActivePanel, skip}) => {
 
     const continuee = () => {
         setActivePanel('instruction4')
-    }
-
-    const skip = async () => {
-        global.queue.beginning = true
-        setActivePanel('home')
-        await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
-        await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": 'true'});
     }
 
     return(
@@ -34,7 +27,7 @@ const Instruction3 = ({id, beginning, setBeginning, setActivePanel}) => {
                 <Text className={'textInstruction2'} weight="regular" style={{ marginBottom: 12 }}>Здесь находятся все ваши возможные действия.</Text>
             </Div>
             <Div>
-                <Button stretched={true} size={'l'} className={'buttonContinue'} onClick={continuee}>Продолжить</Button>
+                <Button stretched={true} size={'l'} className={'buttonContinue'} onClick={continuee}>Удобно!</Button>
             </Div>
         </Panel>
     )

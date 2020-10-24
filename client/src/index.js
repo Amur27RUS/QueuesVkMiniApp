@@ -7,26 +7,13 @@ import App from "./App";
 
 global.scheme = {
     scheme: undefined,
-    beginning: false,
-}
-// Проверка подписи
-const [activePanel, setActivePanel] = useState();
-
-async function firstInstr() {
-    const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
-    if (instr.keys[0] === 'firstInstruction') {
-        global.scheme.beginning = true
-        await setActivePanel('home')
-    }
-    else {
-        await setActivePanel('instruction')
-    }
+    beginning: true,
 }
 
-firstInstr();
 
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
+firstInstr();
 bridge.subscribe(({ detail: { type, data }}) => {
     if (type === 'VKWebAppUpdateConfig') {
         const schemeAttribute = document.createAttribute('scheme');
@@ -42,6 +29,15 @@ bridge.subscribe(({ detail: { type, data }}) => {
     }
 });
 
+async function firstInstr() {
+    const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
+    if (instr.keys[0] === 'firstInstruction') {
+        global.scheme.beginning = true;
+    }else{
+        global.scheme.beginning = false;
+    }
+}
+
 import("./eruda").then(({ default: eruda }) => {}); //runtime download
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App tutorial={global.scheme.beginning}/>, document.getElementById("root"));

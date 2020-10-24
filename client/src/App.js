@@ -90,11 +90,11 @@ const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 const osName = platform();
 // const str = global.scheme.beginning ? 'home' : 'instruction';
 
-const App = () =>{
+const App = (tutorial) =>{
 
-	const [activePanel, setActivePanel] = useState();
-	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
-	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
+	const [activePanel, setActivePanel] = useState('home');
+	const [history, setHistory] = useState(['home']); // Заносим начальную панель в массив историй.
+	const [history2, setHistory2] = useState(['home']); // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -113,11 +113,18 @@ const App = () =>{
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
 	const [beginning, setBeginning] = useState();
+	const [tabbarCSS, setTabbarCSS] = useState('createQueuePanel')
+	const [showTutor, setShowTutor] = useState(undefined);
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+		if(!global.scheme.beginning) {
+			setTabbarCSS('turnOff');
+			setActiveStory('instructionsView');
+			setActivePanel('instruction');
+		}
 
 		console.log('Получение данных о пользователе через VK Bridge');
 
@@ -125,22 +132,6 @@ const App = () =>{
 		meta.name = "referrer";
 		meta.content = "no-referrer";
 		document.getElementsByTagName('head')[0].appendChild(meta);
-
-		// async function firstInstr() {
-		// 	const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
-		// 	if (instr.keys[0] === 'firstInstruction') {
-		// 		global.queue.beginning = true
-		// 		setActivePanel('home')
-		// 	}
-		// 	else {
-		// 		setActivePanel('instruction')
-		// 	}
-		// }
-		//
-		// firstInstr();
-		// console.log(global.scheme.beginning)
-		// console.log(global.scheme.instr)
-		// console.log('str ' + str)
 
 		async function fetchData() {
 
@@ -228,16 +219,6 @@ const App = () =>{
 				// window.location.hash = '';
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
-
-			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
-			// const queuesArray = [
-			// 	{ id: 1, name: 'Сдача лабы по проге', date: '', time: '', place: 'ИТМО', description: 'Приём в каб. 406', code: 'J8D1XI', avatar: 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/43H5.gif?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b'},
-			// 	{ id: 2, name: 'Очередь за шавермой', date:'14.12.2020', time: '15:10', place: 'Ларёк 35', description: 'Лучшая шавуха у Ашота', code: 'F67HN8', aavatar: ''},
-			// 	{ id: 3, name: 'На сдачу экзамена по вождению', date: '25.08.2020', time: '16:00', place: 'Улица Горькавого', description: 'С собой иметь маску и перчатки!', code: 'LI96C1', avatar: cowboy},
-			// 	{ id: 4, name: 'Сдача лабы по инфе', date: '24.02.2021', time: '12:25', place:'Москва, ВШЭ', description: 'Жесткий препод', code: 'N84J4K', avatar: ''},
-			// ];
-			//
-			// queuesSet(queuesArray);
 		}
 
 		fetchData();
@@ -318,7 +299,7 @@ const App = () =>{
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
-	}, []);
+	}, [global.scheme.beginning]);
 
 	const goBack = async () => {
 		if (!time) {
@@ -331,7 +312,7 @@ const App = () =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					await setTimeout(() => setActivePanel(history[history.length - 1]), 400); // Изменяем массив с иторией и меняем активную панель
-					window.scrollTo(0,0);
+					window.scrollTo(0, 0);
 					await setTime(true);
 					await setTimeout(() => {setTime(false)}, 800);
 				}
@@ -358,11 +339,13 @@ const App = () =>{
 		global.queue.changedPioURLNew = undefined;
 		global.queue.changedAvatarName = undefined;
 
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
+
 	};
 
 	const onStoryChange = e => {
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
+
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
 	};
@@ -615,62 +598,79 @@ const App = () =>{
 		</ModalRoot>
 	);
 
+	const skip = async () => {
+		global.queue.beginning = true
+		setTabbarCSS('createQueuePanel');
+		setActiveStory('main');
+		setActivePanel('home')
+		await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
+		await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": "true"});
+	}
+
 	return (
 		<ConfigProvider>
-			{global.scheme.beginning &&
-			<Epic activeStory={activeStory} tabbar={
-				<Tabbar className={'createQueuePanel'}>
-					<TabbarItem
-						onClick={onStoryChange}
-						selected={activeStory === 'main'}
-						data-story="main"
-						data-to='home'
-						text="Очереди"
-					><ListOutline28/></TabbarItem>
-					<TabbarItem
-						onClick={onStoryChange}
-						selected={activeStory === 'createQueue'}
-						data-story="createQueue"
-						data-to="createQueuePanel"
-						text="Создать очередь"
-					><AddSquareOutline28/></TabbarItem>
-					<TabbarItem
-						onClick={onStoryChange}
-						selected={activeStory === 'settings'}
-						data-story="settings"
-						// label="12" - Сколько уведомлений. Может быть потом пригодится
-						text="Настройки"
-					><Icon28SettingsOutline/></TabbarItem>
-				</Tabbar>
-			}>
+				<Epic activeStory={activeStory} tabbar={
+					<Tabbar className={tabbarCSS}>
+						<TabbarItem
+							onClick={onStoryChange}
+							selected={activeStory === 'main'}
+							data-story="main"
+							data-to='home'
+							text="Очереди"
+						><ListOutline28/></TabbarItem>
+						<TabbarItem
+							onClick={onStoryChange}
+							selected={activeStory === 'createQueue'}
+							data-story="createQueue"
+							data-to="createQueuePanel"
+							text="Создать очередь"
+						><AddSquareOutline28/></TabbarItem>
+						<TabbarItem
+							onClick={onStoryChange}
+							selected={activeStory === 'settings'}
+							data-story="settings"
+							// label="12" - Сколько уведомлений. Может быть потом пригодится
+							text="Настройки"
+						><Icon28SettingsOutline/></TabbarItem>
+					</Tabbar>
+				}>
 
 
-				<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
-					<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-					<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-					<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
-				</View>
+					<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
+						<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner}
+							  snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar}
+							  setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go}
+							  setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+						<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory}
+									setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser}
+									go={go} queues={queues} setActivePanel={setActivePanel}
+									setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+						<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar}
+									 snackbar={snackbar} fetchedUser={fetchedUser} go={go}
+									 setActivePanel={setActivePanel} setQueues={setQueues}/>
+					</View>
 
+					<View id={'instructionsView'} activePanel={activePanel}>
+						<Instruction id={'instruction'} setActivePanel={setActivePanel} skip={skip} setTabbarCSS={setTabbarCSS}/>
+						<Instruction2 id={'instruction2'} setActivePanel={setActivePanel} skip={skip}/>
+						<Instruction3 id={'instruction3'} setActivePanel={setActivePanel} skip={skip}/>
+						<Instruction4 id={'instruction4'} setActivePanel={setActivePanel} skip={skip}/>
+						<Instruction5 id={'instruction5'} setActivePanel={setActivePanel} skip={skip}/>
+						<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip}/>
+					</View>
 
+					<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}
+						  history={history}>
+						<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history}
+									 setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go}
+									 setActiveModal={setActiveModal} fetchedUser={fetchedUser}
+									 setQueueCODE={setQueueCODE}/>
+					</View>
+					<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
+						<Settings id={'Settings'} go={go} fetchedUser={fetchedUser}/>
+					</View>
+				</Epic>
 
-				<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
-					<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
-				</View>
-				<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
-					<Settings id={'Settings'} go={go} fetchedUser={fetchedUser}/>
-				</View>
-			</Epic>
-			}
-			{!global.scheme.beginning &&
-				<View activePanel={activePanel}>
-					<Instruction id={'instruction'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-					<Instruction2 id={'instruction2'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-					<Instruction3 id={'instruction3'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-					<Instruction4 id={'instruction4'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-					<Instruction5 id={'instruction5'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-					<Instruction6 id={'instruction6'} beginning={beginning} setBeginning={setBeginning} setActivePanel={setActivePanel}/>
-				</View>
-			}
 		</ConfigProvider>
 	);
 }

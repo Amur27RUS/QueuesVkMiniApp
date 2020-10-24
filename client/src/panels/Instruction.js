@@ -5,17 +5,10 @@ import {Button, Div, Panel, PanelHeader, PanelHeaderButton, Text, Title} from "@
 import phone from "../img/phone.png"
 
 
-const Instruction = ({id, beginning, setBeginning, setActivePanel}) => {
+const Instruction = ({id, setActivePanel, skip}) => {
 
     const continuee = () => {
-        setActivePanel('instruction2')
-    }
-
-    const skip = async () => {
-        global.queue.beginning = true
-        setActivePanel('home')
-        await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
-        await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": "true"});
+        setActivePanel('instruction2');
     }
 
     return(
