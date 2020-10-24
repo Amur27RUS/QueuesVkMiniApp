@@ -184,7 +184,7 @@ async function changeUsersOrder(usersArr, queueCode, url, res){
                     const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
                     const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
                     if(canSend1.rows[0].value !== false) {
-                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length} Не забудьте выйти из очереди или спуститься на последнее место! Удачи :)`).catch((e) => {
                             console.log(e)
                         });
                     }
@@ -380,7 +380,7 @@ async function deleteUser(queueCode, url, res) {
                     const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
                     const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
                     if(canSend1.rows[0].value !== false) {
-                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                        bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length} Не забудьте выйти из очереди или спуститься на последнее место! Удачи :)`).catch((e) => {
                             console.log(e)
                         });
                     }
@@ -438,7 +438,7 @@ async function deleteUserWithAdmin(deletedPlace, queueCode, url, res) {
                         const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
                         const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
                         if(canSend1.rows[0].value !== false) {
-                            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                            bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length} Не забудьте выйти из очереди или спуститься на последнее место! Удачи :)`).catch((e) => {
                                 console.log(e)
                             });
                         }
@@ -508,7 +508,7 @@ async function firstToLast(queueCode, url, res) {
             const canSend1 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[0].value]);
             const canSend2 = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [resultForBot.rows[1].value]);
             if(canSend1.rows[0].value !== false) {
-                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length}`).catch((e) => {
+                bot.sendMessage(resultForBot.rows[0].value, `[${queueName.rows[0].value}] Очередь подошла! Ваша позиция: 1/${resultForBot.rows.length} Не забудьте выйти из очереди или спуститься на последнее место! Удачи :)`).catch((e) => {
                     console.log(e)
                 });
             }

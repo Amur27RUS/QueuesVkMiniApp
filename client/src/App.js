@@ -22,6 +22,12 @@ import CreateQueue from './panels/CreateQueue'
 import AboutQueue from "./panels/AboutQueue";
 import ChangeQueue from "./panels/ChangeQueue"
 import Settings from "./panels/Settings";
+import Instruction from "./panels/Instruction";
+import Instruction2 from "./panels/Instruction2";
+import Instruction3 from "./panels/Instruction3";
+import Instruction4 from "./panels/Instruction4";
+import Instruction5 from "./panels/Instruction5";
+import Instruction6 from "./panels/Instruction6";
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
@@ -76,6 +82,8 @@ global.queue = {
 	goBackIOS: false,
 
 	dataCheck: false,
+
+
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -83,7 +91,7 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 const osName = platform();
 
-const App = () =>{
+const App = (tutorial) =>{
 
 	const [activePanel, setActivePanel] = useState('home');
 	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
@@ -105,11 +113,19 @@ const App = () =>{
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
+	const [tabbarCSS, setTabbarCSS] = useState('createQueuePanel')
+	const [showTutor, setShowTutor] = useState(undefined);
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+		if(!global.scheme.beginning) {
+			setTabbarCSS('turnOff');
+			setActiveStory('instructionsView');
+			setActivePanel('instruction');
+		}
+
 		console.log('Получение данных о пользователе через VK Bridge');
 
 		let meta = document.createElement('meta');
@@ -293,7 +309,7 @@ const App = () =>{
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
-	}, []);
+	}, [global.scheme.beginning]);
 
 	const goBack = async () => {
 		if (!time) {
@@ -589,10 +605,19 @@ const App = () =>{
 		</ModalRoot>
 	);
 
+	const skip = async () => {
+		global.queue.beginning = true
+		setTabbarCSS('createQueuePanel');
+		setActiveStory('main');
+		setActivePanel('home')
+		await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
+		await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": "true"});
+	}
+
 	return (
 		<ConfigProvider>
 		<Epic activeStory={activeStory} tabbar={
-			<Tabbar className={'createQueuePanel'}>
+			<Tabbar className={'tabbarCSS'}>
 				<TabbarItem
 					onClick={onStoryChange}
 					selected={activeStory === 'main'}
@@ -622,6 +647,15 @@ const App = () =>{
 				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
 				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
 				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+			</View>
+
+			<View id={'instructionsView'} activePanel={activePanel}>
+				<Instruction id={'instruction'} setActivePanel={setActivePanel} skip={skip} setTabbarCSS={setTabbarCSS}/>
+				<Instruction2 id={'instruction2'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction3 id={'instruction3'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction4 id={'instruction4'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction5 id={'instruction5'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip}/>
 			</View>
 
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>

@@ -362,3 +362,25 @@ img {
   display: flex;
   margin-bottom: 10px;
 }
+
+.buttonContinue {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 80%;
+  margin-top: -10px;
+}
+
+.textInstruction {
+  text-align: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-top: -27px;
+}
+
+.textInstruction2 {
+  text-align: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  color: #828282;
+}
