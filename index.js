@@ -698,7 +698,7 @@ async function checkNotificationsInDatabase(url, res){
     if(userID !== 3){
         const client = await pool.connect();
         let queues = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [userID]);
-        if(queues.rows !== undefined){
+        if(queues.rows[0] !== undefined){
             if(queues.rows[0].value === true) {
                 await res.send(JSON.stringify('On'));
             }else if (queues.rows[0].value === false){

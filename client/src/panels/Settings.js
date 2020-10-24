@@ -49,7 +49,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                             return data.json();
                         }).then(function (finalResult) {
                             console.log(finalResult);
-                            if(finalResult === 'On' || finalResult === null || finalResult === 'Null'){
+                            if(finalResult === 'On' || finalResult === 'Null' || finalResult === 'no data'){
                                 setSwitchCheck(true);
                                 setSwitchDisabled(false);
                             }else{
