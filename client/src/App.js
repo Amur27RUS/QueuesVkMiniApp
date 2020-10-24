@@ -617,7 +617,7 @@ const App = (tutorial) =>{
 	return (
 		<ConfigProvider>
 		<Epic activeStory={activeStory} tabbar={
-			<Tabbar className={'tabbarCSS'}>
+			<Tabbar className={tabbarCSS}>
 				<TabbarItem
 					onClick={onStoryChange}
 					selected={activeStory === 'main'}
