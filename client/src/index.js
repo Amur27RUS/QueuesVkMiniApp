@@ -7,7 +7,7 @@ import App from "./App";
 
 global.scheme = {
     scheme: undefined,
-    beginning: true,
+    beginning: undefined,
 }
 
 
@@ -31,6 +31,7 @@ bridge.subscribe(({ detail: { type, data }}) => {
 
 async function firstInstr() {
     const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
+    console.log(instr);
     if (instr.keys[0] === 'firstInstruction') {
         global.scheme.beginning = true;
     }else{
