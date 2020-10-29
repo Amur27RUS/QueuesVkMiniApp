@@ -308,7 +308,7 @@ const App = (tutorial) =>{
 
 		});
 
-		window.addEventListener('popstate', () => goBack());
+		// window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
