@@ -120,10 +120,6 @@ const App = (tutorial) =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
-		window.addEventListener('popstate', () => goBack());
-	})
-
-	useEffect(() => {
 		if(!global.scheme.beginning && global.scheme.beginning !== undefined) {
 			setTabbarCSS('turnOff');
 			setActiveStory('instructionsView');
@@ -308,7 +304,7 @@ const App = (tutorial) =>{
 
 		});
 
-		// window.addEventListener('popstate', () => goBack());
+		window.addEventListener('popstate', () => goBack());
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
