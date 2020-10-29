@@ -120,6 +120,10 @@ const App = (tutorial) =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
+		window.addEventListener('popstate', () => goBack());
+	})
+
+	useEffect(() => {
 		if(!global.scheme.beginning && global.scheme.beginning !== undefined) {
 			setTabbarCSS('turnOff');
 			setActiveStory('instructionsView');
