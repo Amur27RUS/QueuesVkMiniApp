@@ -310,6 +310,10 @@ const App = (tutorial) =>{
 		}
 	}, [global.scheme.beginning]);
 
+	useEffect(() => {
+		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1000));
+	})
+
 	const goBack = async () => {
 		if (!time) {
 			setSnackbar(null);
