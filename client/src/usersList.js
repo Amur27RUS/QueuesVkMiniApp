@@ -73,8 +73,7 @@ class UsersList extends React.Component {
             CSSMenuButton: 'turnOff',
             refreshButton: 'refreshButton',
             addAdminForLast: false,
-            cssMessageButton: 'turnOff',
-            messageToAll: '',
+            cssMessageButton: 'turnOff'
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -451,6 +450,35 @@ class UsersList extends React.Component {
         )
     }
 
+    messageToAll = () => {
+        global.queue.codeForMsg = this.props.queueCode
+        if (osName !== IOS) {
+            this.props.history.push("message");
+            window.history.pushState({history: "message"}, "message");
+        }
+        this.setState({
+            CSSMenuDropout: 'turnOff',
+            openMenuButton: 'Открыть меню действий',
+        });
+        menuCounter++;
+        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
+            this.setState({
+                nameAdminButton: 'Выдать права админа',
+                selectables: false,
+                cssButtonGiveAdmin: 'turnOff',
+            })
+            counter++;
+        }
+        if (this.state.buttonText === 'Откл. перемещение/удаление') {
+            counter2++;
+            this.setState({
+                draggable: false,
+                buttonText: 'Вкл. перемещение/удаление',
+            });
+        }
+        this.props.setActiveModal(MODAL_CARD_FOR_MESSAGE)
+    }
+
     exitAlert = () => {
         if (osName !== IOS) {
             this.props.history.push("alert");
@@ -670,35 +698,6 @@ class UsersList extends React.Component {
                 <p>Вы уверены, что хотите спуститься в конец очереди?</p>
             </Alert>
         )
-    }
-
-    messageToAll = () => {
-        global.queue.codeForMsg = this.props.queueCode
-        if (osName !== IOS) {
-            this.props.history.push("message");
-            window.history.pushState({history: "message"}, "message");
-        }
-        this.setState({
-            CSSMenuDropout: 'turnOff',
-            openMenuButton: 'Открыть меню действий',
-        });
-        menuCounter++;
-        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
-            this.setState({
-                nameAdminButton: 'Выдать права админа',
-                selectables: false,
-                cssButtonGiveAdmin: 'turnOff',
-            })
-            counter++;
-        }
-        if (this.state.buttonText === 'Откл. перемещение/удаление') {
-            counter2++;
-            this.setState({
-                draggable: false,
-                buttonText: 'Вкл. перемещение/удаление',
-            });
-        }
-        this.props.setActiveModal(MODAL_CARD_FOR_MESSAGE)
     }
 
 
@@ -1205,6 +1204,7 @@ class UsersList extends React.Component {
                         <Tabs>
                             <TabsItem onClick={() => {
                                 this.setState({
+                                    cssMessageButton: 'turnOff',
                                     refreshButton: 'refreshButton',
                                     activeTab: 'user',
                                     cssSkipButton: 'OnlySkipButton',
@@ -1215,8 +1215,7 @@ class UsersList extends React.Component {
                                     CSSExitQueueButton: 'CSSExitQueueButton',
                                     CSSAddNewUserInput: 'turnOff',
                                     CSSAddNewUserButton: 'turnOff',
-                                    CSSAddPersonButton: 'turnOff',
-                                    cssMessageButton: 'turnOff'
+                                    CSSAddPersonButton: 'turnOff'
                                 });
                                 let usersArr = this.state.users;
                                 for (let i = 0; i < usersArr.length; i++) {
@@ -1233,6 +1232,7 @@ class UsersList extends React.Component {
 
                             <TabsItem onClick={() => {
                                 this.setState({
+                                    cssMessageButton: 'cssMessageButton ',
                                     refreshButton: 'turnOff',
                                     activeTab: 'admin',
                                     cssSkipButton: 'turnOff',
@@ -1241,8 +1241,7 @@ class UsersList extends React.Component {
                                     cssShuffleButton: 'OnlySkipButton',
                                     CSSEditQueueButton: '123',
                                     CSSExitQueueButton: 'turnOff',
-                                    CSSAddPersonButton: 'AddPersonButton',
-                                    cssMessageButton: 'cssMessageButton'
+                                    CSSAddPersonButton: 'AddPersonButton'
                                 })
                             }} selected={this.state.activeTab === 'admin'}>Админ-панель</TabsItem>
                         </Tabs>
@@ -1261,7 +1260,7 @@ class UsersList extends React.Component {
                         this.exitAlert();
                     }} mode={'secondary'} stretched={true}>Покинуть очередь</Button>
                     <Button className={this.state.CSSAddPersonButton} size={'xl'} onClick={() => this.AddPersonNotFromVK()} mode="secondary" stretched={true}>Добавить человека не из VK</Button>
-                    <Button className={this.state.cssMessageButton} size={'xl'} onClick={() => this.messageToAll()} mode={"secondary"} stretched={true}>Написать всем сообщение </Button>
+                    <Button className={this.state.cssMessageButton} size={'xl'} onClick={() => this.messageToAll()} mode={"secondary"} stretched={true}>Написать всем сообщение</Button>
                     </Div>
 
                 </div>

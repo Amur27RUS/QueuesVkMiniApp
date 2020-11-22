@@ -4,19 +4,9 @@
   margin-bottom: 105px;
 }
 
-.version{
-  margin-top: 30px;
-  margin-right: auto;
-  margin-left: auto;
-  display: table;
-}
-
 .inputJoin {
   text-align: center;
   position: center;
-}
-.versionDiv{
-  width: 100%;
 }
 
 #input {
@@ -38,6 +28,15 @@
   display: -webkit-box;
   margin-left: 15px;
   word-break: break-all;
+}
+
+.linkToGroup{
+  text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+
+.imgForTutor{
+  max-width: 80%;
+  margin-left: 10%;
 }
 
 .img {
@@ -218,6 +217,13 @@
   transition-duration: 1000ms;
 }
 
+.cssMessageButton {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
 .menuButton {
   min-height: 43px;
 }
@@ -343,6 +349,13 @@ img {
   display: table;
 }
 
+.version{
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
 .headerUsers {
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -353,6 +366,7 @@ img {
 /*  padding-right: 75px;*/
 /*  text-align: left;*/
 /*}*/
+
 
 .HeaderOfQueue {
   text-align: center;
@@ -389,11 +403,4 @@ img {
   padding-right: 10px;
   padding-left: 10px;
   color: #828282;
-}
-
-.cssMessageButton {
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
 }

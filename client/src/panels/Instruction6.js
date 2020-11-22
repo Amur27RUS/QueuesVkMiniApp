@@ -16,7 +16,7 @@ const Instruction6 = ({id, setActivePanel, setActiveStory, skip, setTabbarCSS}) 
                     Пропустить
                 </PanelHeaderButton>}/>
             <Div>
-                <img src={phone}/>
+                <img className={'imgForTutor'} src={phone}/>
             </Div>
 
             <Div>

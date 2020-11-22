@@ -12,6 +12,7 @@ import {
 	View,
 	Avatar,
 	Snackbar,
+	Textarea,
 	ConfigProvider, platform, IOS,
 } from "@vkontakte/vkui";
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
@@ -32,7 +33,6 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
-import Textarea from "@vkontakte/vkui/dist/components/Textarea/Textarea";
 
 
 global.queue = {
@@ -92,13 +92,12 @@ const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
 const MODAL_CARD_FOR_MESSAGE = 'massage-all';
 const osName = platform();
-// const str = global.scheme.beginning ? 'home' : 'instruction';
 
 const App = (tutorial) =>{
 
 	const [activePanel, setActivePanel] = useState('home');
-	const [history, setHistory] = useState(['home']); // Заносим начальную панель в массив историй.
-	const [history2, setHistory2] = useState(['home']); // Заносим начальную панель в массив историй.
+	const [history, setHistory] = useState(['home']) // Заносим начальную панель в массив историй.
+	const [history2, setHistory2] = useState(['home']) // Заносим начальную панель в массив историй.
 	const [fetchedUser, setUser] = useState({id: 6}); //{id: 3} - это для теста
 	const [popout, setPopout] = useState(null);
 	const [activeStory, setActiveStory] = useState('main');
@@ -116,7 +115,6 @@ const App = (tutorial) =>{
 	const [joinInputStatusText, setJoinInputStatusText] = useState('');
 	const [CSSForCreateQueue, setCSSForCreateQueue] = useState('createQueuePanel');
 	const [time, setTime] = useState(false);
-	const [beginning, setBeginning] = useState();
 	const [tabbarCSS, setTabbarCSS] = useState('createQueuePanel')
 	const [showTutor, setShowTutor] = useState(undefined);
 	const [messageToAll, setMessageToAll] = useState('');
@@ -125,7 +123,7 @@ const App = (tutorial) =>{
 	//ActivePanel - это Panel
 
 	useEffect(() => {
-		if(!global.scheme.beginning) {
+		if(!global.scheme.beginning && global.scheme.beginning !== undefined) {
 			setTabbarCSS('turnOff');
 			setActiveStory('instructionsView');
 			setActivePanel('instruction');
@@ -224,6 +222,16 @@ const App = (tutorial) =>{
 				// window.location.hash = '';
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
+
+			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
+			// const queuesArray = [
+			// 	{ id: 1, name: 'Сдача лабы по проге', date: '', time: '', place: 'ИТМО', description: 'Приём в каб. 406', code: 'J8D1XI', avatar: 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/43H5.gif?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b'},
+			// 	{ id: 2, name: 'Очередь за шавермой', date:'14.12.2020', time: '15:10', place: 'Ларёк 35', description: 'Лучшая шавуха у Ашота', code: 'F67HN8', aavatar: ''},
+			// 	{ id: 3, name: 'На сдачу экзамена по вождению', date: '25.08.2020', time: '16:00', place: 'Улица Горькавого', description: 'С собой иметь маску и перчатки!', code: 'LI96C1', avatar: cowboy},
+			// 	{ id: 4, name: 'Сдача лабы по инфе', date: '24.02.2021', time: '12:25', place:'Москва, ВШЭ', description: 'Жесткий препод', code: 'N84J4K', avatar: ''},
+			// ];
+			//
+			// queuesSet(queuesArray);
 		}
 
 		fetchData();
@@ -317,7 +325,7 @@ const App = (tutorial) =>{
 				if (history.length > 1) { // Если в массиве больше одного значения:
 					history.pop() // удаляем последний элемент в массиве.
 					await setTimeout(() => setActivePanel(history[history.length - 1]), 400); // Изменяем массив с иторией и меняем активную панель
-					window.scrollTo(0, 0);
+					window.scrollTo(0,0);
 					await setTime(true);
 					await setTimeout(() => {setTime(false)}, 800);
 				}
@@ -344,13 +352,11 @@ const App = (tutorial) =>{
 		global.queue.changedPioURLNew = undefined;
 		global.queue.changedAvatarName = undefined;
 
-		window.scrollTo(0, 0);
-
+			window.scrollTo(0,0);
 	};
 
 	const onStoryChange = e => {
-		window.scrollTo(0, 0);
-
+		window.scrollTo(0,0);
 		setSnackbar(null);
 		setActiveStory(e.currentTarget.dataset.story);
 	};
@@ -361,81 +367,81 @@ const App = (tutorial) =>{
 			setJoinInputStatusText('');
 			console.log('Отправлен запрос на вход в очередь...');
 
-			fetch('/joinQueue', {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					"serverCode": data,
-					"url": window.location.search.replace('?', '')
-				})
-			}).then(async function (response) {
-				let res = await response.json();
-				if (osName !== IOS){
-					history.pop() // удаляем последний элемент в массиве.
-					// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-				}
-				if (res === 'noQueue') {
-					setActiveModal(null);
-					setCodeInput(undefined);
-					setSnackbar(<Snackbar
-						layout="vertical"
-						onClose={() => setSnackbar(null)}
-						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-					>
-						Очереди с введённым кодом не существует!
-					</Snackbar>)
-				} else if (res === 'alreadyThere') {
-					setActiveModal(null);
-					setCodeInput(undefined);
-					setSnackbar(<Snackbar
-						layout="vertical"
-						onClose={() => setSnackbar(null)}
-						before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14} height={14}/></Avatar>}
-					>
-						Вы уже находитесь в этой очереди!
-					</Snackbar>)
-				} else if (res === 'success') {
-					setActiveModal(null);
-					setCodeInput(undefined);
-					setSnackbar(<Snackbar
-						layout="vertical"
-						onClose={() => setSnackbar(null)}
-						before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
-					>
-						Вы успешно присоединились к очереди!
-					</Snackbar>)
-				}
-			}).then(async function (res) {
-				fetch('/getQueues', {
+				fetch('/joinQueue', {
 					method: 'POST',
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
+						"serverCode": data,
 						"url": window.location.search.replace('?', '')
 					})
-				}).then(function (response) {
-					return response.json();
+				}).then(async function (response) {
+							let res = await response.json();
+							if (osName !== IOS){
+								history.pop() // удаляем последний элемент в массиве.
+								// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+							}
+							if (res === 'noQueue') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+								>
+									Очереди с введённым кодом не существует!
+								</Snackbar>)
+							} else if (res === 'alreadyThere') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24} style={blueBackground}><Icon16User fill="#fff" width={14} height={14}/></Avatar>}
+								>
+									Вы уже находитесь в этой очереди!
+								</Snackbar>)
+							} else if (res === 'success') {
+								setActiveModal(null);
+								setCodeInput(undefined);
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+								>
+									Вы успешно присоединились к очереди!
+								</Snackbar>)
+							}
+				}).then(async function (res) {
+					fetch('/getQueues', {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							"url": window.location.search.replace('?', '')
+						})
+					}).then(function (response) {
+						return response.json();
 
-				})
-					.then(function (data) {
-						setQueues(data);
 					})
-			}).catch((e) => {
-				setSnackbar(<Snackbar
-					layout="vertical"
-					onClose={() => setSnackbar(null)}
-					before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-				>
-					Ошибка соединения! Проверьте интернет!
-				</Snackbar>);
-			})
+						.then(function (data) {
+							setQueues(data);
+						})
+				}).catch((e) => {
+					setSnackbar(<Snackbar
+						layout="vertical"
+						onClose={() => setSnackbar(null)}
+						before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+					>
+						Ошибка соединения! Проверьте интернет!
+					</Snackbar>);
+				})
 
-		}else{
+			}else{
 			setJoinInputStatus('error');
 			setJoinInputStatusText('Должно быть 6 символов!')
 		}
@@ -475,7 +481,6 @@ const App = (tutorial) =>{
 
 	const modal = (
 		<ModalRoot activeModal={activeModal}>
-
 			<ModalCard
 				id={MODAL_CARD_FOR_MESSAGE}
 				onClose={() => {
@@ -520,17 +525,19 @@ const App = (tutorial) =>{
 				actionsLayout="vertical"
 			>
 				<FormLayout>
-					<Textarea bottom={joinInputStatusText} status={joinInputStatus} placeholder="Текст сообщения..." value={messageToAll} onChange={(e) =>{
-						setMessageToAll(e.target.value)
-						if(e.target.value.length === 0){
-							setJoinInputStatusText('Введите что-нибудь!');
-							setJoinInputStatus('error');
-						}
-					}}/>
-				</FormLayout>
+				<Textarea bottom={joinInputStatusText} status={joinInputStatus} placeholder="Текст сообщения..." value={messageToAll} onChange={(e) =>{
+					setMessageToAll(e.target.value)
+					if(e.target.value.length === 0){
+						setJoinInputStatusText('Введите что-нибудь!');
+						setJoinInputStatus('error');
+					}else{
+						setJoinInputStatusText('');
+						setJoinInputStatus('');
+					}
+				}}/>
+			</FormLayout>
 
 			</ModalCard>
-
 			<ModalCard
 				id={MODAL_CARD_QUEUE_INVITE}
 				onClose={() => {
@@ -590,20 +597,20 @@ const App = (tutorial) =>{
 				]}
 			>
 				<FormLayout className={'inputJoin'}>
-					<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
-						   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
+						<Input id='input' bottom={joinInputStatusText} status={joinInputStatus} className={'inputJoin'} autoFocus={false} type={'text'}
+							   minlength={6} maxlength={6} value={codeInput} onChange={(e) =>{
 
-						setCodeInput(e.target.value.substring(0, 6))
-						if(e.target.value.length === 6){
-							setJoinInputStatusText('');
-							setJoinInputStatus('valid');
-							// history.pop() // удаляем последний элемент в массиве.
-							// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
-						}else{
-							setJoinInputStatusText('Должно быть 6 символов!');
-							setJoinInputStatus('error');
-						}
-					}}/>
+							   	setCodeInput(e.target.value.substring(0, 6))
+								if(e.target.value.length === 6){
+									setJoinInputStatusText('');
+									setJoinInputStatus('valid');
+									// history.pop() // удаляем последний элемент в массиве.
+									// setActivePanel( history[history.length - 1] ) // Изменяем массив с иторией и меняем активную панель.
+								}else{
+									setJoinInputStatusText('Должно быть 6 символов!');
+									setJoinInputStatus('error');
+								}
+						}}/>
 				</FormLayout>
 			</ModalCard>
 
@@ -651,11 +658,10 @@ const App = (tutorial) =>{
 						await bridge.send("VKWebAppCopyText", {"text": queueCODE});
 						setCopyButtonTitle('Скопировано!')
 					}
-				}]}
+					}]}
 				actionsLayout="vertical"
 			>
 			</ModalCard>
-
 		</ModalRoot>
 	);
 
@@ -670,76 +676,58 @@ const App = (tutorial) =>{
 
 	return (
 		<ConfigProvider>
-				<Epic activeStory={activeStory} tabbar={
-					<Tabbar className={tabbarCSS}>
-						<TabbarItem
-							onClick={onStoryChange}
-							selected={activeStory === 'main'}
-							data-story="main"
-							data-to='home'
-							text="Очереди"
-						><ListOutline28/></TabbarItem>
-						<TabbarItem
-							onClick={onStoryChange}
-							selected={activeStory === 'createQueue'}
-							data-story="createQueue"
-							data-to="createQueuePanel"
-							text="Создать очередь"
-						><AddSquareOutline28/></TabbarItem>
-						<TabbarItem
-							onClick={onStoryChange}
-							selected={activeStory === 'settings'}
-							data-story="settings"
-							// label="12" - Сколько уведомлений. Может быть потом пригодится
-							text="Настройки"
-						><Icon28SettingsOutline/></TabbarItem>
-					</Tabbar>
-				}>
+		<Epic activeStory={activeStory} tabbar={
+			<Tabbar className={tabbarCSS}>
+				<TabbarItem
+					onClick={onStoryChange}
+					selected={activeStory === 'main'}
+					data-story="main"
+					data-to='home'
+					text="Очереди"
+				><ListOutline28/></TabbarItem>
+				<TabbarItem
+					onClick={onStoryChange}
+					selected={activeStory === 'createQueue'}
+					data-story="createQueue"
+					data-to="createQueuePanel"
+					text="Создать очередь"
+				><AddSquareOutline28/></TabbarItem>
+				<TabbarItem
+					onClick={onStoryChange}
+					selected={activeStory === 'settings'}
+					data-story="settings"
+					// label="12" - Сколько уведомлений. Может быть потом пригодится
+					text="Настройки"
+				><Icon28SettingsOutline/></TabbarItem>
 
+			</Tabbar>
+		}>
 
-					<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
-						<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner}
-							  snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar}
-							  setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go}
-							  setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-						<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory}
-									setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser}
-									go={go} queues={queues} setActivePanel={setActivePanel}
-									setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-						<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar}
-									 snackbar={snackbar} fetchedUser={fetchedUser} go={go}
-									 setActivePanel={setActivePanel} setQueues={setQueues}/>
-					</View>
+			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
+				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+			</View>
 
-					<View id={'instructionsView'} activePanel={activePanel}>
-						<Instruction id={'instruction'} setActivePanel={setActivePanel} skip={skip} setTabbarCSS={setTabbarCSS}/>
-						<Instruction2 id={'instruction2'} setActivePanel={setActivePanel} skip={skip}/>
-						<Instruction3 id={'instruction3'} setActivePanel={setActivePanel} skip={skip}/>
-						<Instruction4 id={'instruction4'} setActivePanel={setActivePanel} skip={skip}/>
-						<Instruction5 id={'instruction5'} setActivePanel={setActivePanel} skip={skip}/>
-						<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip}/>
-					</View>
+			<View id={'instructionsView'} activePanel={activePanel}>
+				<Instruction id={'instruction'} setActivePanel={setActivePanel} skip={skip} setTabbarCSS={setTabbarCSS}/>
+				<Instruction2 id={'instruction2'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction3 id={'instruction3'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction4 id={'instruction4'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction5 id={'instruction5'} setActivePanel={setActivePanel} skip={skip}/>
+				<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip}/>
+			</View>
 
-					<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal}
-						  history={history}>
-						<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history}
-									 setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go}
-									 setActiveModal={setActiveModal} fetchedUser={fetchedUser}
-									 setQueueCODE={setQueueCODE}/>
-					</View>
-					<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
-						<Settings id={'Settings'} go={go} fetchedUser={fetchedUser}/>
-					</View>
-				</Epic>
+			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+			</View>
 
+			<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
+				<Settings id={'Settings'} go={go} fetchedUser={fetchedUser} setSnackbar={setSnackbar} snackbar={snackbar}/>
+			</View>
+		</Epic>
 		</ConfigProvider>
 	);
 }
 
 export default App;
-
-
-
-
-
-
