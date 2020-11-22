@@ -672,6 +672,7 @@ class UsersList extends React.Component {
     }
 
     messageToAll = () => {
+        global.queue.codeForMsg = this.props.queueCode
         if (osName !== IOS) {
             this.props.history.push("message");
             window.history.pushState({history: "message"}, "message");

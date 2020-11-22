@@ -83,6 +83,8 @@ global.queue = {
 	goBackIOS: false,
 
 	dataCheck: false,
+
+	codeForMsg: undefined,
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -499,7 +501,7 @@ const App = (tutorial) =>{
 										'Content-Type': 'application/json',
 									},
 									body: JSON.stringify({
-										"queueCODE": global.queue.joinQueueCode,
+										"queueCODE": global.queue.codeForMsg,
 										"message": messageToAll,
 										"url": window.location.search.replace('?', '')
 									})
