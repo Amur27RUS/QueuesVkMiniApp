@@ -40,15 +40,6 @@
   word-break: break-all;
 }
 
-.linkToGroup{
-  text-decoration: none; /* Убирает подчеркивание для ссылок */
-}
-
-.imgForTutor{
-  max-width: 80%;
-  margin-left: 10%;
-}
-
 .img {
   width: 30px;
   height: 30px;
@@ -398,4 +389,11 @@ img {
   padding-right: 10px;
   padding-left: 10px;
   color: #828282;
+}
+
+.cssMessageButton {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
 }
