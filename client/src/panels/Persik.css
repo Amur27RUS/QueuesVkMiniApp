@@ -4,9 +4,19 @@
   margin-bottom: 105px;
 }
 
+.version{
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  display: table;
+}
+
 .inputJoin {
   text-align: center;
   position: center;
+}
+.versionDiv{
+  width: 100%;
 }
 
 #input {
