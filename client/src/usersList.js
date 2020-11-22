@@ -34,6 +34,7 @@ const blueBackground = {
 let menuCounter = 1; //Счётчик открытия меню действий
 let styleForButtons = 'ButtonsDiv'; //Стили для кнопки меню действий для IOS/Android
 let styleForButtonAddAdmin = 'giveAdmin'; //Стили для кнопки меню действий для IOS/Android
+const MODAL_CARD_FOR_MESSAGE = 'massage-all';
 
 class UsersList extends React.Component {
 
@@ -72,6 +73,8 @@ class UsersList extends React.Component {
             CSSMenuButton: 'turnOff',
             refreshButton: 'refreshButton',
             addAdminForLast: false,
+            cssMessageButton: 'turnOff',
+            messageToAll: '',
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -669,6 +672,35 @@ class UsersList extends React.Component {
         )
     }
 
+    messageToAll = () => {
+        global.queue.codeForMsg = this.props.queueCode
+        if (osName !== IOS) {
+            this.props.history.push("message");
+            window.history.pushState({history: "message"}, "message");
+        }
+        this.setState({
+            CSSMenuDropout: 'turnOff',
+            openMenuButton: 'Открыть меню действий',
+        });
+        menuCounter++;
+        if (this.state.cssButtonGiveAdmin !== 'turnOff') {
+            this.setState({
+                nameAdminButton: 'Выдать права админа',
+                selectables: false,
+                cssButtonGiveAdmin: 'turnOff',
+            })
+            counter++;
+        }
+        if (this.state.buttonText === 'Откл. перемещение/удаление') {
+            counter2++;
+            this.setState({
+                draggable: false,
+                buttonText: 'Вкл. перемещение/удаление',
+            });
+        }
+        this.props.setActiveModal(MODAL_CARD_FOR_MESSAGE)
+    }
+
 
     changeUsersPositionOnServer = (usersArray) => {
         if(usersArray.length > 1) {
@@ -1183,7 +1215,8 @@ class UsersList extends React.Component {
                                     CSSExitQueueButton: 'CSSExitQueueButton',
                                     CSSAddNewUserInput: 'turnOff',
                                     CSSAddNewUserButton: 'turnOff',
-                                    CSSAddPersonButton: 'turnOff'
+                                    CSSAddPersonButton: 'turnOff',
+                                    cssMessageButton: 'turnOff'
                                 });
                                 let usersArr = this.state.users;
                                 for (let i = 0; i < usersArr.length; i++) {
@@ -1208,7 +1241,8 @@ class UsersList extends React.Component {
                                     cssShuffleButton: 'OnlySkipButton',
                                     CSSEditQueueButton: '123',
                                     CSSExitQueueButton: 'turnOff',
-                                    CSSAddPersonButton: 'AddPersonButton'
+                                    CSSAddPersonButton: 'AddPersonButton',
+                                    cssMessageButton: 'cssMessageButton'
                                 })
                             }} selected={this.state.activeTab === 'admin'}>Админ-панель</TabsItem>
                         </Tabs>
@@ -1227,6 +1261,7 @@ class UsersList extends React.Component {
                         this.exitAlert();
                     }} mode={'secondary'} stretched={true}>Покинуть очередь</Button>
                     <Button className={this.state.CSSAddPersonButton} size={'xl'} onClick={() => this.AddPersonNotFromVK()} mode="secondary" stretched={true}>Добавить человека не из VK</Button>
+                    <Button className={this.state.cssMessageButton} size={'xl'} onClick={() => this.messageToAll()} mode={"secondary"} stretched={true}>Написать всем сообщение </Button>
                     </Div>
 
                 </div>
