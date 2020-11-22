@@ -45,7 +45,7 @@ async function firstInstr() {
     })
         .then(function (data) {
             if (data.length !== 0) {
-                global.scheme.beginning = true;
+                global.scheme.beginning = false;
             }
         })
 
