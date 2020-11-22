@@ -11,7 +11,7 @@ app.set('trust proxy', 1);
 
 const limiter = rateLimit({
     windowMs: 1 * 1000, // 1 seconds
-    max: 3, // limit each IP to 3 requests per windowMs
+    max: 4, // limit each IP to 3 requests per windowMs
     message: "Too many  created from this IP",
 });
 

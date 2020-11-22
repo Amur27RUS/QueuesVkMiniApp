@@ -818,7 +818,6 @@ class UsersList extends React.Component {
                 let tmpUsersArr = data;
                 let user = undefined;
 
-                //todo запрос на получение инфы о людях
                 await fetch('/getUsersInfo', {
                     method: 'POST',
                     headers: {
