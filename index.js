@@ -715,11 +715,43 @@ async function checkNotificationsInDatabase(url, res){
     }
 }
 
+async function sendMessage(url, queueCode, msg, res){
+    let userID = parseInt(await checkSign(url), 10);
+    if(userID !== 3){
+        const client = await pool.connect();
+        const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
+
+        if (isAdmin.rows[0].value) {
+            const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
+            const ppl = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notifications != false AND userid != $2', [queueCode, userID]);
+            for (let i = 0; i < ppl.length; i++) {
+                bot.sendMessage(ppl.rows[i].value, `[${queueName.rows[0].value}] Сообщение от админа: ${msg}`).catch((e) => {
+                    console.log(e)
+                });
+            }
+            await res.send(JSON.stringify('Done!'));
+        }else{
+            res.status(403).send({errorCode: 'sign rejected :('});
+        }
+        await client.release();
+    }else{
+        res.status(403).send({errorCode: 'sign rejected :('});
+    }
+}
+
 
 
 /*---------------------------------------------------------------------*/
 /*--------------------ЗАПРОСЫ------------------------------------------*/
 /*---------------------------------------------------------------------*/
+
+app.post('/sendMessageToAll', limiter, (req, res) => {
+    const url = req.body.url;
+    const queueCode = req.body.url;
+    const msg = req.body.url;
+
+    sendMessage(url, queueCode, msg, res);
+});
 
 app.post('/addNotFromVK', limiter, (req, res) => {
     const newUser = req.body.newUser;
