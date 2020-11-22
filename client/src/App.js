@@ -32,6 +32,7 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
+import Textarea from "@vkontakte/vkui/dist/components/Textarea/Textarea";
 
 
 global.queue = {
@@ -87,6 +88,7 @@ global.queue = {
 const MODAL_CARD_ABOUT = 'say-about';
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 const MODAL_CARD_QUEUE_INVITE = 'queue-join';
+const MODAL_CARD_FOR_MESSAGE = 'massage-all';
 const osName = platform();
 // const str = global.scheme.beginning ? 'home' : 'instruction';
 
@@ -115,6 +117,7 @@ const App = (tutorial) =>{
 	const [beginning, setBeginning] = useState();
 	const [tabbarCSS, setTabbarCSS] = useState('createQueuePanel')
 	const [showTutor, setShowTutor] = useState(undefined);
+	const [messageToAll, setMessageToAll] = useState('');
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
@@ -470,6 +473,62 @@ const App = (tutorial) =>{
 
 	const modal = (
 		<ModalRoot activeModal={activeModal}>
+
+			<ModalCard
+				id={MODAL_CARD_FOR_MESSAGE}
+				onClose={() => {
+					setActiveModal(null)
+					setMessageToAll('')
+					if (osName !== IOS) {
+						history.pop() // удаляем последний элемент в массиве.
+					}
+					setJoinInputStatus('');
+					setJoinInputStatusText('');
+				}}
+				header="Введите текст сообщения"
+				actions={[
+					{
+						title: 'Отправить',
+						mode: 'primary',
+						action: () => {
+							if (messageToAll !== '') {
+								fetch('/sendMessageToAll', {
+									method: 'POST',
+									headers: {
+										'Accept': 'application/json',
+										'Content-Type': 'application/json',
+									},
+									body: JSON.stringify({
+										"queueCODE": global.queue.joinQueueCode,
+										"message": messageToAll,
+										"url": window.location.search.replace('?', '')
+									})
+								})
+								setActiveModal(null);
+								setMessageToAll('')
+								setJoinInputStatus('');
+								setJoinInputStatusText('');
+							} else {
+								setJoinInputStatusText('Введите что-нибудь!');
+								setJoinInputStatus('error');
+							}
+						}
+					}
+				]}
+				actionsLayout="vertical"
+			>
+				<FormLayout>
+					<Textarea bottom={joinInputStatusText} status={joinInputStatus} placeholder="Текст сообщения..." value={messageToAll} onChange={(e) =>{
+						setMessageToAll(e.target.value)
+						if(e.target.value.length === 0){
+							setJoinInputStatusText('Введите что-нибудь!');
+							setJoinInputStatus('error');
+						}
+					}}/>
+				</FormLayout>
+
+			</ModalCard>
+
 			<ModalCard
 				id={MODAL_CARD_QUEUE_INVITE}
 				onClose={() => {

@@ -380,3 +380,10 @@ img {
   padding-left: 10px;
   color: #828282;
 }
+
+.cssMessageButton {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
