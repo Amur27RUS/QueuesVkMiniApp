@@ -81,9 +81,8 @@ global.queue = {
 
 	goBackIOS: false,
 
+
 	dataCheck: false,
-
-
 }
 
 const MODAL_CARD_ABOUT = 'say-about';
@@ -602,6 +601,7 @@ const App = (tutorial) =>{
 				actionsLayout="vertical"
 			>
 			</ModalCard>
+
 		</ModalRoot>
 	);
 
@@ -613,6 +613,7 @@ const App = (tutorial) =>{
 		await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
 		await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": "true"});
 	}
+
 
 	return (
 		<ConfigProvider>
@@ -642,6 +643,7 @@ const App = (tutorial) =>{
 
 			</Tabbar>
 		}>
+
 
 			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
 				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
