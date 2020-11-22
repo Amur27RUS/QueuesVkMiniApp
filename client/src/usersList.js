@@ -21,6 +21,7 @@ import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SyncOutline from '@vkontakte/icons/dist/28/sync_outline';
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
+import Icon28AddSquareOutline from '@vkontakte/icons/dist/28/add_square_outline';
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -123,7 +124,7 @@ class UsersList extends React.Component {
                     CSSMenuButton: '',
                 })
             })
-        //todo Если что, то можно добавить .bind(this) перед .catch
+        //Если что, то можно добавить .bind(this) перед .catch
 
         menuCounter = 1;
 
@@ -132,7 +133,7 @@ class UsersList extends React.Component {
             let tmpUsersArr = data;
             let user = undefined;
 
-            //todo запрос на получение инфы о людях
+            //запрос на получение инфы о людях
             await fetch('/getUsersInfo', {
                 method: 'POST',
                 headers: {
@@ -670,77 +671,79 @@ class UsersList extends React.Component {
 
 
     changeUsersPositionOnServer = (usersArray) => {
-        console.log('Отправлен запрос на изменение порядка людей в очереди...');
-        fetch('/changeUsersOrder', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "usersArray": usersArray,
-                "queueCODE": this.props.queueCode,
-                "url": window.location.search.replace('?', '')
-            })
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(async function (data) {
-                let tmpUsersArr = data;
-                let user = undefined;
-
-                //todo запрос на получение инфы о людях
-                await fetch('/getUsersInfo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        "url": window.location.search.replace('?', ''),
-                        "usersArr": data,
-                    })
-                }).then(function (response) {
-                    return response.json();
-                }).then(function (result){
-                    user = result.response;
+        if(usersArray.length > 1) {
+            console.log('Отправлен запрос на изменение порядка людей в очереди...');
+            fetch('/changeUsersOrder', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "usersArray": usersArray,
+                    "queueCODE": this.props.queueCode,
+                    "url": window.location.search.replace('?', '')
                 })
-                for(let i = 0; i < tmpUsersArr.length; i++){
-                    if(tmpUsersArr[i].notvkname === null) {
-
-                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
-                            global.queue.isFirstPlace = true;
-                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
-                            global.queue.isFirstPlace = false;
-                        }
-
-                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
-                            global.queue.isUserAdmin = true;
-
-                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
-                            global.queue.isUserAdmin = false;
-                        }
-                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
-                        tmpUsersArr[i].avatar = user[i].photo_100;
-                    }else{
-                        tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
-                    }
-                }
-                return tmpUsersArr;
-
-            }).then((usersArr) =>{
-            this.setState({
-                users: usersArr
+            }).then(function (response) {
+                return response.json();
             })
-        }).catch((e) => {
-            // this.props.setSnackbar(<Snackbar
-            //     layout="vertical"
-            //     onClose={() => this.props.setSnackbar(null)}
-            //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-            // >
-            //     Ошибка соединения! Проверьте интернет!
-            // </Snackbar>);
-        })
+                .then(async function (data) {
+                    let tmpUsersArr = data;
+                    let user = undefined;
+
+                    //todo запрос на получение инфы о людях
+                    await fetch('/getUsersInfo', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "url": window.location.search.replace('?', ''),
+                            "usersArr": data,
+                        })
+                    }).then(function (response) {
+                        return response.json();
+                    }).then(function (result) {
+                        user = result.response;
+                    })
+                    for (let i = 0; i < tmpUsersArr.length; i++) {
+                        if (tmpUsersArr[i].notvkname === null) {
+
+                            if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+                                global.queue.isFirstPlace = true;
+                            } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
+                                global.queue.isFirstPlace = false;
+                            }
+
+                            if (global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin) {
+                                global.queue.isUserAdmin = true;
+
+                            } else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin) {
+                                global.queue.isUserAdmin = false;
+                            }
+                            tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+                            tmpUsersArr[i].avatar = user[i].photo_100;
+                        } else {
+                            tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
+                        }
+                    }
+                    return tmpUsersArr;
+
+                }).then((usersArr) => {
+                this.setState({
+                    users: usersArr
+                })
+            }).catch((e) => {
+                // this.props.setSnackbar(<Snackbar
+                //     layout="vertical"
+                //     onClose={() => this.props.setSnackbar(null)}
+                //     before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
+                // >
+                //     Ошибка соединения! Проверьте интернет!
+                // </Snackbar>);
+            })
+        }
     }
 
     openMenu = () => {
@@ -1268,47 +1271,50 @@ class UsersList extends React.Component {
 
                     <List>
                     {this.state.users.map(info => {
-                        return <Cell id={info.name} key={info.userid} description={info.isadmin ? 'Admin' : ''}
-                                     selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
-                                     // onClick={() => window.open("http://vk.com/id"+info.userid)}
-                                     className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
-                                     draggable={this.state.draggable}
-                                     removable={!(info.userid === this.props.fetchedUser.id) ? this.state.draggable : false}
-                                     before={ info.avatar ? <Avatar className={'avatar'} size={45} src={info.avatar}>
-                                          <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>
-                                          : <Avatar className={'avatar'} size={45}>
-                                          <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>}
-                                     onDragFinish={({ from, to }) => {
-                            const draggingList = [...this.state.users];
-                            draggingList.splice(from, 1);
-                            draggingList.splice(to, 0, this.state.users[from]);
-                            this.setState({users: draggingList });
-                            if(this.state.openMenuButton === 'Закрыть меню действий'){
-                                this.setState({
-                                    CSSMenuDropout: 'turnOff',
-                                    openMenuButton: 'Открыть меню действий',
-                                })
-                                menuCounter++;
-                            }
+                            return <Cell id={info.name} key={info.userid} description={info.isadmin ? 'Admin' : ''}
+                                         selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
+                                // onClick={() => window.open("http://vk.com/id"+info.userid)}
+                                         className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
+                                         draggable={this.state.draggable}
+                                         removable={!(info.userid === this.props.fetchedUser.id) ? this.state.draggable : false}
+                                         before={info.avatar ? <Avatar className={'avatar'} size={45} src={info.avatar}>
+                                                 <Group className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>
+                                             : <Avatar className={'avatar'} size={45}>
+                                                 <Group
+                                                     className={'idAvatar'}>{this.state.users.indexOf(info) + 1}</Group></Avatar>}
+                                         onDragFinish={({from, to}) => {
+                                             const draggingList = [...this.state.users];
+                                             draggingList.splice(from, 1);
+                                             draggingList.splice(to, 0, this.state.users[from]);
+                                             this.setState({users: draggingList});
+                                             if (this.state.openMenuButton === 'Закрыть меню действий') {
+                                                 this.setState({
+                                                     CSSMenuDropout: 'turnOff',
+                                                     openMenuButton: 'Открыть меню действий',
+                                                 })
+                                                 menuCounter++;
+                                             }
 
-                            console.log('Отправлен запрос на обновление списка из-за перемещения...')
-                            this.changeUsersPositionOnServer(this.state.users);
+                                             console.log('Отправлен запрос на обновление списка из-за перемещения...')
+                                             this.changeUsersPositionOnServer(this.state.users);
 
-                        }} onRemove={() => {
-                            this.deleteUser(this.state.users.indexOf(info))
-                            this.setState({
-                                users: [...this.state.users.slice(0, this.state.users.indexOf(info)), ...this.state.users.slice(this.state.users.indexOf(info) +1)]
-                            });
-                            if(this.state.openMenuButton === 'Закрыть меню действий'){
+                                         }} onRemove={() => {
+                                this.deleteUser(this.state.users.indexOf(info))
                                 this.setState({
-                                    CSSMenuDropout: 'turnOff',
-                                    openMenuButton: 'Открыть меню действий',
-                                })
-                                menuCounter++;
-                            }
-                            console.log('Отправлен запрос на обновление списка из-за удаления...')
-                            // this.changeUsersPositionOnServer(this.state.users);
-                        }}><text className={'nameUser'}>{info.name}</text></Cell>
+                                    users: [...this.state.users.slice(0, this.state.users.indexOf(info)), ...this.state.users.slice(this.state.users.indexOf(info) + 1)]
+                                });
+                                if (this.state.openMenuButton === 'Закрыть меню действий') {
+                                    this.setState({
+                                        CSSMenuDropout: 'turnOff',
+                                        openMenuButton: 'Открыть меню действий',
+                                    })
+                                    menuCounter++;
+                                }
+                                console.log('Отправлен запрос на обновление списка из-за удаления...')
+                                // this.changeUsersPositionOnServer(this.state.users);
+                            }}>
+                                <text className={'nameUser'}>{info.name}</text>
+                            </Cell>
                     })}
                 </List>
                 </Div>

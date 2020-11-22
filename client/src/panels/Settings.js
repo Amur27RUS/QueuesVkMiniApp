@@ -159,9 +159,11 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                 <Div>
                     <a className={'linkToGroup'} href={'https://vk.com/queuesminiapp'} target={'_blank'}>
                     <Cell
+                        id={'groupCell'}
                         className={'cell'}
                         before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
-                        description="По всем вопросам">
+                        description="По всем вопросам"
+                        onClick={()=>document.getElementById('groupCell').click()}>
                         <text
                             className={'nameUser'}>{'Очереди!'}</text>
                     </Cell>
