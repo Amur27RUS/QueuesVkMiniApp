@@ -492,9 +492,9 @@ async function sendMessage(url, queueCode, msg, res){
     let userID = parseInt(await checkSign(url), 10);
     if(userID !== 3){
         const client = await pool.connect();
-        const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
+        // const isAdmin = await client.query('SELECT isadmin AS VALUE FROM queuesandusers WHERE qcode = $1 AND userid = $2', [queueCode, userID]);
 
-        if (isAdmin.rows[0].value) {
+        // if (isAdmin.rows[0].value) {
             const queueName = await client.query('SELECT name AS VALUE FROM queues WHERE code = $1', [queueCode]);
             const ppl = await client.query('SELECT userid AS VALUE FROM queuesandusers WHERE qcode = $1 AND notifications != false AND userid != $2', [queueCode, userID]);
             for (let i = 0; i < ppl.length; i++) {
@@ -503,9 +503,9 @@ async function sendMessage(url, queueCode, msg, res){
                 });
             }
             await res.send(JSON.stringify('Done!'));
-        }else{
-            res.status(403).send({errorCode: 'sign rejected :('});
-        }
+        // }else{
+        //     res.status(403).send({errorCode: 'sign rejected :('});
+        // }
         await client.release();
     }else{
         res.status(403).send({errorCode: 'sign rejected :('});
