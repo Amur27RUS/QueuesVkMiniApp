@@ -294,7 +294,6 @@ const App = (tutorial) =>{
 
 		});
 
-
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
@@ -344,7 +343,6 @@ const App = (tutorial) =>{
 
 		window.scrollTo(0, 0);
 
-		console.log(history)
 	};
 
 	const onStoryChange = e => {
