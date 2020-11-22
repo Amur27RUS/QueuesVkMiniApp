@@ -515,6 +515,14 @@ const App = (tutorial) =>{
 								setMessageToAll('')
 								setJoinInputStatus('');
 								setJoinInputStatusText('');
+
+								setSnackbar(<Snackbar
+									layout="vertical"
+									onClose={() => setSnackbar(null)}
+									before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+								>
+									Отправлено!
+								</Snackbar>);
 							} else {
 								setJoinInputStatusText('Введите что-нибудь!');
 								setJoinInputStatus('error');
