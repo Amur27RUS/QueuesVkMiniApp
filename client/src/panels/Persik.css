@@ -30,15 +30,6 @@
   word-break: break-all;
 }
 
-.linkToGroup{
-  text-decoration: none; /* Убирает подчеркивание для ссылок */
-}
-
-.imgForTutor{
-  max-width: 80%;
-  margin-left: 10%;
-}
-
 .img {
   width: 30px;
   height: 30px;

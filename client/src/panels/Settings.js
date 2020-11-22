@@ -8,7 +8,7 @@ import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import queuesLogo from '../img/QueuesLogoNEW150x150.jpg';
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
-    const [VKgroup, setVKGroup] = useState([]);
+    const [VKgroup, setVKGroup] = useState(undefined);
     const [switchCheck, setSwitchCheck] = useState(false);
     const [switchDisabled, setSwitchDisabled] = useState(true)
 
@@ -24,7 +24,6 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "https://api.vk.com"
             },
             body: JSON.stringify({
                 "url": window.location.search.replace('?', ''),
@@ -50,7 +49,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                             return data.json();
                         }).then(function (finalResult) {
                             console.log(finalResult);
-                            if(finalResult === 'On' || finalResult === 'Null' || finalResult === 'no data'){
+                            if(finalResult === 'On' || finalResult === 'Null'){
                                 setSwitchCheck(true);
                                 setSwitchDisabled(false);
                             }else{
@@ -143,30 +142,30 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                 </Div>
             </Group>
 
-            {/*<Group description={'После добавления приложения в избранное, его можно будет легче найти среди других приложений'}*/}
-            {/*       header={<Header mode="secondary">Добавь приложение в избранное:</Header>}>*/}
-            {/*    <Div>*/}
-            {/*    <Cell className={'cell'} before={<Icon24Favorite/>} onClick={async ()=>{*/}
-            {/*        await bridge.send("VKWebAppAddToFavorites").then(function (data){*/}
-            {/*            console.log(data);*/}
-            {/*        })*/}
+            <Group description={'После добавления приложения в избранное, его можно будет легче найти среди других приложений'}
+                   header={<Header mode="secondary">Добавь приложение в избранное:</Header>}>
+                <Div>
+                <Cell className={'cell'} before={<Icon24Favorite/>} onClick={async ()=>{
+                    await bridge.send("VKWebAppAddToFavorites").then(function (data){
+                        console.log(data);
+                    })
 
-            {/*    }}>Добавить в избранное</Cell>*/}
-            {/*    </Div>*/}
-            {/*</Group>*/}
+                }}>Добавить в избранное</Cell>
+                </Div>
+            </Group>
 
 
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                 <Div>
-                    <a className={'linkToGroup'} href={'https://vk.com/queuesminiapp'} target={'_blank'}>
                     <Cell
                         className={'cell'}
                         before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
-                        description="По всем вопросам">
+                        onClick={() => window.open("https://vk.com/queuesminiapp")}
+                        description="По всем вопросам"
+                    >
                         <text
                             className={'nameUser'}>{'Очереди!'}</text>
                     </Cell>
-                    </a>
                 </Div>
             </Group>
 

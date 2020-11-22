@@ -570,7 +570,6 @@ async function skipCommand(queueCode, url, res){
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value, nextUser.rows[0].value, queueCode])
             await client.query('UPDATE queuesandusers SET userplace = $1 WHERE userid = $2 AND qcode = $3', [place.rows[0].value+1, userID, queueCode])
             await client.release();
-            await res.send(JSON.stringify('Done!'));
         }else{
             res.status(403).send({errorCode: 'sign rejected :('});
         }
@@ -700,7 +699,7 @@ async function checkNotificationsInDatabase(url, res){
     if(userID !== 3){
         const client = await pool.connect();
         let queues = await client.query('SELECT notifications AS VALUE FROM queuesandusers WHERE userid = $1', [userID]);
-        if(queues.rows[0] !== undefined){
+        if(queues.rows !== undefined){
             if(queues.rows[0].value === true) {
                 await res.send(JSON.stringify('On'));
             }else if (queues.rows[0].value === false){

@@ -19,7 +19,7 @@ const Instruction4 = ({id, setActivePanel, skip}) => {
                     Пропустить
                 </PanelHeaderButton>}/>
             <Div>
-                <img className={'imgForTutor'} src={phone}/>
+                <img src={phone}/>
             </Div>
 
             <Div>

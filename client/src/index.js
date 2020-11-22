@@ -7,7 +7,7 @@ import App from "./App";
 
 global.scheme = {
     scheme: undefined,
-    beginning: undefined,
+    beginning: true,
 }
 
 
@@ -31,7 +31,6 @@ bridge.subscribe(({ detail: { type, data }}) => {
 
 async function firstInstr() {
     const instr = await bridge.send("VKWebAppStorageGetKeys", {"count": 1, "offset": 0});
-    console.log(instr);
     if (instr.keys[0] === 'firstInstruction') {
         global.scheme.beginning = true;
     }else{
@@ -39,6 +38,6 @@ async function firstInstr() {
     }
 }
 
-// import("./eruda").then(({ default: eruda }) => {}); //runtime download
+import("./eruda").then(({ default: eruda }) => {}); //runtime download
 
 ReactDOM.render(<App tutorial={global.scheme.beginning}/>, document.getElementById("root"));
