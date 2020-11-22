@@ -294,14 +294,13 @@ const App = (tutorial) =>{
 
 		});
 
+		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1000));
+
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
 		}
 	}, [global.scheme.beginning]);
 
-	useEffect(() => {
-		window.addEventListener('popstate', () => goBack());
-	})
 
 	const goBack = async () => {
 		if (!time) {
