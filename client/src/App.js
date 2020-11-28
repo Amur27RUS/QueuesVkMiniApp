@@ -672,13 +672,15 @@ const App = (tutorial) =>{
 			</ModalCard>
 		</ModalRoot>
 	);
+	const allowNotifications = async () => {
+		await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
+	}
 
 	const skip = async () => {
 		global.queue.beginning = true
 		setTabbarCSS('createQueuePanel');
 		setActiveStory('main');
 		setActivePanel('home')
-		await bridge.send("VKWebAppAllowMessagesFromGroup", {"group_id": 198211683});
 		await bridge.send("VKWebAppStorageSet", {"key": "firstInstruction", "value": "true"});
 	}
 
@@ -723,7 +725,7 @@ const App = (tutorial) =>{
 				<Instruction3 id={'instruction3'} setActivePanel={setActivePanel} skip={skip}/>
 				<Instruction4 id={'instruction4'} setActivePanel={setActivePanel} skip={skip}/>
 				<Instruction5 id={'instruction5'} setActivePanel={setActivePanel} skip={skip}/>
-				<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip}/>
+				<Instruction6 id={'instruction6'} setActivePanel={setActivePanel} setActiveStory={setActiveStory} skip={skip} allowNotifications={allowNotifications}/>
 			</View>
 
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>

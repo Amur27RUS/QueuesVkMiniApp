@@ -5,7 +5,7 @@ import {Button, Div, Panel, PanelHeader, PanelHeaderButton, Text, Title} from "@
 import phone from "../img/phone6.png";
 
 
-const Instruction6 = ({id, setActivePanel, setActiveStory, skip, setTabbarCSS}) => {
+const Instruction6 = ({id, setActivePanel, setActiveStory, skip, setTabbarCSS, allowNotifications}) => {
 
 
     return(
@@ -24,11 +24,13 @@ const Instruction6 = ({id, setActivePanel, setActiveStory, skip, setTabbarCSS}) 
                 <Text className={'textInstruction2'} weight="regular" style={{ marginBottom: 12 }}>Бот будет присылать вам сообщения, когда вы на первом и втором месте в очереди :)</Text>
             </Div>
             <Div>
+                <Button mode={'secondary'} stretched={true} size={'l'} className={'buttonContinue'} onClick={allowNotifications}>Включить уведомления</Button>
+            </Div>
+            <Div>
                 <Button stretched={true} size={'l'} className={'buttonContinue'} onClick={skip}>Погнали!</Button>
             </Div>
         </Panel>
     )
 }
-
 
 export default Instruction6;
