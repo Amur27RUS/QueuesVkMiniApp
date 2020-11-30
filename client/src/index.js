@@ -60,7 +60,6 @@ async function firstInstr() {
         } else {
             global.scheme.beginning = false;
         }
-        global.scheme.goBack = true;
     }
 }
 
