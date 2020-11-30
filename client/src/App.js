@@ -331,7 +331,7 @@ const App = (tutorial) =>{
 				}
 			}
 		}
-		console.log(history)
+		console.log('ИСТОРИЯ: ' + history)
 	}
 
 	const go = e => {
