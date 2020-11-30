@@ -8,6 +8,7 @@ import App from "./App";
 global.scheme = {
     scheme: undefined,
     beginning: undefined,
+    goBack: undefined,
 }
 
 

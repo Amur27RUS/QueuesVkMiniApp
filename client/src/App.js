@@ -121,6 +121,9 @@ const App = (tutorial) =>{
 
 	//ActiveStory - это View
 	//ActivePanel - это Panel
+	useEffect(() => {
+		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1));
+	},[global.scheme.goBack])
 
 	useEffect(() => {
 		if(!global.scheme.beginning && global.scheme.beginning !== undefined) {
@@ -306,8 +309,6 @@ const App = (tutorial) =>{
 			}
 
 		});
-
-		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1));
 
 		async function queuesSet(queuesArray){
 			setQueues(queuesArray);
