@@ -61,6 +61,6 @@ async function firstInstr() {
     }
 }
 
-// import("./eruda").then(({ default: eruda }) => {}); //runtime download
+import("./eruda").then(({ default: eruda }) => {}); //runtime download
 
 ReactDOM.render(<App tutorial={global.scheme.beginning}/>, document.getElementById("root"));
