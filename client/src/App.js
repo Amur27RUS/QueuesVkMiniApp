@@ -123,7 +123,7 @@ const App = (tutorial) =>{
 	//ActivePanel - это Panel
 	useEffect(() => {
 		window.addEventListener('popstate', () => setTimeout(() => goBack(), 1));
-	})
+	},[global.scheme.goBack])
 
 	useEffect(() => {
 		if(!global.scheme.beginning && global.scheme.beginning !== undefined) {

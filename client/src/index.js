@@ -8,6 +8,7 @@ import App from "./App";
 global.scheme = {
     scheme: undefined,
     beginning: undefined,
+    goBack: undefined
 }
 
 
@@ -46,6 +47,7 @@ async function firstInstr() {
         .then(function (data) {
             if (data.length !== 0) {
                 global.scheme.beginning = true;
+                global.scheme.goBack = true;
             }
         })
 
@@ -58,6 +60,7 @@ async function firstInstr() {
         } else {
             global.scheme.beginning = false;
         }
+        global.scheme.goBack = true;
     }
 }
 
