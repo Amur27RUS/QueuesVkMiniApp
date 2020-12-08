@@ -163,7 +163,13 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                         className={'cell'}
                         before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
                         description="По всем вопросам"
-                        onClick={()=>window.open('https://vk.com/queuesminiapp')}
+                        onClick={()=>{
+                            if (typeof (window.open) == "function") {
+                                window.open("https://vk.com/queuesminiapp");
+                            }else {
+                                window.location.href = "https://vk.com/queuesminiapp";
+                            }
+                        }}
                     >
                         <text
                             className={'nameUser'}>{'Очереди!'}</text>
