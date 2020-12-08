@@ -16,12 +16,8 @@ import {
     Tabs,
     TabsItem
 } from "@vkontakte/vkui";
-import Icon56InboxOutline from '@vkontakte/icons/dist/56/inbox_outline';
-import bridge from "@vkontakte/vk-bridge";
+import Icon56UserAddOutline from '@vkontakte/icons/dist/56/user_add_outline';import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
-import Icon28SyncOutline from '@vkontakte/icons/dist/28/sync_outline';
-import Icon16Clear from "@vkontakte/icons/dist/16/clear";
-import Icon28AddSquareOutline from '@vkontakte/icons/dist/28/add_square_outline';
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -1354,24 +1350,23 @@ class UsersList extends React.Component {
                 </Div>
             </Group>
                 <Placeholder
-                    icon={<Icon56InboxOutline/>}
+                    icon={<Icon56UserAddOutline/>}
                 >
-                    Нужно БОЛЬШЕ людей!?<br/>
+                    Пригласите людей в очередь:<br/>
                     <Button size="l" mode="tertiary"
                             onClick={() => bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${this.props.queueCode}`})}>
-                        Пригласить друзей из VK</Button>
+                        Отправить ссылку-приглашение</Button>
                     <br/>или
-                    <br/><Button className={'noScrollButton'} size="l" mode="tertiary" onClick={async () =>{
-                        await bridge.send("VKWebAppCopyText", {"text": this.props.queueCode});
-                    this.props.setSnackbar(<Snackbar
-                        layout="vertical"
-                        onClose={() => this.props.setSnackbar(null)}
-
-                        before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
-                    >
-                        Скопировано!
-                    </Snackbar>)
-
+                    <br/><Button className={'noScrollButton'} size="l" mode="tertiary"
+                                 onClick={async () =>{
+                                await bridge.send("VKWebAppCopyText", {"text": this.props.queueCode});
+                            this.props.setSnackbar(<Snackbar
+                                layout="vertical"
+                                onClose={() => this.props.setSnackbar(null)}
+                                before={<Avatar size={24} style={blueBackground}><Icon16CheckCircle fill="#fff" width={14} height={14}/></Avatar>}
+                            >
+                                Скопировано!
+                            </Snackbar>);
                 }}>Скопировать код: {this.props.queueCode}</Button>
 
                 </Placeholder>

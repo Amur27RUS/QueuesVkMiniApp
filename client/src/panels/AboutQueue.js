@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
 	MiniInfoCell,
@@ -28,6 +28,18 @@ import Icon20Info from '@vkontakte/icons/dist/20/info';
 const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const [cssEdit, setCssEdit] = useState('turnOff');
+	// const [desc, setDesc] = useState(global.queue.descriptionQueue);
+	//
+	// useEffect(()=>{
+	// 	//Находим ссылки в описании:
+	// 	let reg = desc.match(/^(ftp|http|https):\/\/[^ "]+$/);
+	// 	if (reg !== null) {
+	// 		for (let key in reg) {
+	// 			let str = desc.replace(reg[key], '<a href="' + reg[key] + '" target="_blank">' + reg[key] + '</a>');
+	// 			setDesc(str);
+	// 		}
+	// 	}
+	// })
 
 	return (
 		<Panel id={id}>
