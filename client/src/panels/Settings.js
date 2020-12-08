@@ -157,20 +157,21 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
 
             <Group header={<Header mode="secondary">Наша группа в VK:</Header>}>
                 <Div>
-                    <a className={'linkToGroup'} href={'https://vk.com/queuesminiapp'} target={'_blank'}>
+                    {/*<a className={'linkToGroup'} href={'https://vk.com/queuesminiapp'} target={'_blank'}>*/}
                     <Cell
                         id={'groupCell'}
                         className={'cell'}
                         before={<Avatar className={'avatar'} size={45} src={queuesLogo}/>}
                         description="По всем вопросам"
-                        onClick={()=>document.getElementById('groupCell').click()}>
+                        onClick={()=>window.open('https://vk.com/queuesminiapp')}
+                    >
                         <text
                             className={'nameUser'}>{'Очереди!'}</text>
                     </Cell>
-                    </a>
+                    {/*</a>*/}
                 </Div>
             </Group>
-            <Text className={'version'}>Version: 1.2.1</Text>
+            <Text className={'version'}>Version: 1.2.2</Text>
 
             {snackbar}
         </Panel>
