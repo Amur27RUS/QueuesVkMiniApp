@@ -884,7 +884,7 @@ app.post('/createQueue',limiter, (req, res) => {
         }
     }
 
-    if(queueName.length > 33 || queueName.trim() === '' || queuePlace.length > 41 || queueDescription.length > 41
+    if(queueName.length > 33 || queueName.trim() === '' || queuePlace.length > 41 || queueDescription.length > 101
         || date.getTime()+86000000 < today.getTime() || isNaN(date.getTime()) || !isTime){
         res.status(403).send({errorCode: 'error'})
     }else {
@@ -918,7 +918,7 @@ app.post('/changeQueue',limiter, (req, res) => {
     }
 
     if(queueName.length > 33 || code.length < 6 || queueName.trim() === '' || queuePlace.length > 41 ||
-        queueDescription.length > 41 || date.getTime()+86000000 < today.getTime() || isNaN(date.getTime()) || !isTime){
+        queueDescription.length > 101 || date.getTime()+86000000 < today.getTime() || isNaN(date.getTime()) || !isTime){
         res.status(403).send({errorCode: 'Do not modify data!'})
     }else {
         changeQueue(queuePlace, queueDescription, queueAvatarURL, queueName, queueTime, queueDate, code, url, res);

@@ -9,13 +9,14 @@ import {
     Text,
     FormStatus,
     ScreenSpinner,
-    Avatar, Snackbar, Div, FormLayoutGroup, IOS, platform
+    Avatar, Snackbar, Div, FormLayoutGroup, IOS, platform, Header
 } from "@vkontakte/vkui";
 import Icon28Attachments from '@vkontakte/icons/dist/28/attachments';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
 import Icon28CalendarOutline from '@vkontakte/icons/dist/28/calendar_outline';
 import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
+import Group from "@vkontakte/vkui/dist/components/Group/Group";
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 
@@ -324,13 +325,15 @@ const CreateQueue = ({ snackbar, id, go, history, setActiveModal, fetchedUser, s
                                                                             }}/></Text>
 
                 </div>
-                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="40" value={description} onClick={()=>{
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength="100" value={description}
+                    bottom={'В описании вы можете указать ссылку на конференцию или же просто добавить дополнительную информацию об очереди.'}
+                       onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
                     setDateInputButton('dateAndTimeInputButton');
                     setTimeInputButton('dateAndTimeInputButton');
                 }} onChange={e => {
-                    setDescription(e.target.value.substring(0, 40))
+                    setDescription(e.target.value.substring(0, 100))
                     global.queue.createDescription = e.target.value;
                 }}/>
                 <Button size="xl" onClick={async () => {

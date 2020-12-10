@@ -373,14 +373,16 @@ const СhangeQueue = ({ id, go, fetchedUser, history, setActivePanel, setPopout,
                                                                            }}/></Text>
 
                 </div>
-                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength = "40" value={newDescription} onClick={()=>{
+                <Input id={'qDesc'} top={'Краткое описание очереди'} maxlength = "100" value={newDescription}
+                       bottom={'В описании вы можете указать ссылку на конференцию или же просто добавить дополнительную информацию об очереди.'}
+                       onClick={()=>{
                     setDateInput('turnOff');
                     setTimeInput('turnOff');
                     setTimeInputButton('dateAndTimeInputButton');
                     setDateInputButton('dateAndTimeInputButton');
                 }} onChange={e => {
-                    setNewDescription(e.target.value.substring(0, 40));
-                    global.queue.changedDesc = e.target.value.substring(0, 40);
+                    setNewDescription(e.target.value.substring(0, 100));
+                    global.queue.changedDesc = e.target.value.substring(0, 100);
                 }}/>
                 <Button size="xl" onClick={() => {
 

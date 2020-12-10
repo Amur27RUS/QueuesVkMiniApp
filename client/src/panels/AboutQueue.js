@@ -22,24 +22,15 @@ import UsersList from '../usersList'
 import Icon20Info from '@vkontakte/icons/dist/20/info';
 
 
+let linkify = require('linkifyjs');
+let linkifyHtml = require('linkifyjs/html');
 
 // const osName = platform(); - Определяет ОС устройства
 
 const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, setSnackbar, go, queues, setActiveModal, setPopout, setActivePanel, setActiveStory, setQueues}) => {
 
 	const [cssEdit, setCssEdit] = useState('turnOff');
-	// const [desc, setDesc] = useState(global.queue.descriptionQueue);
-	//
-	// useEffect(()=>{
-	// 	//Находим ссылки в описании:
-	// 	let reg = desc.match(/^(ftp|http|https):\/\/[^ "]+$/);
-	// 	if (reg !== null) {
-	// 		for (let key in reg) {
-	// 			let str = desc.replace(reg[key], '<a href="' + reg[key] + '" target="_blank">' + reg[key] + '</a>');
-	// 			setDesc(str);
-	// 		}
-	// 	}
-	// })
+	const [desc, setDesc] = useState(global.queue.descriptionQueue);
 
 	return (
 		<Panel id={id}>
@@ -71,7 +62,9 @@ const AboutQueue = ({id, bridge, snackbar, history, setHistory, fetchedUser, set
 						before={<Icon20ArticleOutline/>}
 						multiline
 					>
-						{global.queue.descriptionQueue}
+						<div className="Container" dangerouslySetInnerHTML={{__html: linkifyHtml(desc, {
+								defaultProtocol: 'https'
+							})}}></div>
 					</MiniInfoCell>
 				}
 				{ global.queue.placeQueue.trim() !== '' &&

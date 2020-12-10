@@ -9,7 +9,7 @@ function QueueCell({ info, go}) {
         <RichCell
             className={'QueueCellStyle'}
             before={<Avatar size={48} src={info.avatar} />}
-            text = {info.description}
+            text = {info.place}
             caption = {info.date.slice(0, 10).split('-').reverse().join('.')}
             // after="+ 1 500 ₽"
             onClick={ (e) => {
