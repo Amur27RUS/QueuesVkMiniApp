@@ -5,7 +5,6 @@ import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16Clear from "@vkontakte/icons/dist/16/clear";
 import Icon16CheckCircle from "@vkontakte/icons/dist/16/check_circle";
-import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import queuesLogo from '../img/QueuesLogoNEW150x150.jpg';
 const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
     const [VKgroup, setVKGroup] = useState(undefined);
@@ -170,7 +169,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                     </a>
                 </Div>
             </Group>
-            <Text className={'version'}>Version: 1.3.0</Text>
+            <Text className={'version'}>Version: 1.3.1</Text>
 
             {snackbar}
         </Panel>

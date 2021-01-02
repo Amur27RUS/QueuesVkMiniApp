@@ -16,7 +16,8 @@ import {
     Tabs,
     TabsItem
 } from "@vkontakte/vkui";
-import Icon56UserAddOutline from '@vkontakte/icons/dist/56/user_add_outline';import bridge from "@vkontakte/vk-bridge";
+import Icon56UserAddOutline from '@vkontakte/icons/dist/56/user_add_outline';
+import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 
 
@@ -1355,7 +1356,7 @@ class UsersList extends React.Component {
                     Пригласите людей в очередь:<br/>
                     <Button size="l" mode="tertiary"
                             onClick={() => bridge.send("VKWebAppShare", {"link": `https://vk.com/app7551421_199833891#${this.props.queueCode}`})}>
-                        Отправить ссылку-приглашение</Button>
+                        Поделиться ссылкой-приглашением</Button>
                     <br/>или
                     <br/><Button className={'noScrollButton'} size="l" mode="tertiary"
                                  onClick={async () =>{

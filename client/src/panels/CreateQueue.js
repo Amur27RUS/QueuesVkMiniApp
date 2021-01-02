@@ -16,7 +16,6 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon12Cancel from '@vkontakte/icons/dist/12/cancel';
 import Icon28CalendarOutline from '@vkontakte/icons/dist/28/calendar_outline';
 import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
-import Group from "@vkontakte/vkui/dist/components/Group/Group";
 
 const MODAL_CARD_CHAT_INVITE = 'chat-invite';
 

@@ -19,7 +19,7 @@
     "react-scripts": "^3.4.3"
   },
   "dependencies": {
-    "@vkontakte/icons": "^1.30.0",
+    "@vkontakte/icons": "^1.69.0",
     "@vkontakte/vk-bridge": "^2.2.4",
     "@vkontakte/vk-connect": "^1.9.1",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",

@@ -1,6 +1,4 @@
 import React from 'react';
-import bridge from '@vkontakte/vk-bridge';
-import PropTypes from 'prop-types';
 import {Button, Div, Panel, PanelHeader, PanelHeaderButton, Text, Title} from "@vkontakte/vkui";
 import phone from "../img/phone4.png";
 
