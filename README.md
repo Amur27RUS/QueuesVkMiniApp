@@ -1,2 +1,2 @@
 # Queues_VKMiniApp_Back
-Back-End of queues VkMiniApp :)
+Back-End + Front-End of queues VkMiniApp :)
