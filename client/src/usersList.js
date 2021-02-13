@@ -70,7 +70,8 @@ class UsersList extends React.Component {
             CSSMenuButton: 'turnOff',
             refreshButton: 'refreshButton',
             addAdminForLast: false,
-            cssMessageButton: 'turnOff'
+            cssMessageButton: 'turnOff',
+            openProfile: true,
         };
         if( global.scheme.scheme === 'client_dark' || global.scheme.scheme === 'space_gray') {
             this.setState({
@@ -237,6 +238,9 @@ class UsersList extends React.Component {
     }
 
     addAdminButton = () => {
+        this.setState({
+            openProfile: false,
+        })
         if (this.state.addAdminForLast && counter % 2 === 0) {
             counter++;
         }
@@ -244,6 +248,7 @@ class UsersList extends React.Component {
             if (osName === IOS){
                 styleForButtons = 'ButtonDivIOS';
             }
+
             else {
                 styleForButtons = 'ButtonsDiv';
             }
@@ -255,6 +260,9 @@ class UsersList extends React.Component {
                 CSSButtonDiv: styleForButtons,
             });
             counter++;
+            this.setState({
+                openProfile: true,
+            });
         }else {
             if (this.state.buttonText === 'Откл. перемещение/удаление') {counter2++}
             if (osName === IOS){
@@ -821,6 +829,7 @@ class UsersList extends React.Component {
             selectables: false,
             nameAdminButton: 'Выдать права админа',
             CSSButtonDiv: styleForButtons,
+            openProfile: true,
         })
         this.state.users.map(info => {
                 let a = document.getElementById(info.name)
@@ -900,6 +909,12 @@ class UsersList extends React.Component {
                 // </Snackbar>);
             })
         })
+    }
+
+    openProfile = (id) =>{
+        if(this.state.openProfile){
+            window.open("http://vk.com/id"+id)
+        }
     }
 
     AddPersonNotFromVK = () => {
@@ -1304,7 +1319,7 @@ class UsersList extends React.Component {
                     {this.state.users.map(info => {
                             return <Cell id={info.name} key={info.userid} description={info.isadmin ? 'Admin' : ''}
                                          selectable={info.avatar && !(info.isadmin) ? this.state.selectables : false}
-                                // onClick={() => window.open("http://vk.com/id"+info.userid)}
+                                onClick={() => this.openProfile(info.userid)}
                                          className={info.userid === this.props.fetchedUser.id ? 'SELFcell' : 'cell'}
                                          draggable={this.state.draggable}
                                          removable={!(info.userid === this.props.fetchedUser.id) ? this.state.draggable : false}

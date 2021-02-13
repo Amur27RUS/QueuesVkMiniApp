@@ -16,14 +16,15 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "react-hot-loader": "^4.9.0",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^4.0.2"
   },
   "dependencies": {
     "@vkontakte/icons": "^1.69.0",
     "@vkontakte/vk-bridge": "^2.2.4",
     "@vkontakte/vk-connect": "^1.9.1",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
-    "@vkontakte/vkui": "^3.12.0",
+    "@vkontakte/vkjs": "^0.20.0",
+    "@vkontakte/vkui": "^3.13.2",
     "babel-eslint": "^10.1.0",
     "chalk": "^2.4.2",
     "core-js": "^3.6.4",
@@ -37,8 +38,7 @@
     "react-code-input": "^3.10.0",
     "react-dom": "^16.9.0",
     "react-hot-loader": "^4.9.0",
-    "react-native": "^0.63.2",
-    "react-scripts": "^3.4.3"
+    "react-native": "^0.63.2"
   },
   "browserslist": {
     "production": [

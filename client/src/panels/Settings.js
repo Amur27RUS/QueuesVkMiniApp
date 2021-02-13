@@ -169,7 +169,7 @@ const Settings = ({ id, go, fetchedUser, setSnackbar, snackbar}) => {
                     </a>
                 </Div>
             </Group>
-            <Text className={'version'}>Version: 1.3.1</Text>
+            <Text className={'version'}>Version: 1.4.0</Text>
 
             {snackbar}
         </Panel>
