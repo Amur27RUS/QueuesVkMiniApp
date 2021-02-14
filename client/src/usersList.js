@@ -913,14 +913,10 @@ class UsersList extends React.Component {
 
     openProfile = (id) =>{
         if(this.state.openProfile){
-            // if (typeof (window.open) == "function") {
-            //     window.open("http://vk.com/id"+id)
-            // }else {
                 const link = document.createElement('a')
                 link.href = "http://vk.com/id"+id
                 link.setAttribute('target', '_blank')
                 link.click()
-            // }
         }
     }
 
