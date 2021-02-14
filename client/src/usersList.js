@@ -916,7 +916,10 @@ class UsersList extends React.Component {
             if (typeof (window.open) == "function") {
                 window.open("http://vk.com/id"+id)
             }else {
-                window.location.href = "http://vk.com/id"+id;
+                const link = document.createElement('a')
+                link.href = "http://vk.com/id"+id
+                link.setAttribute('target', '_blank')
+                link.click()
             }
         }
     }
