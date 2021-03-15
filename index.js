@@ -49,9 +49,12 @@ const pool = new Pool({
     //     rejectUnauthorized: false
     // }
     // sslmode: require
+    ssl: {
+        require: true
+    }
 });
 
-pool.defaults.ssl = true;
+// pool.defaults.ssl = true;
 
 app.use(bodyParser.json())
 app.use( express.json() );       // to support JSON-encoded bodies
