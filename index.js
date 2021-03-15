@@ -30,6 +30,7 @@ const limiter = rateLimit({
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
 
+
 if (process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "client/build")));
 }
@@ -53,6 +54,7 @@ const pool = new Pool({
         require: true
     }
 });
+process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
 
 // pool.defaults.ssl = true;
 
