@@ -50,6 +50,9 @@ const pool = new Pool({
     // }
     // sslmode: require
 });
+
+pool.defaults.ssl = true;
+
 app.use(bodyParser.json())
 app.use( express.json() );       // to support JSON-encoded bodies
 app.use(express.urlencoded({     // to support URL-encoded bodies
@@ -64,7 +67,6 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
     console.log('Бот работает!')
 
     bot.startPolling();
-
 
 
 //Запуск - nodemon app.js
