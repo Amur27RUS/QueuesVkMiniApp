@@ -15,17 +15,6 @@ const limiter = rateLimit({
     message: "Too many  created from this IP",
 });
 
-// const bot = new VkBot({
-//     token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
-//     confirmation: '7268987f'
-// })
-
-
-// const api = require('node-vk-bot-api/lib/api');
-// api('users.get', {
-//     user_ids: 1,
-//     access_token: '2eb106ece7d56ca4b33b2cc72e25900000000000000000b314c942ba1311e27242e2e05186ab73bf6385b',
-// }).then(r => r);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
@@ -67,7 +56,7 @@ app.use(express.urlencoded({     // to support URL-encoded bodies
 //todo БОТ====================================================================
     const VkBot = require('node-vk-bot-api');
 
-    const bot = new VkBot('6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac');
+    const bot = new VkBot('TOKEN');
 
     console.log('Бот работает!')
 
@@ -94,7 +83,7 @@ async function getUsersInfo(usersArr, url, res){
             }
         }
 
-        let result = await fetch('https://api.vk.com/method/users.get?user_ids=' +userIdsString + '&fields=photo_100&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124' , {
+        let result = await fetch('https://api.vk.com/method/users.get?user_ids=' +userIdsString + '&fields=photo_100&access_token=TOKEN&v=5.124' , {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -651,7 +640,7 @@ async function notificationsCheck(url, res){
     let userID = parseInt(await checkSign(url), 10);
 
     if(userID !== 3){
-        let result = await fetch('https://api.vk.com/method/messages.isMessagesFromGroupAllowed?user_id='+ userID +'&group_id=198211683&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124' , {
+        let result = await fetch('https://api.vk.com/method/messages.isMessagesFromGroupAllowed?user_id='+ userID +'&group_id=198211683&access_token=TOKEN&v=5.124' , {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
