@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import '@vkontakte/vkui/dist/vkui.css';
 import {
+	Avatar,
+	ConfigProvider,
 	Epic,
+	FormLayout,
+	Input,
+	IOS,
+	ModalCard,
+	ModalRoot,
+	platform,
+	Snackbar,
 	Tabbar,
 	TabbarItem,
-	ModalRoot,
-	ModalCard,
-	Input,
-	FormLayout,
-	View,
-	Avatar,
-	Snackbar,
 	Textarea,
-	ConfigProvider, platform, IOS,
+	View,
 } from "@vkontakte/vkui";
 import ListOutline28 from '@vkontakte/icons/dist/28/list_outline'
 import AddSquareOutline28 from '@vkontakte/icons/dist/28/add_square_outline'
@@ -33,6 +35,7 @@ import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16User from '@vkontakte/icons/dist/16/user';
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
+import cowboy from './img/cowboy.jpg'
 
 
 global.queue = {
@@ -141,9 +144,9 @@ const App = (tutorial) =>{
 
 		async function fetchData() {
 
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
-			global.queue.userID = user.id;
+			// const user = await bridge.send('VKWebAppGetUserInfo');
+			// setUser(user);
+			global.queue.userID = 199833891;
 			setPopout(null);
 
 
@@ -171,6 +174,9 @@ const App = (tutorial) =>{
 				>
 					Ошибка соединения! Проверьте интернет!
 				</Snackbar>);
+
+				setCssSpinner('turnOff');
+
 			})
 
 			if(window.location.hash !== ''){
@@ -226,15 +232,15 @@ const App = (tutorial) =>{
 				await bridge.send("VKWebAppSetLocation", {"location": ""});
 			}
 
-			// /* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
-			// const queuesArray = [
-			// 	{ id: 1, name: 'Сдача лабы по проге', date: '', time: '', place: 'ИТМО', description: 'Приём в каб. 406', code: 'J8D1XI', avatar: 'https://firebasestorage.googleapis.com/v0/b/queuesvkminiapp.appspot.com/o/43H5.gif?alt=media&token=bc19b8ba-dc95-4bcf-8914-c7b6163d1b3b'},
-			// 	{ id: 2, name: 'Очередь за шавермой', date:'14.12.2020', time: '15:10', place: 'Ларёк 35', description: 'Лучшая шавуха у Ашота', code: 'F67HN8', aavatar: ''},
-			// 	{ id: 3, name: 'На сдачу экзамена по вождению', date: '25.08.2020', time: '16:00', place: 'Улица Горькавого', description: 'С собой иметь маску и перчатки!', code: 'LI96C1', avatar: cowboy},
-			// 	{ id: 4, name: 'Сдача лабы по инфе', date: '24.02.2021', time: '12:25', place:'Москва, ВШЭ', description: 'Жесткий препод', code: 'N84J4K', avatar: ''},
-			// ];
-			//
-			// queuesSet(queuesArray);
+			/* ИМИТАЦИЯ ПОЛУЧЕННЫХ ДАННЫХ */
+			const queuesArray = [
+				{ id: 1, name: 'Сдача лабы по проге', date: '', time: '', place: 'ИТМО', description: 'Приём в каб. 406', code: 'J8D1XI', avatar: cowboy},
+				{ id: 2, name: 'Очередь за шавермой', date:'14.12.2020', time: '15:10', place: 'Ларёк 35', description: 'Лучшая шавуха у Ашота', code: 'F67HN8', aavatar: ''},
+				{ id: 3, name: 'На сдачу экзамена по вождению', date: '25.08.2020', time: '16:00', place: 'Улица Горькавого', description: 'С собой иметь маску и перчатки!', code: 'LI96C1', avatar: ''},
+				{ id: 4, name: 'Сдача лабы по инфе', date: '24.02.2021', time: '12:25', place:'Москва, ВШЭ', description: 'Жесткий препод', code: 'N84J4K', avatar: ''},
+			];
+
+			queuesSet(queuesArray);
 		}
 
 		fetchData();
@@ -334,7 +340,7 @@ const App = (tutorial) =>{
 		}
 	}
 
-	const go = e => {
+	const changePanel = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 		setSnackbar(null); //При переходе
 		window.history.pushState( {history: e.currentTarget.dataset.to}, e.currentTarget.dataset.to ); // Создаём новую запись в истории  браузера
@@ -448,33 +454,6 @@ const App = (tutorial) =>{
 		}
 	}
 
-	const updateQueues = data => {
-		console.log('Отправлен запрос на получение очередей...')
-		fetch('/getQueues', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"url": window.location.search.replace('?', '')
-			})
-		}).then(function (response) {
-			return response.json();
-
-		})
-			.then(function (data) {
-				setQueues(data);
-			}).catch((e) => {
-			setSnackbar(<Snackbar
-				layout="vertical"
-				onClose={() => setSnackbar(null)}
-				before={<Avatar size={24}><Icon16Clear fill="red" width={14} height={14}/></Avatar>}
-			>
-				Ошибка соединения! Проверьте интернет!
-			</Snackbar>);
-		})
-	}
 
 	const blueBackground = {
 		backgroundColor: 'var(--accent)'
@@ -715,9 +694,9 @@ const App = (tutorial) =>{
 		}>
 
 			<View id={'main'} activePanel={activePanel} popout={popout} modal={modal} history={history}>
-				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={go} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
-				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={go} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
-				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={go} setActivePanel={setActivePanel} setQueues={setQueues}/>
+				<Home id='home' cssSpinner={cssSpinner} history={history} setCssSpinner={setCssSpinner} snackbar={snackbar} setSnackbar={setSnackbar} setJoinQueueAvatar={setJoinQueueAvatar} setJoinQueueName={setJoinQueueName} queues={queues} fetchedUser={fetchedUser} go={changePanel} setActiveModal={setActiveModal} setActiveStory={setActiveStory} setQueues={setQueues}/>
+				<AboutQueue id='aboutQueue' snackbar={snackbar} history={history} setHistory={setHistory} setSnackbar={setSnackbar} setActiveStory={setActiveStory} fetchedUser={fetchedUser} go={changePanel} queues={queues} setActivePanel={setActivePanel} setActiveModal={setActiveModal} setPopout={setPopout} setQueues={setQueues}/>
+				<ChangeQueue id='changeQueue' setPopout={setPopout} history={history} setSnackbar={setSnackbar} snackbar={snackbar} fetchedUser={fetchedUser} go={changePanel} setActivePanel={setActivePanel} setQueues={setQueues}/>
 			</View>
 
 			<View id={'instructionsView'} activePanel={activePanel}>
@@ -730,11 +709,11 @@ const App = (tutorial) =>{
 			</View>
 
 			<View id={'createQueue'} activePanel={'CreateQueue'} popout={popout} modal={modal} history={history}>
-				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={go} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
+				<CreateQueue id={'CreateQueue'} setCSSForCreateQueue={setCSSForCreateQueue} history={history} setSnackbar={setSnackbar} setPopout={setPopout} snackbar={snackbar} go={changePanel} setActiveModal={setActiveModal} fetchedUser={fetchedUser} setQueueCODE={setQueueCODE}/>
 			</View>
 
 			<View id={'settings'} activePanel={'Settings'} popout={popout} modal={modal}>
-				<Settings id={'Settings'} go={go} fetchedUser={fetchedUser} setSnackbar={setSnackbar} snackbar={snackbar}/>
+				<Settings id={'Settings'} go={changePanel} fetchedUser={fetchedUser} setSnackbar={setSnackbar} snackbar={snackbar}/>
 			</View>
 		</Epic>
 		</ConfigProvider>

@@ -19,6 +19,7 @@ import {
 import Icon56UserAddOutline from '@vkontakte/icons/dist/56/user_add_outline';
 import bridge from "@vkontakte/vk-bridge";
 import Icon16CheckCircle from '@vkontakte/icons/dist/16/check_circle';
+import cowboy from './img/cowboy.jpg'
 
 
 let counter = 1; //Счётчик, считающий кол-во включений админ-панели
@@ -32,6 +33,31 @@ let menuCounter = 1; //Счётчик открытия меню действий
 let styleForButtons = 'ButtonsDiv'; //Стили для кнопки меню действий для IOS/Android
 let styleForButtonAddAdmin = 'giveAdmin'; //Стили для кнопки меню действий для IOS/Android
 const MODAL_CARD_FOR_MESSAGE = 'massage-all';
+
+function deleteUserFromTheList(tmpUsersArr, user){
+    for(let i = 0; i < tmpUsersArr.length; i++){
+        if(tmpUsersArr[i].notvkname === null) {
+
+            if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
+                global.queue.isFirstPlace = true;
+            } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
+                global.queue.isFirstPlace = false;
+            }
+
+            if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
+                global.queue.isUserAdmin = true;
+
+            }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
+                global.queue.isUserAdmin = false;
+            }
+            tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
+            tmpUsersArr[i].avatar = user[i].photo_100;
+        }else{
+            tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
+        }
+    }
+    return tmpUsersArr;
+}
 
 class UsersList extends React.Component {
 
@@ -90,7 +116,30 @@ class UsersList extends React.Component {
     }
 
     async componentDidMount() {
-        	console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
+
+        /*ИМИТАЦИЯ ПОЛУЧЕНИЯ ДАННЫХ*/
+        let usersArr = [
+            {id: 1, name: 'Павел Сергеевич', avatar: cowboy, isAdmin: true},
+            {id: 199833891, name: 'Андрей', avatar: cowboy, isAdmin: true},
+            {id: 3, name: 'Моннар бэкендер', avatar: cowboy, isAdmin: false},
+            {id: 4, name: 'Ус', avatar: cowboy, isAdmin: false},
+            {id: 5, name: 'Человек', isAdmin: false},
+            {id: 6, name: 'Тута Хамон', avatar: cowboy, isAdmin: false},
+            {id: 7, name: 'Тамерлан', avatar: cowboy, isAdmin: false},
+            {id: 8, name: 'Ислам', avatar: cowboy, isAdmin: false},
+            {id: 9, name: 'Сергей Павлович', avatar: cowboy, isAdmin: false},
+            {id: 10, name: 'Динозавр Рус', isAdmin: true},
+        ];
+        this.setState({
+            users: usersArr,
+            cssSpinner: 'turnOff'
+        });
+
+
+        /*ИМИТАЦИЯ ПОЛУЧЕНИЯ ДАННЫХ*/
+
+
+        	console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...');
             this.setState({
                 CSSMenuButton: 'turnOff'
             })
@@ -149,28 +198,7 @@ class UsersList extends React.Component {
             }).then(function (result){
                 user = result.response;
             })
-            for(let i = 0; i < tmpUsersArr.length; i++){
-                if(tmpUsersArr[i].notvkname === null) {
-
-                    if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
-                        global.queue.isFirstPlace = true;
-                    } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
-                        global.queue.isFirstPlace = false;
-                    }
-
-                    if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
-                        global.queue.isUserAdmin = true;
-
-                    }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
-                        global.queue.isUserAdmin = false;
-                    }
-                    tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
-                    tmpUsersArr[i].avatar = user[i].photo_100;
-                }else{
-                    tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
-                }
-            }
-            return tmpUsersArr;
+            return deleteUserFromTheList(tmpUsersArr, user);
         }
 
     }
@@ -1048,7 +1076,12 @@ class UsersList extends React.Component {
         }
     }
 
+
+
+
     deleteUser = (deletedUserPlace) => {
+
+
         fetch('/deleteUser', {
             method: 'POST',
             headers: {
@@ -1083,28 +1116,7 @@ class UsersList extends React.Component {
                 }).then(function (result){
                     user = result.response;
                 })
-                for(let i = 0; i < tmpUsersArr.length; i++){
-                    if(tmpUsersArr[i].notvkname === null) {
-
-                        if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
-                            global.queue.isFirstPlace = true;
-                        } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
-                            global.queue.isFirstPlace = false;
-                        }
-
-                        if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
-                            global.queue.isUserAdmin = true;
-
-                        }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
-                            global.queue.isUserAdmin = false;
-                        }
-                        tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
-                        tmpUsersArr[i].avatar = user[i].photo_100;
-                    }else{
-                        tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
-                    }
-                }
-                return tmpUsersArr;
+                return deleteUserFromTheList(tmpUsersArr, user);
 
             }).then((usersArr) => {
             this.setState({
@@ -1119,6 +1131,8 @@ class UsersList extends React.Component {
             // </Snackbar>);
         })
     }
+
+
 
     refresh = async () =>{
         console.log('Отправлен запрос на получение списка людей, принадлежащих к очереди...')
@@ -1158,6 +1172,8 @@ class UsersList extends React.Component {
             })
         })
 
+
+
         async function getUsersData(data){
             console.log('Получение данных о пользователях через VK Bridge')
             let tmpUsersArr = data;
@@ -1179,35 +1195,17 @@ class UsersList extends React.Component {
             }).then(function (result){
                 user = result.response;
             })
-            for(let i = 0; i < tmpUsersArr.length; i++){
-                if(tmpUsersArr[i].notvkname === null) {
-
-                    if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace === 1 && tmpUsersArr.length > 1) {
-                        global.queue.isFirstPlace = true;
-                    } else if (global.queue.userID === user[i].id && tmpUsersArr[i].userplace !== 1) {
-                        global.queue.isFirstPlace = false;
-                    }
-
-                    if(global.queue.userID === tmpUsersArr[i].userid && tmpUsersArr[i].isadmin){
-                        global.queue.isUserAdmin = true;
-
-                    }else if (global.queue.userID === tmpUsersArr[i].userid && !tmpUsersArr[i].isadmin){
-                        global.queue.isUserAdmin = false;
-                    }
-                    tmpUsersArr[i].name = user[i].last_name + " " + user[i].first_name;
-                    tmpUsersArr[i].avatar = user[i].photo_100;
-                }else{
-                    tmpUsersArr[i].name = tmpUsersArr[i].notvkname;
-                }
-            }
-            return tmpUsersArr;
+            return deleteUserFromTheList(tmpUsersArr, user);
         }
     }
+
+
 
     render() {
         return (
             <div>
             <br/>
+                {/*Блок с верхним меню и кнопками админа и пользователя*/}
                 <Div className={this.state.CSSButtonDiv}>
                 <div className={'showActionsButton'}>
 
@@ -1284,6 +1282,8 @@ class UsersList extends React.Component {
 
                 </Div>
 
+
+                {/*Блок с участниками очереди*/}
                 <Group header={
                     <Header className={'headerUsers'}>Участники</Header> }>
                     {/*<Button className={'refreshButtonCSS'} mode={'secondary'}><Icon28SyncOutline/></Button>*/}
@@ -1367,6 +1367,8 @@ class UsersList extends React.Component {
                     })}
                 </List>
                 </Div>
+
+            {/*Нижний блок инвайтов в очередь*/}
             </Group>
                 <Placeholder
                     icon={<Icon56UserAddOutline/>}
