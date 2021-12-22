@@ -3,3 +3,4 @@ dbConnection.js
 .env
 # Project exclude paths
 /client/node_modules/
+/client/build
