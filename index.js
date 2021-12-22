@@ -39,9 +39,9 @@ const pool = new Pool({
     //     rejectUnauthorized: false
     // }
     // sslmode: require
-    // ssl: {
-    //     require: false
-    // }
+    ssl: {
+        require: true
+    }
 });
 process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
 
