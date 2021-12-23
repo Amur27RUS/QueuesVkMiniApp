@@ -640,7 +640,7 @@ async function notificationsCheck(url, res){
     let userID = parseInt(await checkSign(url), 10);
 
     if(userID !== 3){
-        let result = await fetch('https://api.vk.com/method/messages.isMessagesFromGroupAllowed?user_id='+ userID +'&group_id=198211683&access_token=TOKEN&v=5.124' , {
+        let result = await fetch('https://api.vk.com/method/messages.isMessagesFromGroupAllowed?user_id='+ userID +'&group_id=198211683&access_token=8f0c19f28f0c19f28f0c19f2338f7f204f88f0c8f0c19f2d0135c6c55c6583321721266&v=5.124' , {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
