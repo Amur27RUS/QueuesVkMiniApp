@@ -83,7 +83,7 @@ async function getUsersInfo(usersArr, url, res){
             }
         }
 
-        let result = await fetch('https://api.vk.com/method/users.get?user_ids=' +userIdsString + '&fields=photo_100&access_token=TOKEN&v=5.124' , {
+        let result = await fetch('https://api.vk.com/method/users.get?user_ids=' +userIdsString + '&fields=photo_100&access_token=6c7ebd70e77ac095fc2aee45ddb1b06fcadca07a669b8fa1d9c1a789e1bed65d0b6e91772d3e8003534ac&v=5.124' , {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -290,7 +290,7 @@ async function createQueue(queuePlace, queueDescription, queueAvatarURL, queueNa
             }
             let now = new Date().toLocaleDateString();
 
-            const floodCheck = await client.query('SELECT * FROM queuesandusers WHERE userid = $1 AND createdate = $2', [userID, now])
+            const floodCheck = await client.query('SELECT * FROM queuesandusers WHERE userid = $1 AND createdate = $2', [userID, now]);
 
             if (floodCheck.rows.length >= 5) {
                 await res.send(JSON.stringify('LIMIT REACHED'));
